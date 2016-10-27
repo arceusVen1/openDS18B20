@@ -1,0 +1,5 @@
+open_ds18b20/*.pyc
+open_ds18b20/config.json
+build/
+dist/
+OpenDS18B20.egg-info
