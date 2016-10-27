@@ -1,3 +1,6 @@
+OpenDS18B20
+==========
+
 I am working on this project to help people with the automation of the task of reading temperatures with DS18B20 probe on a Raspberry Pi 3
 
 How to use OpenDS18B20 ?
@@ -11,7 +14,7 @@ It is then very easy to use !
 Install it
 *********************************************************************
 
-$ sudo python setup.py install 
+	$ sudo python setup.py install 
 
 *********************************************************************
 
@@ -19,7 +22,7 @@ you just need to use the following command to start it from the console
 
 *********************************************************************
 
-$ open_ds18b20 
+	$ open_ds18b20 
 
 *********************************************************************
 
@@ -29,7 +32,7 @@ This can manually modified later of course by running the program :
 
 *********************************************************************
 
-$ open_ds18b20 erase
+	$ open_ds18b20 erase
 
 *********************************************************************
 
