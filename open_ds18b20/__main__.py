@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python2.7
 import sys
 import os
 import re
@@ -40,11 +40,11 @@ def initialConfig():
 		os.path.abspath(path)
 		config = file.ConfigFile(path + "/config.json")
 	except IOError:
-		print("creating config.json in " + path)
+		print "creating config.json in " + path
 		try:
 			os.makedirs(path)
 		except OSError:
-			print("already existing folder")
+			print "already existing folder"
 		subprocess.Popen(["touch", path + "/config.json"])
 		time.sleep(1) #leaves enough time for the subprocess to create the file
 		config = file.ConfigFile(path + "/config.json")
@@ -58,7 +58,7 @@ def writeDependencies():
 	Returns:
 	    BOOLEAN: just to know that you miss the modules
 	"""
-	print("before continuing you should add \"w1-gpio\" and \"w1-therm\" to /etc/modules files")
+	print "before continuing you should add \"w1-gpio\" and \"w1-therm\" to /etc/modules files"
 	return False
 
 def promptConfig(config):
@@ -70,17 +70,17 @@ def promptConfig(config):
 	Returns:
 	    none: The configuration has been saved
 	"""
-	print("adress where emails are going to be send and sent from ? ")
+	print "adress where emails are going to be send and sent from ? "
 	SETTINGS["email"] = raw_input(PROMPT)
-	print("password ? (warning the password will be kept clear in the config file)")
+	print "password ? (warning the password will be kept clear in the config file)"
 	SETTINGS["password"]= getpass.getpass() #to hide the password in the console
-	print("woud you like to set an alert system ?(y/n)")
+	print "woud you like to set an alert system ?(y/n)"
 	alert = raw_input(PROMPT)
 	if str(alert) == "y": 
 		SETTINGS["alert"]["choice"] = True
-		print("max temp ?")
+		print "max temp ?"
 		SETTINGS["alert"]["max"] = int(raw_input(PROMPT))
-		print("min temp ?")
+		print "min temp ?"
 		SETTINGS["alert"]["min"] = int(raw_input(PROMPT))
 	config.register(SETTINGS)
 	return 
