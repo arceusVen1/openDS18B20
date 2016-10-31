@@ -9,7 +9,7 @@ import file, mail, probe
 
 #--GLOBAL---------------------------------------------------------------------
 
-SETTINGS = {"email":"","password":"","alert":{"choice": False, "max":0, "min":0}}
+SETTINGS = {"email":"","password":"","number":0,"alert":{"choice": False, "max":0, "min":0}}
 PROMPT = '> '
 
 #-----------------------------------------------------------------------------
@@ -74,6 +74,11 @@ def promptConfig(config):
 	SETTINGS["email"] = raw_input(PROMPT)
 	print("password ? (warning the password will be kept clear in the config file)")
 	SETTINGS["password"]= getpass.getpass() #to hide the password in the console
+	print("What is the number of probes attached ?")
+	try:
+		SETTINGS["number"] = int(raw_input(PROMPT))
+	except:
+		print("a number please !")
 	print("woud you like to set an alert system ?(y/n)")
 	alert = raw_input(PROMPT)
 	if str(alert) == "y": 
@@ -137,6 +142,8 @@ def main():
 	probes = probe.Probe()		#create a Probe instance
 	probes.detectProbe()		#detect the probes attach
 #	dht_h, dht_t = dht.read_retry(dht.DHT22,17)
+	if len(probes.listprobes) < config.getProbes():
+		message = "one or more probes may not have been detected"
 	try:						#try to read the probes temp 
 		for p in range(len(probes.listprobes)):
 			files.append(file.ProbeFile(probes.listprobes[p]))

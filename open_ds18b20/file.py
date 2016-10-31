@@ -72,6 +72,9 @@ class ConfigFile(File):
 		else:
 			return False
 
+	def getProbes(self):
+		return int(self.data["number"])
+
 	def getMaxTempAlert(self):
 		"""get the max temperature allowed before alert from the json loaded data
 		
