@@ -71,22 +71,22 @@ def promptConfig(config):
 	    none: The configuration has been saved
 	"""
 	print("adress where emails are going to be send and sent from ? ")
-	SETTINGS["email"] = raw_input(PROMPT)
+	SETTINGS["email"] = input(PROMPT)
 	print("password ? (warning the password will be kept clear in the config file)")
 	SETTINGS["password"]= getpass.getpass() #to hide the password in the console
 	print("What is the number of probes attached ?")
 	try:
-		SETTINGS["number"] = int(raw_input(PROMPT))
+		SETTINGS["number"] = int(input(PROMPT))
 	except:
 		print("a number please !")
 	print("woud you like to set an alert system ?(y/n)")
-	alert = raw_input(PROMPT)
+	alert = input(PROMPT)
 	if str(alert) == "y": 
 		SETTINGS["alert"]["choice"] = True
 		print("max temp ?")
-		SETTINGS["alert"]["max"] = int(raw_input(PROMPT))
+		SETTINGS["alert"]["max"] = int(input(PROMPT))
 		print("min temp ?")
-		SETTINGS["alert"]["min"] = int(raw_input(PROMPT))
+		SETTINGS["alert"]["min"] = int(input(PROMPT))
 	config.register(SETTINGS)
 	return 
 
