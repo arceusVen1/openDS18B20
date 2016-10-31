@@ -27,7 +27,7 @@ class Probe():
 		return self.listprobes
  	
 
- 	def getTemperature(self, line):
+	def getTemperature(self, line):
 		"""get the temperature
 		
 		Args:
