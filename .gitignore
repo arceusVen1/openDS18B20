@@ -1,4 +1,5 @@
 open_ds18b20/*.pyc
+open_ds18b20/__pycache__
 open_ds18b20/config.json
 build/
 dist/
