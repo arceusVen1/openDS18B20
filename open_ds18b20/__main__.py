@@ -21,10 +21,10 @@ def to_float(array):
     """turn a list's integer in float (for python2)
 
     Args:
-        array (ARRAY): array of number
+        array (list): array of number
 
     Returns:
-        ARRAY: the same array with float numbers
+        list: the same array with float numbers
     """
     floater = []
     for i in range(len(array)):
@@ -36,7 +36,7 @@ def initialConfig():
     """try to open the config file or creates one if there's not
 
     Returns:
-        JSON: the opened config.json file
+        ConfigFile: the opened config.json file
     """
     path = "/home/pi/ds18b20_conf"
     try:
@@ -60,7 +60,7 @@ def writeDependencies():
 
 
     Returns:
-        BOOLEAN: just to know that you miss the modules
+        bool: just to know that you miss the modules
     """
     print("before continuing you should add "
           "\"w1-gpio\" and \"w1-therm\" to /etc/modules files")
@@ -71,7 +71,7 @@ def promptConfig(config):
     """ask for the new config settings
 
     Args:
-        config (JSON): File to write the config
+        config (ConfigFile): File to write the config
 
     Returns:
         none: The configuration has been saved
@@ -103,7 +103,7 @@ def modulesTester():
     """test the presence w1-therm and w1-gpio modules in the /etc/modules
 
     Returns:
-        TYPE: True if the modules are installed, false otherwise
+        bool: True if the modules are installed, false otherwise
     """
     flag = [False, False]
     modules = fichier.ModuleFile("/etc/modules")
@@ -119,20 +119,20 @@ def modulesTester():
         return True
 
 
-def createMail(probes, subject, config, alert=False):
+def createMail(probes, subject, config, alert=False, message=""):
     """create the email to use it more easily on the __main__
 
     Args:
-        probes (PROBE): Probe instance
-        subject (STRING): Subject of the message
-        config (CONFIG): Config file
+        probes (Probe): Probe instance
+        subject (str): Subject of the message
+        config (ConfigFile): Config file
         alert (bool, optional): if it is an alert mail
 
     Returns:
         none: mail has been sent
     """
     email = mail.Mail()
-    email.messageBody(probes.temperatures, alert)
+    email.messageBody(probes.temperatures, message, alert)
     email.credentials["email"], email.credentials[
         "password"] = config.getCredentials()
     email.messageBuilder(
@@ -164,10 +164,14 @@ def main():
     # detect the probes attach
     probes.detectProbe()
 # dht_h, dht_t = dht.read_retry(dht.DHT22,17)
-    if len(probes.listprobes) < config.getProbes():
-        message = "* " + (str(config.getProbes() - len(probes.listprobes)) +
+    number = config.getProbes()
+    if len(probes.listprobes) < number:
+        difference = number - len(probe.listprobes)
+        message = "* " + (str(difference) +
                           " probes not **** detected ***")
-        return message
+        createMail(probes, "technical issue", config, True, message)
+        if difference == number:
+            return message
     # try to read the probes temp
     try:
         for p in range(len(probes.listprobes)):
@@ -198,7 +202,7 @@ def main():
                 createMail(probes, subject, config)
 
     except:
-        return "mail couldn't be***** send *****: "  # , sys.exc_info()
+        return "mail couldn't be***** send *****"  # , sys.exc_info()
     # close the opened file
     for i in range(len(files)):
         files[i].closeFile()

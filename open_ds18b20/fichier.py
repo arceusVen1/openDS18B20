@@ -17,10 +17,10 @@ class File(object):
         """Reads a specific line
 
         Args:
-            nbline (INT): number of the line 
+            nbline (int): number of the line
 
         Returns:
-            STRING: the content read
+            str: the content read
         """
         return self.content[nbline - 1]
 
@@ -53,7 +53,7 @@ class ConfigFile(File):
         """get the credential from the json loaded data
 
         Returns:
-            STRING: email and password from the data
+            str: email and password from the data
         """
         email = self.data["email"]
         password = self.data["password"]
@@ -63,7 +63,7 @@ class ConfigFile(File):
         """determine if the configuration includes alert mailing
 
         Returns:
-            BOOLEAN: True if it has alert, False otherwise
+            bool: True if it has alert, False otherwise
         """
         if self.data["alert"]["choice"]:
             return True
@@ -77,7 +77,7 @@ class ConfigFile(File):
         """get the max temperature allowed before alert from the json loaded data
 
         Returns:
-            FLOAT: maximum temperature allowed
+            float: maximum temperature allowed
         """
         return float(self.data["alert"]["max"])
 
@@ -85,7 +85,7 @@ class ConfigFile(File):
         """Get the minimum temperature allowed before alert from the json loaded data
 
         Returns:
-            FLOAT: Minimum temp allowed
+            float: Minimum temp allowed
         """
         return float(self.data["alert"]["min"])
 
@@ -93,7 +93,7 @@ class ConfigFile(File):
         """Registers the (new) settings in the cofnig file
 
         Args:
-            settings (HASH): Dictionnary of the settings
+            settings (dict): Dictionnary of the settings
 
         Returns:
             none: The settings hacve been saved in the config file
@@ -102,10 +102,10 @@ class ConfigFile(File):
         self._save(element)
 
     def _save(self, element):
-        """Overwrite text in a file to ensure that the file have been saved 
+        """Overwrite text in a file to ensure that the file have been saved
 
         Args:
-            element (STRING): what needs to be written
+            element (str): what needs to be written
 
         Returns:
             none: The file has been correctly overwrittent by the element

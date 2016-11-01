@@ -17,7 +17,7 @@ class Probe():
         """detects the connected DS18B20 probes whose folders always start by 28
 
         Returns:
-            LIST: files containing a measured temperature from a probe
+            list: files containing a measured temperature from a probe
         """
         regexp = r"^28"
         for directory in os.listdir(self.path):
@@ -29,10 +29,10 @@ class Probe():
         """get the temperature
 
         Args:
-            line (STRING): content of the files with the temperature inside
+            line (str): content of the files with the temperature inside
 
         Returns:
-            LIST: List of the temperatures
+            list: List of the temperatures
         """
         regexp = r"\d+$"
         if re.match(regexp, line):
