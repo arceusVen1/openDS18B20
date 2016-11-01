@@ -169,9 +169,9 @@ def main():
         difference = number - len(probe.listprobes)
         message = "* " + (str(difference) +
                           " probes not **** detected ***")
-        createMail(probes, "technical issue", config, True, message)
-        if difference == number:
-            return message
+        # createMail(probes, "technical issue", config, True, message)
+        # if difference == number:
+        return message
     # try to read the probes temp
     try:
         for p in range(len(probes.listprobes)):
