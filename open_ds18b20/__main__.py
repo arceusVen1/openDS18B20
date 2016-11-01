@@ -165,8 +165,8 @@ def main():
     probes.detectProbe()
 # dht_h, dht_t = dht.read_retry(dht.DHT22,17)
     if len(probes.listprobes) < config.getProbes():
-        message = "** " + (str(config.getProbes() - len(probes.listprobes)) +
-                   " probes not **** detected ***")
+        message = "* " + (str(config.getProbes() - len(probes.listprobes)) +
+                          " probes not **** detected ***")
         return message
     # try to read the probes temp
     try:
