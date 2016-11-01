@@ -185,11 +185,11 @@ def main():
     try:
         # a flag to avoid sending a standard mail + alert
         mailsent = False
-        # transform the temp in float
+        # transform the temp in float (for python 2)
         floater = to_float(probes.temperatures)
         # if alert compare the max/min with real temp
         if config.has_alert():
-            if(max(floater) >= config.getMaxTempAlert() or
+            if (max(floater) >= config.getMaxTempAlert() or
                     min(floater) <= config.getMinTempAlert()):
                 subject = "Alert detected"
                 createMail(probes, subject, config, True)
