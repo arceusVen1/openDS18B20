@@ -14,7 +14,7 @@ setup(
 	url='https://github.com/lecreateurfrench/openDS18B20.git',
 	#license="",
 	long_description=read('readme.md'),
-	packages=find_packages(),
+	packages=['open_ds18b20'],
 	entry_points={
         	"console_scripts": ['open_ds18b20 = open_ds18b20.__main__:main']
     	}

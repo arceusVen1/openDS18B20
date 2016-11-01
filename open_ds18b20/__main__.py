@@ -5,7 +5,8 @@ import re
 import getpass
 import time
 import subprocess
-import file, mail, probe
+from open_ds18b20 import fichier, mail, probe
+
 
 #--GLOBAL---------------------------------------------------------------------
 
@@ -38,7 +39,7 @@ def initialConfig():
 	path = "/home/pi/ds18b20_conf"
 	try: 
 		os.path.abspath(path)
-		config = file.ConfigFile(path + "/config.json")
+		config = fichier.ConfigFile(path + "/config.json")
 	except IOError:
 		print("creating config.json in " + path)
 		try:
@@ -47,7 +48,7 @@ def initialConfig():
 			print("already existing folder")
 		subprocess.Popen(["touch", path + "/config.json"])
 		time.sleep(1) #leaves enough time for the subprocess to create the file
-		config = file.ConfigFile(path + "/config.json")
+		config = fichier.ConfigFile(path + "/config.json")
 	return config
 	
 
@@ -97,7 +98,7 @@ def modulesTester():
 	    TYPE: True if the modules are installed, false otherwise
 	"""
 	flag = [False, False]
-	modules = file.ModuleFile("/etc/modules")
+	modules = fichier.ModuleFile("/etc/modules")
 	for i in range(modules.nbline):
 		line = modules.readLine(i+1)
 		if re.match(r"^w1-gpio", line):
@@ -146,7 +147,7 @@ def main():
 		message = "one or more probes may not have been detected"
 	try:						#try to read the probes temp 
 		for p in range(len(probes.listprobes)):
-			files.append(file.ProbeFile(probes.listprobes[p]))
+			files.append(fichier.ProbeFile(probes.listprobes[p]))
 			templine = files[p].readLine(2)
 			probes.getTemperature(templine)
 	except: 					# return an exception with the nature of the exception
