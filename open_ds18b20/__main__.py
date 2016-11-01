@@ -165,8 +165,8 @@ def main():
     probes.detectProbe()
 # dht_h, dht_t = dht.read_retry(dht.DHT22,17)
     if len(probes.listprobes) < config.getProbes():
-        message = (str(config.getProbes() - len(probes.listprobes)) +
-                   " probes not \n*** detected ***")
+        message = "*" + (str(config.getProbes() - len(probes.listprobes)) +
+                   " probes not **** detected ***")
         return message
     # try to read the probes temp
     try:
@@ -176,7 +176,7 @@ def main():
             probes.getTemperature(templine)
     # return an exception with the nature of the exception
     except:
-        message = "* temperatures *\ncouldn't be read"  # , sys.exc_info()[:2]
+        message = "* temperatures *couldn't be read"  # , sys.exc_info()[:2]
         return message
     try:
         # a flag to avoid sending a standard mail + alert
@@ -198,7 +198,7 @@ def main():
                 createMail(probes, subject, config)
 
     except:
-        return "mail couldn't be\n***** send *****: "  # , sys.exc_info()
+        return "mail couldn't be***** send *****: "  # , sys.exc_info()
     # close the opened file
     for i in range(len(files)):
         files[i].closeFile()
