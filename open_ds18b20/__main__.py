@@ -8,17 +8,17 @@ import subprocess
 from open_ds18b20 import fichier, mail, probe
 
 
-#--GLOBAL--------------------------------------------------
+# GLOBAL--------------------------------------------------
 
 SETTINGS = {"email": "", "password": "", "number": 0,
             "alert": {"choice": False, "max": 0, "min": 0}}
 PROMPT = '> '
 
-#----------------------------------------------------------
+# ---------------------------------------------------------
 
 
 def to_float(array):
-    """turn a list's integer in float
+    """turn a list's integer in float (for python2)
 
     Args:
         array (ARRAY): array of number
@@ -70,7 +70,7 @@ def writeDependencies():
 def promptConfig(config):
     """ask for the new config settings
 
-    Args:	
+    Args:
         config (JSON): File to write the config
 
     Returns:
@@ -141,41 +141,56 @@ def createMail(probes, subject, config, alert=False):
 
 
 def main():
-    tester = modulesTester()  # test that the moduels are present
-    if not tester:			#
-        return 					#
+    # test that the moduels are present
+    tester = modulesTester()
+    if not tester:
+        return
     files = []
-    if len(sys.argv) > 1:  # if erase arg the config is reset
+    # if erase arg the config is reset
+    if len(sys.argv) > 1:
         if str(sys.argv[1]) == "erase":
             # erase the config file to avoid conflict
             os.remove("/home/pi/ds18b20_conf/config.json")
-    config = initialConfig()  # create if needed and open a config file
+    # create if needed and open a config file
+    config = initialConfig()
     # if the config file is empty (especially if it has just been created)
     if config.nbline == 0:
-        promptConfig(config)  # ask for the new settings in the console
-    config.readData()  # read the data now that you should have some
-    probes = probe.Probe()  # create a Probe instance
-    probes.detectProbe()  # detect the probes attach
-#	dht_h, dht_t = dht.read_retry(dht.DHT22,17)
+        # ask for the new settings in the console
+        promptConfig(config)
+    # read the data now that you should have some
+    config.readData()
+    # create a Probe instance
+    probes = probe.Probe()
+    # detect the probes attach
+    probes.detectProbe()
+# dht_h, dht_t = dht.read_retry(dht.DHT22,17)
     if len(probes.listprobes) < config.getProbes():
-        message = "one or more probes may not have been detected"
-    try:  # try to read the probes temp
+        message = (str(config.getProbes - len(probes.listprobes)) +
+                   " probes not \n*** detected ***")
+        return message
+    # try to read the probes temp
+    try:
         for p in range(len(probes.listprobes)):
             files.append(fichier.ProbeFile(probes.listprobes[p]))
             templine = files[p].readLine(2)
             probes.getTemperature(templine)
-    except: 					# return an exception with the nature of the exception
-        message = "temperatures couldn't be read : ", sys.exc_info()[:2]
+    # return an exception with the nature of the exception
+    except:
+        message = "* temperatures *\ncouldn't be read"  # , sys.exc_info()[:2]
         return message
     try:
-        mailsent = False  # a flag to avoid sending a standard mail + alert
-        floater = to_float(probes.temperatures)  # transform the temp in float
-        if config.has_alert():  # if alert compare the max/min with real temp
+        # a flag to avoid sending a standard mail + alert
+        mailsent = False
+        # transform the temp in float
+        floater = to_float(probes.temperatures)
+        # if alert compare the max/min with real temp
+        if config.has_alert():
             if(max(floater) >= config.getMaxTempAlert() or
                     min(floater) <= config.getMinTempAlert()):
                 subject = "Alert detected"
                 createMail(probes, subject, config, True)
-                mailsent = True  # a mail has been sent
+                # a mail has been sent
+                mailsent = True
         # to force a mail message with the optionnal argument "mail"
         if len(sys.argv) >= 2 and not mailsent:
             if str(sys.argv[1]) == "mail":
@@ -183,8 +198,9 @@ def main():
                 createMail(probes, subject, config)
 
     except:
-        return "mail couldn't be send : ", sys.exc_info()
-    for i in range(len(files)):  # close the open filed
+        return "mail couldn't be\n***** send *****: "  # , sys.exc_info()
+    # close the opened file
+    for i in range(len(files)):
         files[i].closeFile()
     config.closeFile()
     return (probes.temperatures)
