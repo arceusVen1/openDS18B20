@@ -166,12 +166,12 @@ def main():
 # dht_h, dht_t = dht.read_retry(dht.DHT22,17)
     number = config.getProbes()
     if len(probes.listprobes) < number:
-        difference = number - len(probe.listprobes)
+        difference = number - len(probes.listprobes)
         message = "* " + (str(difference) +
                           " probes not **** detected ***")
-        # createMail(probes, "technical issue", config, True, message)
-        # if difference == number:
-        return message
+        createMail(probes, "technical issue", config, True, message)
+        if difference == number:
+            return message
     # try to read the probes temp
     try:
         for p in range(len(probes.listprobes)):
