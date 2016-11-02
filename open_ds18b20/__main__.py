@@ -159,6 +159,8 @@ def main():
         promptConfig(config)
     # read the data now that you should have some
     config.readData()
+    # initialize a potential message for the user
+    messages = []
     # create a Probe instance
     probes = probe.Probe()
     # detect the probes attach
@@ -167,11 +169,11 @@ def main():
     number = config.getProbes()
     if len(probes.listprobes) < number:
         difference = number - len(probes.listprobes)
-        message = "* " + (str(difference) +
-                          " probes not **** detected ***")
-        createMail(probes, "technical issue", config, True, message)
+        messages.append("* " + (str(difference) +
+                                " probes not **** detected ***"))
+        createMail(probes, "technical issue", config, True, messages[-1])
         if difference == number:
-            return message
+            return messages[-1]
     # try to read the probes temp
     try:
         for p in range(len(probes.listprobes)):
@@ -180,8 +182,8 @@ def main():
             probes.getTemperature(templine)
     # return an exception with the nature of the exception
     except:
-        message = "* temperatures *couldn't be read"  # , sys.exc_info()[:2]
-        return message
+        # , sys.exc_info()[:2]
+        messages.append("* temperatures *couldn't be read")
     try:
         # a flag to avoid sending a standard mail + alert
         mailsent = False
@@ -203,12 +205,16 @@ def main():
                 createMail(probes, subject, config)
 
     except:
-        return sys.exc_info()[:2]  # "mail couldn't be***** send *****"
+        messages.append("mail couldn't be***** send *****")
+        return messages  # sys.exc_info()[:2]
     # close the opened file
     for i in range(len(files)):
         files[i].closeFile()
     config.closeFile()
-    return (probes.temperatures)
+    if len(messages) > 0:
+        return (probes.temperatures + messages)
+    else:
+        return probes.temperatures
 
 
 if __name__ == '__main__':

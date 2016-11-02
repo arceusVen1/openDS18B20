@@ -19,9 +19,9 @@ class Probe():
         Returns:
             list: files containing a measured temperature from a probe
         """
-        regexp = r"^28"
+        regexp = re.compile("^28")
         for directory in os.listdir(self.path):
-            if re.match(regexp, directory):
+            if regexp.match(directory):
                 self.listprobes.append(self.path + '/' + directory + "/w1_slave")
         return self.listprobes
 
@@ -35,7 +35,6 @@ class Probe():
             list: List of the temperatures
         """
         regexp = re.compile("\d+$")
-
         temp = regexp.search(line).group(0)
         temp = list(temp)
         self.temperatures.append(temp[0] + temp[1] + "." + temp[2])
