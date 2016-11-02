@@ -189,11 +189,12 @@ def main():
         floater = to_float(probes.temperatures)
         # if alert compare the max/min with real temp
         if config.has_alert():
+            print(probes.temperatures)
             if (max(floater) >= config.getMaxTempAlert() or
                     min(floater) <= config.getMinTempAlert()):
                 subject = "Alert detected"
                 createMail(probes, subject, config, True)
-                # a mail has been sent
+            # a mail has been sent
                 mailsent = True
         # to force a mail message with the optionnal argument "mail"
         if len(sys.argv) >= 2 and not mailsent:
@@ -202,7 +203,7 @@ def main():
                 createMail(probes, subject, config)
 
     except:
-        return "mail couldn't be***** send *****"  # , sys.exc_info()
+        return sys.exc_info()[:2]  # "mail couldn't be***** send *****"
     # close the opened file
     for i in range(len(files)):
         files[i].closeFile()
