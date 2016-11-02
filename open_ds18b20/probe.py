@@ -35,10 +35,7 @@ class Probe():
             list: List of the temperatures
         """
         regexp = r"\d+$"
-        if re.match(regexp, line):
-            temp = re.search(regexp, line).group(0)
-            temp = list(temp)
-            self.temperatures.append(temp[0] + temp[1] + "." + temp[2])
-            return self.temperatures
-        else:
-            return False
+        temp = re.search(regexp, line).group(0)
+        temp = list(temp)
+        self.temperatures.append(temp[0] + temp[1] + "." + temp[2])
+        return self.temperatures
