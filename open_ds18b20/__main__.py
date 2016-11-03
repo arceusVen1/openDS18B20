@@ -212,6 +212,7 @@ def main():
     for i in range(len(files)):
         files[i].closeFile()
     config.closeFile()
+    result["temperatures"].append(probes.temperatures)
     return result
 
 
