@@ -5,6 +5,7 @@ import re
 import getpass
 import time
 import subprocess
+import click  # package import
 from open_ds18b20 import fichier, mail, probe
 
 
@@ -17,6 +18,9 @@ PROMPT = '> '
 # ---------------------------------------------------------
 
 
+@click.command()
+@click.option('--mail', default=False,
+              help='forces a mail to be sended.')
 def to_float(array):
     """turn a list's integer in float (for python2)
 
@@ -119,7 +123,7 @@ def modulesTester():
         return True
 
 
-def createMail(probes, subject, config, alert=False, message=""):
+def createMail(probes, subject, config, alert=False, messages=[]):
     """create the email to use it more easily on the __main__
 
     Args:
@@ -132,6 +136,10 @@ def createMail(probes, subject, config, alert=False, message=""):
         none: mail has been sent
     """
     email = mail.Mail()
+    message = ""
+    for i in range(len(messages)):
+        message += str(messages[i])
+        message += "\n"
     email.messageBody(probes.temperatures, message, alert)
     email.credentials["email"], email.credentials[
         "password"] = config.getCredentials()
@@ -140,7 +148,7 @@ def createMail(probes, subject, config, alert=False, message=""):
     email.sendMail()
 
 
-def main():
+def main(mail):
     # initialize the returned instance
     result = {"temperatures": [], "messages": []}
     # test that the moduels are present
@@ -171,10 +179,6 @@ def main():
         difference = number - len(probes.listprobes)
         result["messages"].append("* " + (str(difference) +
                                           " probes not **** detected ***"))
-        createMail(probes, "technical issue", config, True,
-                   result["messages"][-1])
-        if difference == number:
-            return result
     # try to read the probes temp
     try:
         for p in range(len(probes.listprobes)):
@@ -186,8 +190,6 @@ def main():
         # , sys.exc_info()[:2]
         result["messages"].append("* temperatures *couldn't be read")
     try:
-        # a flag to avoid sending a standard mail + alert
-        mailsent = False
         # transform the temp in float (for python 2)
         floater = to_float(probes.temperatures)
         # if alert compare the max/min with real temp
@@ -195,15 +197,14 @@ def main():
             print(probes.temperatures)
             if (max(floater) >= config.getMaxTempAlert() or
                     min(floater) <= config.getMinTempAlert()):
-                subject = "Alert detected"
-                createMail(probes, subject, config, True)
-            # a mail has been sent
-                mailsent = True
+                result["messages"].append("too high/low temperature")
         # to force a mail message with the optionnal argument "mail"
-        if len(sys.argv) >= 2 and not mailsent:
-            if str(sys.argv[1]) == "mail":
-                subject = "list of temperatures"
-                createMail(probes, subject, config)
+        if mail:
+            subject = "list of temperatures"
+            createMail(probes, subject, config)
+        if len(result["messages"]) > 0:
+            subject = "alert detected"
+            createMail(probes, subject, config, True, result["messages"])
 
     except:
         result["messages"].append("mail couldn't be***** send *****")
