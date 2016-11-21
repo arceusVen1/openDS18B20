@@ -18,12 +18,6 @@ PROMPT = '> '
 # ---------------------------------------------------------
 
 
-@click.command()
-@click.option('--mail', default=False,
-              help='forces a mail to be sended.')
-@click.option('--erase', default=False,
-              help='rewrite the config')
-
 def to_float(array):
     """turn a list's integer in float (for python2)
 
@@ -151,6 +145,11 @@ def createMail(probes, subject, config, alert=False, messages=[]):
     email.sendMail()
 
 
+@click.command()
+@click.option('--mail', default=False,
+              help='forces a mail to be sended.')
+@click.option('--erase', default=False,
+              help='rewrite the config')
 def main(mail, erase):
     # initialize the returned instance
     result = {"temperatures": [], "messages": []}
