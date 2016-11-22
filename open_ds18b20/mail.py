@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import smtplib
+import socket
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -24,7 +25,7 @@ class Mail():
             server.sendmail(self.msg["From"], self.msg["To"], text)
             server.quit()
             sent = True
-        except:
+        except socket.gaierror:
             pass
         return sent
 
