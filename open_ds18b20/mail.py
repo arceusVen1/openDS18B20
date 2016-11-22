@@ -21,9 +21,11 @@ class Mail():
             server = smtplib.SMTP(smtp_server, port)
             server.starttls()
             server.login(self.credentials["email"], self.credentials["password"])
-            server.sendmail(self.msg["From"], self.msg["To"], text)
-            server.quit()
-            sent = True
+            try:
+                server.sendmail(self.msg["From"], self.msg["To"], text)
+            finally:
+                server.quit()
+                sent = True
         except:
             pass
         return sent
