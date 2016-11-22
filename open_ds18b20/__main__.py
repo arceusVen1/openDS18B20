@@ -146,9 +146,9 @@ def createMail(probes, subject, config, alert=False, messages=[]):
 
 
 @click.command()
-@click.option('-m', '--mail', action="store_true",
+@click.option('-m', '--mail', is_flag=True,
               help='forces a mail to be sended.')
-@click.option('-e', '--erase', action="store_true",
+@click.option('-e', '--erase', is_flag=True,
               help='rewrite the config')
 def main(mail, erase):
     # initialize the returned instance
