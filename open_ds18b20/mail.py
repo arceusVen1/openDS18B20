@@ -15,19 +15,16 @@ class Mail():
 
     def sendMail(self, smtp_server="smtp.gmail.com", port=587):
         sent = False
-        self.msg.attach(MIMEText(self.body, 'plain'))
-        text = self.msg.as_string()
         try:
+            self.msg.attach(MIMEText(self.body, 'plain'))
+            text = self.msg.as_string()
             server = smtplib.SMTP(smtp_server, port)
-        except smtplib.socket.gaierror:
-            return sent
-        try:
             server.starttls()
             server.login(self.credentials["email"], self.credentials["password"])
             server.sendmail(self.msg["From"], self.msg["To"], text)
             server.quit()
             sent = True
-        except Exception:
+        except:
             pass
         return sent
 
