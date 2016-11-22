@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import smtplib
+import urllib2
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -13,6 +14,13 @@ class Mail():
         self.body = ""
         return
 
+    def internet_on():
+        try:
+            urllib2.urlopen('http://8.8.8.8', timeout=1)
+            return True
+        except urllib2.URLError as err:
+            return False
+
     def sendMail(self, smtp_server="smtp.gmail.com", port=587):
         sent = False
         try:
@@ -20,7 +28,8 @@ class Mail():
             text = self.msg.as_string()
             server = smtplib.SMTP(smtp_server, port)
             server.starttls()
-            server.login(self.credentials["email"], self.credentials["password"])
+            server.login(self.credentials["email"],
+                         self.credentials["password"])
             try:
                 server.sendmail(self.msg["From"], self.msg["To"], text)
             finally:

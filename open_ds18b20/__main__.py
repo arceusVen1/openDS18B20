@@ -134,17 +134,20 @@ def createMail(probes, config, alert=False, messages=[]):
     """
 
     email = mail.Mail()
-    message = ""
-    for i in range(len(messages)):
-        message += str(messages[i])
-        message += "\n"
-    email.messageBody(probes.temperatures, message, alert)
-    email.credentials["email"], email.credentials[
-        "password"] = config.getCredentials()
-    email.messageBuilder(email.credentials["email"],
-                         email.credentials["email"])
-    sent = email.sendMail()
-    return sent
+    if email.internet_on():
+        message = ""
+        for i in range(len(messages)):
+            message += str(messages[i])
+            message += "\n"
+        email.messageBody(probes.temperatures, message, alert)
+        email.credentials["email"], email.credentials[
+            "password"] = config.getCredentials()
+        email.messageBuilder(email.credentials["email"],
+                             email.credentials["email"])
+        sent = email.sendMail()
+        return sent
+    else:
+        return False
 
 
 @click.command()
