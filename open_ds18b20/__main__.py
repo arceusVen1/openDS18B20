@@ -195,7 +195,6 @@ def main(mail, erase):
         floater = to_float(probes.temperatures)
         # if alert compare the max/min with real temp
         if config.has_alert():
-            print(probes.temperatures)
             if (max(floater) >= config.getMaxTempAlert() or
                     min(floater) <= config.getMinTempAlert()):
                 result["messages"].append("too high/low temperature")
