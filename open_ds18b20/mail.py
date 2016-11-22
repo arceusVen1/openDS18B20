@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
 import smtplib
-import urllib2
+from urllib.request import urlopen
+from urllib.error import *
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -16,9 +17,9 @@ class Mail():
 
     def internet_on():
         try:
-            urllib2.urlopen('http://8.8.8.8', timeout=1)
+            urlopen('http://8.8.8.8', timeout=1)
             return True
-        except urllib2.URLError as err:
+        except:
             return False
 
     def sendMail(self, smtp_server="smtp.gmail.com", port=587):
