@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import smtplib
-from socket import gaierror
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -25,8 +24,8 @@ class Mail():
             server.sendmail(self.msg["From"], self.msg["To"], text)
             server.quit()
             sent = True
-        except gaierror:
-            sent = False
+        except smtplib.socket.gaierror:
+            pass
         return sent
 
     def messageBody(self, temperatures, additional="", alert=False):
