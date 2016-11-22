@@ -133,7 +133,6 @@ def createMail(probes, config, alert=False, messages=[]):
         bool: indicates if mail has been sent
     """
 
-    sent = False
     email = mail.Mail()
     message = ""
     for i in range(len(messages)):
@@ -142,13 +141,9 @@ def createMail(probes, config, alert=False, messages=[]):
     email.messageBody(probes.temperatures, message, alert)
     email.credentials["email"], email.credentials[
         "password"] = config.getCredentials()
-    email.messageBuilder(
-        email.credentials["email"], email.credentials["email"])
-    try:
-        email.sendMail()
-        sent = True
-    except:
-        pass
+    email.messageBuilder(email.credentials["email"],
+                         email.credentials["email"])
+    sent = email.sendMail()
     return sent
 
 

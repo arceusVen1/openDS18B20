@@ -14,14 +14,19 @@ class Mail():
         return
 
     def sendMail(self, smtp_server="smtp.gmail.com", port=587):
+        sent = False
         self.msg.attach(MIMEText(self.body, 'plain'))
         text = self.msg.as_string()
-        server = smtplib.SMTP(smtp_server, port)
-        server.starttls()
-        server.login(self.credentials["email"], self.credentials["password"])
-        server.sendmail(self.msg["From"], self.msg["To"], text)
-        server.quit()
-        return
+        try:
+            server = smtplib.SMTP(smtp_server, port)
+            server.starttls()
+            server.login(self.credentials["email"], self.credentials["password"])
+            server.sendmail(self.msg["From"], self.msg["To"], text)
+            server.quit()
+            sent = True
+        except:
+            pass
+        return sent
 
     def messageBody(self, temperatures, additional="", alert=False):
         if alert:
