@@ -19,12 +19,15 @@ class Mail():
         text = self.msg.as_string()
         try:
             server = smtplib.SMTP(smtp_server, port)
+        except smtplib.socket.gaierror:
+            return sent
+        try:
             server.starttls()
             server.login(self.credentials["email"], self.credentials["password"])
             server.sendmail(self.msg["From"], self.msg["To"], text)
             server.quit()
             sent = True
-        except smtplib.socket.gaierror:
+        except Exception:
             pass
         return sent
 
