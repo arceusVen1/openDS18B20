@@ -24,11 +24,9 @@ class Mail():
             server.starttls()
             server.login(self.credentials["email"],
                          self.credentials["password"])
-            try:
-                server.sendmail(self.msg["From"], self.msg["To"], text)
-            finally:
-                server.quit()
-                sent = True
+            server.sendmail(self.msg["From"], self.msg["To"], text)
+            server.quit()
+            sent = True
         except:
             pass
         return sent
