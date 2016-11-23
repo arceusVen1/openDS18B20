@@ -15,13 +15,6 @@ class Mail():
         self.body = ""
         return
 
-    def internet_on():
-        try:
-            urlopen('http://8.8.8.8', timeout=1)
-            return True
-        except:
-            return False
-
     def sendMail(self, smtp_server="smtp.gmail.com", port=587):
         sent = False
         try:
