@@ -205,7 +205,7 @@ def main():
     # transform the temp in float (for python 2)
     floater = to_float(probes.temperatures)
     # if alert compare the max/min with real temp
-    if config.has_alert():
+    if config.has_alert() and len(floater) > 0:
         if (max(floater) >= config.getMaxTempAlert() or
                 min(floater) <= config.getMinTempAlert()):
             result["messages"].append("too high/low temperature")
