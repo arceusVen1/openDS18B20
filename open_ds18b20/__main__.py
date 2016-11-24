@@ -5,7 +5,6 @@ import re
 import getpass
 import time
 import subprocess
-import click  # package import
 from open_ds18b20 import fichier, mail, probe
 
 
@@ -120,6 +119,17 @@ def modulesTester():
         return True
 
 
+def argGestion(args):
+    erase = False
+    mail = False
+    for i in range(len(args)):
+        if args[i] == "erase":
+            erase = True
+        elif args[i] == "mail":
+            mail = True
+    return erase, mail
+
+
 def createMail(probes, config, alert=False, messages=[]):
     """create the email to use it more easily on the __main__
 
@@ -139,19 +149,15 @@ def createMail(probes, config, alert=False, messages=[]):
         message += str(messages[i])
         message += "\n"
     email.messageBody(probes.temperatures, message, alert)
-    email.credentials["email"], email.credentials["password"] = config.getCredentials()
+    email.credentials["email"], email.credentials[
+        "password"] = config.getCredentials()
     email.messageBuilder(email.credentials["email"],
                          email.credentials["email"])
     sent = email.sendMail()
     return sent
 
 
-@click.command()
-@click.option('-m', '--mail', is_flag=True,
-              help='forces a mail to be sended.')
-@click.option('-e', '--erase', is_flag=True,
-              help='rewrite the config')
-def main(mail, erase):
+def main():
     # initialize the returned instance
     result = {"temperatures": [], "messages": []}
     # flag for the alert
@@ -161,6 +167,7 @@ def main(mail, erase):
     if not tester:
         return
     files = []
+    erase, mail = argGestion(sys.argv)
     # if erase arg the config is reset
     if erase:
         # erase the config file to avoid conflict
@@ -218,4 +225,4 @@ def main(mail, erase):
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    main()
