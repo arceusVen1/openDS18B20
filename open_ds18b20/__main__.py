@@ -77,7 +77,7 @@ def main():
     config = ConfigFile("/home/pi/ds18b20_conf/config.json")
     config.initialConfig()
     # if the config file is empty (especially if it has just been created)
-    if config.nbline == 0:
+    if not hasattr(config, 'nbline') or config.nbline == 0:
         # ask for the new settings in the console
         config.register()
     # read the data now that you should have some
