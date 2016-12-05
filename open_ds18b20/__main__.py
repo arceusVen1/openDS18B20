@@ -1,14 +1,8 @@
 #!/usr/bin/python3
 import sys
-import os
-import re
-import getpass
-import time
-import subprocess
-from open_ds18b20.fichier import File, ConfigFile, ProbeFile, ModuleFile 
-from open_ds18b20.mail import Mail 
-from open_ds18b20.probe import Probe
-from open_ds18b20.console import Console
+from fichier import File, ConfigFile, ProbeFile, ModuleFile
+from mail import Mail
+from probe import Probe
 
 
 def to_float(array):

@@ -1,6 +1,13 @@
 #!/usr/bin/python3
 
+from console import console
 import json
+import os
+import time
+import subprocess
+
+SETTINGS = {"email": "", "password": "", "number": 0,
+            "alert": {"choice": False, "max": 0, "min": 0}}
 
 
 class File(object):
@@ -32,6 +39,9 @@ class File(object):
         """
         self.file.close()
 
+    def removeFile(self):
+        os.remove(self.path)
+
 
 class ConfigFile(File):
 
@@ -39,6 +49,22 @@ class ConfigFile(File):
 
     def __init__(self, filepath):
         super(ConfigFile, self).__init__(filepath)
+        self.settings = SETTINGS
+
+    def initialConfig(self):
+        console = console.Console()
+        try:
+            os.path.abspath(self.path)
+        except IOError:
+            console.print("creating config.json in " + str(path))
+            try:
+                os.makedirs(path)
+            except OSError:
+                console.print("already existing folder")
+            subprocess.Popen(["touch", path + "/config.json"])
+            # leaves enough time for the subprocess to create the file
+            time.sleep(1)
+
 
     def readData(self):
         """load the data from a json file
@@ -89,16 +115,14 @@ class ConfigFile(File):
         """
         return float(self.data["alert"]["min"])
 
-    def register(self, settings):
+    def register(self):
         """Registers the (new) settings in the cofnig file
-
-        Args:
-            settings (dict): Dictionnary of the settings
 
         Returns:
             none: The settings hacve been saved in the config file
         """
-        element = json.dumps(settings, indent=4)
+        self.settings = Console.promptConfig(self.settings)
+        element = json.dumps(self.settings, indent=4)
         self._save(element)
 
     def _save(self, element):
@@ -139,3 +163,21 @@ class ModuleFile(File):
 
     def closeFile(self):
         super(ModuleFile, self).closeFile()
+
+    def tester(self):
+        """test the presence w1-therm and w1-gpio modules in the /etc/modules
+
+        Returns:
+            bool: True if the modules are installed, false otherwise
+        """
+        flag = [False, False]
+        for i in range(self.nbline):
+            line = self.readLine(i + 1)
+            if re.match(r"^w1-gpio", line):
+                flag[0] = True
+            if re.match(r"^w1-therm", line):
+                flag[1] = True
+        if flag != [True, True]:
+            return Console.writeDependencies()
+        else:
+            return True

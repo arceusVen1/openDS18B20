@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 
 import smtplib
-from urllib.request import urlopen
-from urllib.error import *
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
