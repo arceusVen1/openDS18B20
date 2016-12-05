@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 
-from console import console
+from console import Console
 import json
 import os
 import time
 import subprocess
+import re
 
 SETTINGS = {"email": "", "password": "", "number": 0,
             "alert": {"choice": False, "max": 0, "min": 0}}
@@ -16,9 +17,9 @@ class File(object):
 
     def __init__(self, filepath):
         self.path = filepath
-        self.file = open(self.path, "r")
-        self.content = list(self.file)
-        self.nbline = len(self.content)
+	self.file = open(self.path, "r")
+       	self.content = list(self.file)
+       	self.nbline = len(self.content)
 
     def readLine(self, nbline):
         """Reads a specific line
@@ -48,22 +49,27 @@ class ConfigFile(File):
     """Deal with the configuration file in /home/pi/ds18b20_conf/config.json"""
 
     def __init__(self, filepath):
-        super(ConfigFile, self).__init__(filepath)
-        self.settings = SETTINGS
+        self.path = filepath
+	try:
+	    self.file = open(self.path, 'r')
+	except:
+	    pass
+	self.settings = SETTINGS
 
     def initialConfig(self):
-        console = console.Console()
+        console = Console()
         try:
-            os.path.abspath(self.path)
+            dirpath = os.path.dirname(os.path.abspath(self.path))
         except IOError:
-            console.print("creating config.json in " + str(path))
+            console.dislay("creating config.json in " + str(dirpath))
             try:
-                os.makedirs(path)
+                os.makedirs(dirpath)
             except OSError:
-                console.print("already existing folder")
-            subprocess.Popen(["touch", path + "/config.json"])
+                console.display("already existing folder")
+            subprocess.Popen(["touch", self.path])
             # leaves enough time for the subprocess to create the file
             time.sleep(1)
+	self.file = open(self.path, 'r')
 
 
     def readData(self):

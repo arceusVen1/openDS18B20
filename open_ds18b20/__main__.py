@@ -74,7 +74,7 @@ def main():
         # erase the config file to avoid conflict
         File.removeFile("/home/pi/ds18b20_conf/config.json")
     # create if needed and open a config file
-    config = ConfigFile("/home/pi/ds18b20_conf/")
+    config = ConfigFile("/home/pi/ds18b20_conf/config.json")
     config.initialConfig()
     # if the config file is empty (especially if it has just been created)
     if config.nbline == 0:
