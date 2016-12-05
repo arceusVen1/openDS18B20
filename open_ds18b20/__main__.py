@@ -64,7 +64,7 @@ def main():
     # flag for the alert
     alert = False
     # test that the moduels are present
-    tester = ModuleFile.tester()
+    tester = ModuleFile("/etc/modules").tester()
     if not tester:
         return
     files = []
