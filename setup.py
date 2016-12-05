@@ -18,5 +18,5 @@ setup(
     long_description=read('readme.md'),
     packages=['open_ds18b20'],
     entry_points={"console_scripts": ['open_ds18b20 = open_ds18b20.__main__:main']
-        }
+                  }
 )
