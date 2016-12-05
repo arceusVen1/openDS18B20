@@ -17,9 +17,9 @@ class File(object):
 
     def __init__(self, filepath):
         self.path = filepath
-	self.file = open(self.path, "r")
-       	self.content = list(self.file)
-       	self.nbline = len(self.content)
+        self.file = open(self.path, "r")
+        self.content = list(self.file)
+        self.nbline = len(self.content)
 
     def readLine(self, nbline):
         """Reads a specific line
@@ -50,11 +50,11 @@ class ConfigFile(File):
 
     def __init__(self, filepath):
         self.path = filepath
-	try:
-	    self.file = open(self.path, 'r')
-	except:
-	    pass
-	self.settings = SETTINGS
+        try:
+            self.file = open(self.path, 'r')
+        except:
+            pass
+        self.settings = SETTINGS
 
     def initialConfig(self):
         console = Console()
@@ -69,8 +69,7 @@ class ConfigFile(File):
             subprocess.Popen(["touch", self.path])
             # leaves enough time for the subprocess to create the file
             time.sleep(1)
-	self.file = open(self.path, 'r')
-
+        self.file = open(self.path, 'r')
 
     def readData(self):
         """load the data from a json file
