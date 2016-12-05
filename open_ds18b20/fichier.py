@@ -52,6 +52,8 @@ class ConfigFile(File):
         self.path = filepath
         try:
             self.file = open(self.path, 'r')
+            self.content = list(self.file)
+            #self.nbline = len(self.content)
         except:
             pass
         self.settings = SETTINGS
