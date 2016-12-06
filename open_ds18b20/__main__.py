@@ -72,7 +72,7 @@ def main():
     # if erase arg the config is reset
     if erase:
         # erase the config file to avoid conflict
-        File.removeFile("/home/pi/ds18b20_conf/config.json")
+        File("/home/pi/ds18b20_conf/config.json").removeFile()
     # create if needed and open a config file
     config = ConfigFile("/home/pi/ds18b20_conf/config.json")
     # if the config file is empty (especially if it has just been created)

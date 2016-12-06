@@ -53,9 +53,9 @@ class ConfigFile(File):
         self.path = filepath
         self.settings = SETTINGS
         console = Console()
-        try:
-            dirpath = os.path.dirname(os.path.abspath(self.path))
-        except IOError:
+        osPath = os.path.abspath(self.path)
+        if not os.path.exists(osPath):
+            dirpath = os.path.dirname(osPath)
             console.dislay("creating config.json in " + str(dirpath))
             try:
                 os.makedirs(dirpath)
