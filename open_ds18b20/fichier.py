@@ -41,6 +41,7 @@ class File(object):
         self.file.close()
 
     def removeFile(self):
+        self.closeFile()
         os.remove(self.path)
 
 
@@ -50,15 +51,7 @@ class ConfigFile(File):
 
     def __init__(self, filepath):
         self.path = filepath
-        try:
-            self.file = open(self.path, 'r')
-            self.content = list(self.file)
-            #self.nbline = len(self.content)
-        except:
-            pass
         self.settings = SETTINGS
-
-    def initialConfig(self):
         console = Console()
         try:
             dirpath = os.path.dirname(os.path.abspath(self.path))
@@ -72,6 +65,8 @@ class ConfigFile(File):
             # leaves enough time for the subprocess to create the file
             time.sleep(1)
         self.file = open(self.path, 'r')
+        self.content = list(self.file)
+        self.nbline = len(self.content)
 
     def readData(self):
         """load the data from a json file
