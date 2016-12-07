@@ -153,7 +153,21 @@ class ProbeConfigFile(ConfigFile):
 
     def __init__(self, path):
         # super(ProbeConfigFile, self).__init__()
-        self.path = path
+        self.path = os.path.abspath(path)
+
+    def edit(self):
+        self.file = open(self.path, "r")
+        self.content = list(self.file)
+        self.nbline = len(self.content)
+
+    def exist(self):
+        if os.path.exists(self.path):
+            return True
+        else:
+            return False
+
+    def create(self):
+        os.mknod(self.path)
 
     def register(self):
         super(ProbeConfigFile, self).register()

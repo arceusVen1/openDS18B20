@@ -2,7 +2,7 @@
 import sys
 from open_ds18b20.fichier import File, ConfigFile, ProbeFile, ModuleFile
 from open_ds18b20.mail import Mail
-from open_ds18b20.probe import Probe
+from open_ds18b20.probe import Materials, Probe
 
 
 def to_float(array):
@@ -82,29 +82,37 @@ def main():
     # read the data now that you should have some
     config.readData()
     # create a Probe instance
-    probes = Probe()
+    materials = Materials()
     # detect the probes attach
-    probes.detectProbe()
+    materials.detectProbe()
+    # get all the probes attach
+    probes = []
+    n = len(materials.listprobes)
+    for probe in range(n):
+        probes.append(Probe(probe))
 # dht_h, dht_t = dht.read_retry(dht.DHT22,17)
     number = config.getProbes()
-    if len(probes.listprobes) < number:
-        difference = number - len(probes.listprobes)
-        result["messages"].append("* " + (str(difference) +
-                                          " probes not **** detected ***"))
-        alert = True
     # try to read the probes temp
     try:
-        for p in range(len(probes.listprobes)):
-            files.append(ProbeFile(probes.listprobes[p]))
-            templine = files[p].readLine(2)
-            probes.getTemperature(templine)
+        for p in range(n):
+            files.append(ProbeFile(materials.listPaths[p]))
+            if probes[p].is_working(files[p].readLine(1)):
+                materials.numWorkingProbes += 1
+                templine = files[p].readLine(2)
+                probes[p].getTemperature(templine)
+                result["temperatures"].append(probes[p].temperature)
     # append an exception message if exception is raised
     except:
         # , sys.exc_info()[:2]
         result["messages"].append("* temperatures *couldn't be read")
         alert = True
+    if materials.numWorkingProbes < number:
+        difference = number - materials.numWorkingProbes
+        result["messages"].append("* " + (str(difference) +
+                                          " probes not **** detected ***"))
+        alert = True
     # transform the temp in float (for python 2)
-    floater = to_float(probes.temperatures)
+    floater = to_float(result["temperatures"])
     # if alert compare the max/min with real temp
     if config.has_alert() and len(floater) > 0:
         if (max(floater) >= config.getMaxTempAlert() or

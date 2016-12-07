@@ -3,14 +3,18 @@ from fichier import ProbeConfigFile
 import re
 import os
 
+SETTINGS = {"idt": "", "alert": {"bool": False, "max": 0,
+                                 "min": 0}, "max": [], "min": [], "moment": []}
 
-class Probes():
+
+class Materials():
 
     """Represents all the probes"""
 
     def __init__(self):
         self.listprobes = []
-        self.temperatures = []
+        self.listPaths = []
+        self.numWorkingProbes = 0
         self.path = os.path.abspath("/sys/bus/w1/devices")
         return
 
@@ -23,51 +27,66 @@ class Probes():
         regexp = re.compile("^28")
         for directory in os.listdir(self.path):
             if regexp.match(directory):
-                self.listprobes.append(
-                    self.path + '/' + directory + "/w1_slave")
+                self.listprobes.append(directory)
+        self.__path_listing()
         return self.listprobes
 
-    def __is_working(self):
-        pass
+    def __path_listing(self):
+        for probe in range(len(self.listprobes)):
+            self.listPaths.append(
+                self.path + '/' + probe + "/w1_slave")
 
 
 class Probe():
 
     """Represents the DS18B20 probes"""
 
-    def __init__(self, path, settings):
-        self.path = os.path.abspath(path)
+    def __init__(self, idt, settings=SETTINGS):
+        self.idt = idt
         self.settings = settings
+        self.temperature = ""
+        self.path = "/home/pi/ds18b20_conf/" + self.idt + ".json"
+        self.config = ProbeConfigFile(self.path)
         return
 
-    def __is_working(self):
-        pass
+    def __has_config(self):
+        if not self.config.exists():
+            self.config.create()
+            return False
+        elif hasattr(self.config, "nbline") and self.config.nbline == 0:
+            return False
+        else:
+            return True
 
     def get_data(self):
-        self.settings = ProbeConfigFile(configPath).readData()
+        if self.__has_config():
+            self.config.edit()
+            self.settings = self.config.readData()
         return self.settings
 
     def set_data(self):
         self.config.settings = self.settings
         self.config.register()
 
+    def set_idt(self):
+        self.settings["idt"] = self.idt
+
     def has_alert(self):
-        if self.settings["alert"]:
+        if self.settings["alert"]["bool"]:
             return True
         else:
             return False
 
-    def __set_max_alert(self, maxAlert):
+    def set_max_alert(self, maxAlert):
         self.settings["alert"]["max"] = maxAlert
 
-
-    def __set_max_alert(self, minAlert):
+    def set_min_alert(self, minAlert):
         self.settings["alert"]["min"] = minAlert
 
     def get_slug(self):
         return self.settings["slug"]
 
-    def __set_slug(self, slug):
+    def set_slug(self, slug):
         self.settings["slug"] = str(slug)
 
     def get_max(self):
@@ -76,17 +95,28 @@ class Probe():
     def get_min(self):
         return self.settings["min"]
 
-    def __set_max(self, maxTemps):
+    def set_max(self, maxTemps):
         self.settings["max"] = maxTemps
 
-    def __set_min(self, minTemps):
+    def set_min(self, minTemps):
         self.settings["min"] = minTemps
 
     def get_moment(self):
         return self.settings["moment"]
 
-    def __set_moment(self, moments):
+    def set_moment(self, moments):
         self.settings["moment"] = moments
+
+    def get_creneau(self):
+        return len(self.settings["moment"])
+
+    def link_moment_temp(self):
+        thermoRange = []
+        for i in range(self.get_creneau()):
+            thermoRange.append([self.settings["moment"][i],
+                                self.settings["min"][i],
+                                self.settings["max"][i]])
+        return thermoRange
 
     def getTemperature(self, line):
         """get the temperature
@@ -95,10 +125,10 @@ class Probe():
             line (str): content of the files with the temperature inside
 
         Returns:
-            list: List of the temperatures
+            string: String of the temperatures
         """
         regexp = re.compile("\d+$")
         temp = regexp.search(line).group(0)
         temp = list(temp)
-        self.temperatures.append(temp[0] + temp[1] + "." + temp[2])
-        return self.temperatures
+        self.temperature = temp[0] + temp[1] + "." + temp[2]
+        return self.temperature
