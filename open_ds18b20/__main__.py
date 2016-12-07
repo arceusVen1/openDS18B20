@@ -96,7 +96,7 @@ def main():
                 materials.numWorkingProbes += 1
                 templine = files[p].readLine(2)
                 probes[p].getTemperature(templine)
-                result["temperatures"].append(probes[p].temperature)
+                result["temperatures"].append(float(probes[p].temperature))
     # append an exception message if exception is raised
     except:
         # , sys.exc_info()[:2]
