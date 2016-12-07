@@ -1,11 +1,13 @@
 #!/usr/bin/python3
+from fichier import ProbeConfigFile
 import re
 import os
 
 
-class Probe():
 
-    """Represents the DS18B20 probes"""
+class Probes():
+
+    """Represents all the probes"""
 
     def __init__(self):
         self.listprobes = []
@@ -13,7 +15,7 @@ class Probe():
         self.path = os.path.abspath("/sys/bus/w1/devices")
         return
 
-    def detectProbe(self):
+    def detectProbes(self):
         """detects the connected DS18B20 probes whose folders always start by 28
 
         Returns:
@@ -26,10 +28,37 @@ class Probe():
                     self.path + '/' + directory + "/w1_slave")
         return self.listprobes
 
-    def get_data():
+    def __is_working(self):
+        pass
+
+
+
+class Probe():
+
+    """Represents the DS18B20 probes"""
+
+    def __init__(self, path):
+        self.path = os.path.abspath(path)
+        self.settings = {}
+        return
+
+    def __is_working(self):
+        pass
+
+
+    def get_data(self):
+        pass
+
+    def set_data(self):
         pass
 
     def has_alert(self):
+        pass
+
+    def get_slug(self):
+        pass
+
+    def __set_slug(self):
         pass
 
     def get_max(self):
@@ -38,16 +67,16 @@ class Probe():
     def get_min(self):
         pass
 
-    def set_max(self):
+    def __set_max(self):
         pass
 
-    def set_min(self):
+    def __set_min(self):
         pass
 
     def get_moment(self):
         pass
 
-    def set_moment(self):
+    def __set_moment(self):
         pass
 
     def getTemperature(self, line):

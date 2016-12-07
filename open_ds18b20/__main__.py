@@ -78,7 +78,7 @@ def main():
     # if the config file is empty (especially if it has just been created)
     if config.nbline == 0:
         # ask for the new settings in the console
-        config.register()
+        config.set_settings()
     # read the data now that you should have some
     config.readData()
     # create a Probe instance

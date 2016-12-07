@@ -117,13 +117,16 @@ class ConfigFile(File):
         """
         return float(self.data["alert"]["min"])
 
+    def set_settings(self):
+        self.settings = Console().promptConfig(self.settings)
+        self.register()
+
     def register(self):
         """Registers the (new) settings in the cofnig file
 
         Returns:
             none: The settings hacve been saved in the config file
         """
-        self.settings = Console().promptConfig(self.settings)
         element = json.dumps(self.settings, indent=4)
         self._save(element)
 
@@ -143,6 +146,17 @@ class ConfigFile(File):
 
     def closeFile(self):
         super(ConfigFile, self).closeFile()
+
+
+class ProbeConfigFile(ConfigFile):
+    """deals with the config file of the probes"""
+
+    def __init__(self, path):
+        # super(ProbeConfigFile, self).__init__()
+        self.path = path
+
+    def readData(self):
+        super(ProbeConfigFile, self).readData()
 
 
 class ProbeFile(File):
