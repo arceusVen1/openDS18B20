@@ -32,7 +32,7 @@ class Materials():
         return self.listprobes
 
     def __path_listing(self):
-        for probe in xrange(len(self.listprobes)):
+        for probe in range(len(self.listprobes)):
             self.listPaths.append(
                 self.path + '/' + self.listprobes[probe] + "/w1_slave")
 
@@ -126,12 +126,12 @@ class Probe():
         return len(self.settings["moment"])
 
     def link_moment_temp(self):
-        thermoxrange = []
-        for i in xrange(self.get_creneau()):
-            thermoxrange.append([self.settings["moment"][i],
+        thermorange = []
+        for i in range(self.get_creneau()):
+            thermorange.append([self.settings["moment"][i],
                                 self.settings["min"][i],
                                 self.settings["max"][i]])
-        return thermoxrange
+        return thermorange
 
     def getTemperature(self, line):
         """get the temperature

@@ -206,7 +206,7 @@ class ModuleFile(File):
             bool: True if the modules are installed, false otherwise
         """
         flag = [False, False]
-        for i in xrange(self.nbline):
+        for i in range(self.nbline):
             line = self.readLine(i + 1)
             if re.match(r"^w1-gpio", line):
                 flag[0] = True
