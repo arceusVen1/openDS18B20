@@ -56,16 +56,19 @@ class Probe():
         else:
             return False
 
-    def __has_config(self):
-        if not self.config.exists() or (hasattr(self.config, "nbline") and self.config.nbline == 0):
+    def has_config(self):
+        if not self.config.exists() or (hasattr(self.config, "nbline") and
+                                        self.config.nbline == 0):
             return False
         else:
             return True
 
+    def allow_config(self):
+        self.config.create()
+        self.config.edit()
+
     def get_data(self):
-        if self.__has_config():
-            self.config.edit()
-            self.settings = self.config.readData()
+        self.settings = self.config.readData()
         return self.settings
 
     def set_data(self):
@@ -76,16 +79,23 @@ class Probe():
         self.settings["idt"] = self.idt
 
     def has_alert(self):
-        if self.settings["alert"]["bool"]:
-            return True
-        else:
-            return False
+        return self.settings["alert"]["bool"]
+
+    def set_alert(self, alert):
+        self.settings["alert"]["bool"] = True
+
+
+    def get_max_alert(self):
+        return self.settings["alert"]["max"]
+
+    def get_min_alert(self):
+        return self.settings["alert"]["min"]
 
     def set_max_alert(self, maxAlert):
-        self.settings["alert"]["max"] = maxAlert
+        self.settings["alert"]["max"] = float(maxAlert)
 
     def set_min_alert(self, minAlert):
-        self.settings["alert"]["min"] = minAlert
+        self.settings["alert"]["min"] = float(minAlert)
 
     def get_slug(self):
         return self.settings["slug"]
@@ -115,12 +125,12 @@ class Probe():
         return len(self.settings["moment"])
 
     def link_moment_temp(self):
-        thermoRange = []
+        thermorange = []
         for i in range(self.get_creneau()):
-            thermoRange.append([self.settings["moment"][i],
+            thermorange.append([self.settings["moment"][i],
                                 self.settings["min"][i],
                                 self.settings["max"][i]])
-        return thermoRange
+        return thermorange
 
     def getTemperature(self, line):
         """get the temperature

@@ -40,7 +40,7 @@ class Mail():
         if len(temperatures) > 0:
             for i in range(len(temperatures)):
                 self.body += ("probe " + str(i + 1) +
-                              " : " + temperatures[i] + "*C\n")
+                              " : " + str(temperatures[i]) + "*C\n")
         return self.body
 
     def messageBuilder(self, toaddr, fromaddr):

@@ -156,14 +156,17 @@ class ProbeConfigFile(ConfigFile):
         self.content = list(self.file)
         self.nbline = len(self.content)
 
-    def exist(self):
+    def exists(self):
         if os.path.exists(self.path):
             return True
         else:
             return False
 
     def create(self):
-        os.mknod(self.path)
+        try:
+            os.mknod(self.path)
+        except OSError:
+            pass
 
     def register(self):
         super(ProbeConfigFile, self).register()
