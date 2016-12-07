@@ -118,6 +118,7 @@ def main():
                     result["messages"].append(probes[p].get_slug() +
                                               "too high/low temperature")
                     alert = True
+                    print(alert)
     # to force a mail message with the optionnal argument "mail"
     if mail or alert:
         sent = createMail(result["temperatures"],

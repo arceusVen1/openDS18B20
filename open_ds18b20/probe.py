@@ -79,10 +79,7 @@ class Probe():
         self.settings["idt"] = self.idt
 
     def has_alert(self):
-        if self.settings["alert"]["bool"]:
-            return True
-        else:
-            return False
+        return self.settings["alert"]["bool"]
 
     def set_alert(self, alert):
         self.settings["alert"]["bool"] = True
