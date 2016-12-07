@@ -4,7 +4,6 @@ import re
 import os
 
 
-
 class Probes():
 
     """Represents all the probes"""
@@ -32,52 +31,62 @@ class Probes():
         pass
 
 
-
 class Probe():
 
     """Represents the DS18B20 probes"""
 
-    def __init__(self, path):
+    def __init__(self, path, settings):
         self.path = os.path.abspath(path)
-        self.settings = {}
+        self.settings = settings
         return
 
     def __is_working(self):
         pass
 
-
     def get_data(self):
-        pass
+        self.settings = ProbeConfigFile(configPath).readData()
+        return self.settings
 
     def set_data(self):
-        pass
+        self.config.settings = self.settings
+        self.config.register()
 
     def has_alert(self):
-        pass
+        if self.settings["alert"]:
+            return True
+        else:
+            return False
+
+    def __set_max_alert(self, maxAlert):
+        self.settings["alert"]["max"] = maxAlert
+
+
+    def __set_max_alert(self, minAlert):
+        self.settings["alert"]["min"] = minAlert
 
     def get_slug(self):
-        pass
+        return self.settings["slug"]
 
-    def __set_slug(self):
-        pass
+    def __set_slug(self, slug):
+        self.settings["slug"] = str(slug)
 
     def get_max(self):
-        pass
+        return self.settings["max"]
 
     def get_min(self):
-        pass
+        return self.settings["min"]
 
-    def __set_max(self):
-        pass
+    def __set_max(self, maxTemps):
+        self.settings["max"] = maxTemps
 
-    def __set_min(self):
-        pass
+    def __set_min(self, minTemps):
+        self.settings["min"] = minTemps
 
     def get_moment(self):
-        pass
+        return self.settings["moment"]
 
-    def __set_moment(self):
-        pass
+    def __set_moment(self, moments):
+        self.settings["moment"] = moments
 
     def getTemperature(self, line):
         """get the temperature

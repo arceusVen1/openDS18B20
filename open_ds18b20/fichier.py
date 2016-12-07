@@ -128,9 +128,9 @@ class ConfigFile(File):
             none: The settings hacve been saved in the config file
         """
         element = json.dumps(self.settings, indent=4)
-        self._save(element)
+        self.__save(element)
 
-    def _save(self, element):
+    def __save(self, element):
         """Overwrite text in a file to ensure that the file have been saved
 
         Args:
@@ -154,6 +154,12 @@ class ProbeConfigFile(ConfigFile):
     def __init__(self, path):
         # super(ProbeConfigFile, self).__init__()
         self.path = path
+
+    def register(self):
+        super(ProbeConfigFile, self).register()
+
+    def __save(self):
+        super(ProbeConfigFile, self).__save()
 
     def readData(self):
         super(ProbeConfigFile, self).readData()
