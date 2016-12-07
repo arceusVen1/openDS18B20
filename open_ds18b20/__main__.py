@@ -15,7 +15,7 @@ def to_float(array):
         list: the same array with float numbers
     """
     floater = []
-    for i in range(len(array)):
+    for i in xrange(len(array)):
         floater.append(float(array[i]))
     return floater
 
@@ -23,7 +23,7 @@ def to_float(array):
 def argGestion(args):
     erase = False
     mail = False
-    for i in range(len(args)):
+    for i in xrange(len(args)):
         if args[i] == "erase":
             erase = True
         elif args[i] == "mail":
@@ -46,7 +46,7 @@ def createMail(temperatures, config, alert=False, messages=[]):
 
     email = Mail()
     message = ""
-    for i in range(len(messages)):
+    for i in xrange(len(messages)):
         message += str(messages[i])
         message += "\n"
     email.messageBody(temperatures, message, alert)
@@ -88,13 +88,13 @@ def main():
     # get all the probes attach
     probes = []
     n = len(materials.listprobes)
-    for probe in range(n):
+    for probe in xrange(n):
         probes.append(Probe(materials.listprobes[probe]))
 # dht_h, dht_t = dht.read_retry(dht.DHT22,17)
     number = config.getProbes()
     # try to read the probes temp
     try:
-        for p in range(n):
+        for p in xrange(n):
             files.append(ProbeFile(materials.listPaths[p]))
             if probes[p].is_working(files[p].readLine(1)):
                 materials.numWorkingProbes += 1
@@ -114,19 +114,23 @@ def main():
     # transform the temp in float (for python 2)
     floater = to_float(result["temperatures"])
     # if alert compare the max/min with real temp
-    if config.has_alert() and len(floater) > 0:
-        if (max(floater) >= config.getMaxTempAlert() or
-                min(floater) <= config.getMinTempAlert()):
-            result["messages"].append("too high/low temperature")
-            alert = True
+    if len(floater) > 0:
+        for p in xrange(materials.numWorkingProbes):
+            if probes[p].has_config() and probes[p].has_alert():
+                if (floater[p] >= probes[p].get_max_alert() or
+                        min(floater) <= probes[p].get_min_alert()):
+                    result["messages"].append(probes[p].get_slug() +
+                                              "too high/low temperature")
+                    alert = True
     # to force a mail message with the optionnal argument "mail"
     if mail or alert:
-        sent = createMail(result["temperatures"], config, alert, result["messages"])
+        sent = createMail(result["temperatures"],
+                          config, alert, result["messages"])
         if not sent:
             result["messages"].append("mail couldn't be***** send *****")
         # sys.exc_info()[:2]
     # close the opened file
-    for i in range(len(files)):
+    for i in xrange(len(files)):
         files[i].closeFile()
     config.closeFile()
     return result

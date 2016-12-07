@@ -32,7 +32,7 @@ class Materials():
         return self.listprobes
 
     def __path_listing(self):
-        for probe in range(len(self.listprobes)):
+        for probe in xrange(len(self.listprobes)):
             self.listPaths.append(
                 self.path + '/' + self.listprobes[probe] + "/w1_slave")
 
@@ -56,11 +56,16 @@ class Probe():
         else:
             return False
 
-    def __has_config(self):
-        if not self.config.exists() or (hasattr(self.config, "nbline") and self.config.nbline == 0):
+    def has_config(self):
+        if not self.config.exists() or (hasattr(self.config, "nbline") and
+                                        self.config.nbline == 0):
             return False
         else:
             return True
+
+    def allow_config(self):
+        self.config.create()
+        self.config.edit()
 
     def get_data(self):
         if self.__has_config():
@@ -80,6 +85,12 @@ class Probe():
             return True
         else:
             return False
+
+    def get_max_alert(self):
+        return self.settings["alert"]["max"]
+
+    def get_min_alert(self):
+        return self.settings["alert"]["min"]
 
     def set_max_alert(self, maxAlert):
         self.settings["alert"]["max"] = maxAlert
@@ -115,12 +126,12 @@ class Probe():
         return len(self.settings["moment"])
 
     def link_moment_temp(self):
-        thermoRange = []
-        for i in range(self.get_creneau()):
-            thermoRange.append([self.settings["moment"][i],
+        thermoxrange = []
+        for i in xrange(self.get_creneau()):
+            thermoxrange.append([self.settings["moment"][i],
                                 self.settings["min"][i],
                                 self.settings["max"][i]])
-        return thermoRange
+        return thermoxrange
 
     def getTemperature(self, line):
         """get the temperature

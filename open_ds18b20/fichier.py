@@ -163,7 +163,10 @@ class ProbeConfigFile(ConfigFile):
             return False
 
     def create(self):
-        os.mknod(self.path)
+        try:
+            os.mknod(self.path)
+        except OSError:
+            pass
 
     def register(self):
         super(ProbeConfigFile, self).register()
@@ -203,7 +206,7 @@ class ModuleFile(File):
             bool: True if the modules are installed, false otherwise
         """
         flag = [False, False]
-        for i in range(self.nbline):
+        for i in xrange(self.nbline):
             line = self.readLine(i + 1)
             if re.match(r"^w1-gpio", line):
                 flag[0] = True
