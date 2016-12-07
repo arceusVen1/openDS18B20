@@ -84,6 +84,10 @@ class Probe():
         else:
             return False
 
+    def set_alert(self, alert):
+        self.settings["alert"]["bool"] = True
+
+
     def get_max_alert(self):
         return self.settings["alert"]["max"]
 
