@@ -50,7 +50,7 @@ class Probe():
         return
 
     def is_working(self, line):
-        regexp = re.compile("yes$")
+        regexp = re.compile("YES$")
         if regexp.match(line):
             self.numworkingprobe += 1
             return True

@@ -3,8 +3,6 @@
 from console import Console
 import json
 import os
-import time
-import subprocess
 import re
 
 SETTINGS = {"email": "", "password": "", "number": 0,
@@ -61,9 +59,7 @@ class ConfigFile(File):
                 os.makedirs(dirpath)
             except OSError:
                 console.display("already existing folder")
-            subprocess.Popen(["touch", self.path])
-            # leaves enough time for the subprocess to create the file
-            time.sleep(1)
+                os.mknod(self.path)
         self.file = open(self.path, 'r')
         self.content = list(self.file)
         self.nbline = len(self.content)
