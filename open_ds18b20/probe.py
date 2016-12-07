@@ -34,7 +34,7 @@ class Materials():
     def __path_listing(self):
         for probe in range(len(self.listprobes)):
             self.listPaths.append(
-                self.path + '/' + probe + "/w1_slave")
+                self.path + '/' + self.listprobes[probe] + "/w1_slave")
 
 
 class Probe():
