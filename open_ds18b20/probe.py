@@ -52,7 +52,6 @@ class Probe():
     def is_working(self, line):
         regexp = re.compile("YES$")
         if regexp.search(line):
-            self.numworkingprobe += 1
             return True
         else:
             return False
