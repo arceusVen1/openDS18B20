@@ -1,10 +1,8 @@
 #!/usr/bin/python3
 
-from open_ds18b20.console import Console
+from console import Console
 import json
 import os
-import time
-import subprocess
 import re
 
 SETTINGS = {"email": "", "password": "", "number": 0,
@@ -61,9 +59,7 @@ class ConfigFile(File):
                 os.makedirs(dirpath)
             except OSError:
                 console.display("already existing folder")
-            subprocess.Popen(["touch", self.path])
-            # leaves enough time for the subprocess to create the file
-            time.sleep(1)
+                os.mknod(self.path)
         self.file = open(self.path, 'r')
         self.content = list(self.file)
         self.nbline = len(self.content)
@@ -117,17 +113,20 @@ class ConfigFile(File):
         """
         return float(self.data["alert"]["min"])
 
+    def set_settings(self):
+        self.settings = Console().promptConfig(self.settings)
+        self.register()
+
     def register(self):
         """Registers the (new) settings in the cofnig file
 
         Returns:
             none: The settings hacve been saved in the config file
         """
-        self.settings = Console().promptConfig(self.settings)
         element = json.dumps(self.settings, indent=4)
-        self._save(element)
+        self.__save(element)
 
-    def _save(self, element):
+    def __save(self, element):
         """Overwrite text in a file to ensure that the file have been saved
 
         Args:
@@ -143,6 +142,37 @@ class ConfigFile(File):
 
     def closeFile(self):
         super(ConfigFile, self).closeFile()
+
+
+class ProbeConfigFile(ConfigFile):
+    """deals with the config file of the probes"""
+
+    def __init__(self, path):
+        # super(ProbeConfigFile, self).__init__()
+        self.path = os.path.abspath(path)
+
+    def edit(self):
+        self.file = open(self.path, "r")
+        self.content = list(self.file)
+        self.nbline = len(self.content)
+
+    def exist(self):
+        if os.path.exists(self.path):
+            return True
+        else:
+            return False
+
+    def create(self):
+        os.mknod(self.path)
+
+    def register(self):
+        super(ProbeConfigFile, self).register()
+
+    def __save(self):
+        super(ProbeConfigFile, self).__save()
+
+    def readData(self):
+        super(ProbeConfigFile, self).readData()
 
 
 class ProbeFile(File):
