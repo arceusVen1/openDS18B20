@@ -15,6 +15,17 @@ def argGestion(args):
             mail = True
     return erase, mail
 
+def test(probe):
+    probe.allow_config()
+    probe.set_idt()
+    probe.set_slug("test")
+    probe.set_alert(True)
+    probe.set_max_alert(25)
+    probe.set_min_alert(24)
+    probe.set_data()
+    return
+
+
 
 def createMail(temperatures, config, alert=False, messages=[]):
     """create the email to use it more easily on the __main__
@@ -97,6 +108,7 @@ def main():
                                           " probes not **** detected ***"))
         alert = True
     # if alert compare the max/min with real temp
+    test(probes[0])
     if len(result["temperatures"]) > 0:
         for p in range(materials.numWorkingProbes):
             if probes[p].has_config() and probes[p].has_alert():
