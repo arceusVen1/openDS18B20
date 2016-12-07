@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from console import Console
+from open_ds18b20.console import Console
 import json
 import os
 import time
@@ -56,7 +56,7 @@ class ConfigFile(File):
         osPath = os.path.abspath(self.path)
         if not os.path.exists(osPath):
             dirpath = os.path.dirname(osPath)
-            console.dislay("creating config.json in " + str(dirpath))
+            console.display("creating config.json in " + str(dirpath))
             try:
                 os.makedirs(dirpath)
             except OSError:
@@ -123,7 +123,7 @@ class ConfigFile(File):
         Returns:
             none: The settings hacve been saved in the config file
         """
-        self.settings = Console.promptConfig(self.settings)
+        self.settings = Console().promptConfig(self.settings)
         element = json.dumps(self.settings, indent=4)
         self._save(element)
 
