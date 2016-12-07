@@ -22,8 +22,33 @@ class Probe():
         regexp = re.compile("^28")
         for directory in os.listdir(self.path):
             if regexp.match(directory):
-                self.listprobes.append(self.path + '/' + directory + "/w1_slave")
+                self.listprobes.append(
+                    self.path + '/' + directory + "/w1_slave")
         return self.listprobes
+
+    def get_data():
+        pass
+
+    def has_alert(self):
+        pass
+
+    def get_max(self):
+        pass
+
+    def get_min(self):
+        pass
+
+    def set_max(self):
+        pass
+
+    def set_min(self):
+        pass
+
+    def get_moment(self):
+        pass
+
+    def set_moment(self):
+        pass
 
     def getTemperature(self, line):
         """get the temperature
