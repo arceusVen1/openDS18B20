@@ -26,7 +26,7 @@ class Materials():
         """
         regexp = re.compile("^28")
         for directory in os.listdir(self.path):
-            if regexp.match(directory):
+            if regexp.search(directory):
                 self.listprobes.append(directory)
         self.__path_listing()
         return self.listprobes
@@ -51,7 +51,7 @@ class Probe():
 
     def is_working(self, line):
         regexp = re.compile("YES$")
-        if regexp.match(line):
+        if regexp.search(line):
             self.numworkingprobe += 1
             return True
         else:
