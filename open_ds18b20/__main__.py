@@ -129,7 +129,6 @@ def main():
     for i in range(len(files)):
         files[i].closeFile()
     config.closeFile()
-    result["temperatures"] = probes.temperatures
     return result
 
 

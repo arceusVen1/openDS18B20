@@ -49,6 +49,14 @@ class Probe():
         self.config = ProbeConfigFile(self.path)
         return
 
+    def is_working(self, line):
+        regexp = re.compile("yes$")
+        if regexp.match(line):
+            self.numworkingprobe += 1
+            return True
+        else:
+            return False
+
     def __has_config(self):
         if not self.config.exists():
             self.config.create()
