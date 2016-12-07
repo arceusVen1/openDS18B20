@@ -31,11 +31,11 @@ def argGestion(args):
     return erase, mail
 
 
-def createMail(probes, config, alert=False, messages=[]):
+def createMail(temperatures, config, alert=False, messages=[]):
     """create the email to use it more easily on the __main__
 
     Args:
-        probes (Probe): Probe instance
+        temperatures (list): List of temperatures
         subject (str): Subject of the message
         config (ConfigFile): Config file
         alert (bool, optional): if it is an alert mail
@@ -49,7 +49,7 @@ def createMail(probes, config, alert=False, messages=[]):
     for i in range(len(messages)):
         message += str(messages[i])
         message += "\n"
-    email.messageBody(probes.temperatures, message, alert)
+    email.messageBody(temperatures, message, alert)
     email.credentials["email"], email.credentials[
         "password"] = config.getCredentials()
     email.messageBuilder(email.credentials["email"],
@@ -84,12 +84,12 @@ def main():
     # create a Probe instance
     materials = Materials()
     # detect the probes attach
-    materials.detectProbe()
+    materials.detectProbes()
     # get all the probes attach
     probes = []
     n = len(materials.listprobes)
     for probe in range(n):
-        probes.append(Probe(probe))
+        probes.append(Probe(materials.listprobes[probe]))
 # dht_h, dht_t = dht.read_retry(dht.DHT22,17)
     number = config.getProbes()
     # try to read the probes temp
@@ -121,7 +121,7 @@ def main():
             alert = True
     # to force a mail message with the optionnal argument "mail"
     if mail or alert:
-        sent = createMail(probes, config, alert, result["messages"])
+        sent = createMail(result["temperatures"], config, alert, result["messages"])
         if not sent:
             result["messages"].append("mail couldn't be***** send *****")
         # sys.exc_info()[:2]
