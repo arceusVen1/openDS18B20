@@ -57,10 +57,7 @@ class Probe():
             return False
 
     def __has_config(self):
-        if not self.config.exists():
-            self.config.create()
-            return False
-        elif hasattr(self.config, "nbline") and self.config.nbline == 0:
+        if not self.config.exists() or (hasattr(self.config, "nbline") and self.config.nbline == 0):
             return False
         else:
             return True
