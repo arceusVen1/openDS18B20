@@ -38,7 +38,7 @@ class Mail():
             self.msg["Subject"] = "List of Temperatures"
             self.body = "Here is the list of the mesured temperatures\n"
         if len(temperatures) > 0:
-            for i in xrange(len(temperatures)):
+            for i in range(len(temperatures)):
                 self.body += ("probe " + str(i + 1) +
                               " : " + temperatures[i] + "*C\n")
         return self.body

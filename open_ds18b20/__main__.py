@@ -5,21 +5,6 @@ from mail import Mail
 from probe import Materials, Probe
 
 
-def to_float(array):
-    """turn a list's integer in float (for python2)
-
-    Args:
-        array (list): array of number
-
-    Returns:
-        list: the same array with float numbers
-    """
-    floater = []
-    for i in range(len(array)):
-        floater.append(float(array[i]))
-    return floater
-
-
 def argGestion(args):
     erase = False
     mail = False
@@ -111,14 +96,13 @@ def main():
         result["messages"].append("* " + (str(difference) +
                                           " probes not **** detected ***"))
         alert = True
-    # transform the temp in float (for python 2)
-    floater = to_float(result["temperatures"])
     # if alert compare the max/min with real temp
-    if len(floater) > 0:
+    if len(result["temperatures"]) > 0:
         for p in range(materials.numWorkingProbes):
             if probes[p].has_config() and probes[p].has_alert():
-                if (floater[p] >= probes[p].get_max_alert() or
-                        min(floater) <= probes[p].get_min_alert()):
+                if (result["temperatures"][p] >= probes[p].get_max_alert() or
+                        result["temperatures"][p] <=
+                        probes[p].get_min_alert()):
                     result["messages"].append(probes[p].get_slug() +
                                               "too high/low temperature")
                     alert = True

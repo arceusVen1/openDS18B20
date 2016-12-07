@@ -68,9 +68,7 @@ class Probe():
         self.config.edit()
 
     def get_data(self):
-        if self.__has_config():
-            self.config.edit()
-            self.settings = self.config.readData()
+        self.settings = self.config.readData()
         return self.settings
 
     def set_data(self):
@@ -93,10 +91,10 @@ class Probe():
         return self.settings["alert"]["min"]
 
     def set_max_alert(self, maxAlert):
-        self.settings["alert"]["max"] = maxAlert
+        self.settings["alert"]["max"] = float(maxAlert)
 
     def set_min_alert(self, minAlert):
-        self.settings["alert"]["min"] = minAlert
+        self.settings["alert"]["min"] = float(minAlert)
 
     def get_slug(self):
         return self.settings["slug"]

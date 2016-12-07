@@ -156,7 +156,7 @@ class ProbeConfigFile(ConfigFile):
         self.content = list(self.file)
         self.nbline = len(self.content)
 
-    def exist(self):
+    def exists(self):
         if os.path.exists(self.path):
             return True
         else:
