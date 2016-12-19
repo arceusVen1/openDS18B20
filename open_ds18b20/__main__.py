@@ -70,6 +70,7 @@ def main():
         File("/home/pi/ds18b20_conf/config.json").removeFile()
     # create if needed and open a config file
     config = ConfigFile("/home/pi/ds18b20_conf/config.json")
+    file.append(config)
     # if the config file is empty (especially if it has just been created)
     if config.nbline == 0:
         # ask for the new settings in the console
