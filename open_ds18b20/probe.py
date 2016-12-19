@@ -109,10 +109,7 @@ class Probe():
 
     def set_slug(self, slug):
         slug = str(slug)
-        if len(slug) > 7:
-            return False
         self.settings["slug"] = str(slug)
-        return True
 
     def get_max(self):
         return self.settings["max"]
