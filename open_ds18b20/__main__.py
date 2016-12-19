@@ -104,7 +104,7 @@ def main():
                     p].temperature)
     # append an exception message if exception is raised
     except:
-        # sys.exc_info()[:2]
+        print(sys.exc_info()[:2])
         result["messages"].append("* temperatures *couldn't be read")
         alert = True
     # if not all of the probes attached are working
