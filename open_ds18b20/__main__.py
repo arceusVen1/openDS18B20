@@ -70,7 +70,6 @@ def main():
         File("/home/pi/ds18b20_conf/config.json").removeFile()
     # create if needed and open a config file
     config = ConfigFile("/home/pi/ds18b20_conf/config.json")
-    files.append(config)
     # if the config file is empty (especially if it has just been created)
     if config.nbline == 0:
         # ask for the new settings in the console
@@ -98,7 +97,6 @@ def main():
                 if probes[p].has_config():
                     probes[p].get_data()
                 # the probe is working
-                print("hello")
                 materials.numWorkingProbes += 1
                 templine = files[p].readLine(2)
                 probes[p].getTemperature(templine)
@@ -111,7 +109,6 @@ def main():
         alert = True
     # if not all of the probes attached are working
     if materials.numWorkingProbes < number:
-        print(number)
         difference = number - materials.numWorkingProbes
         result["messages"].append("* " + (str(difference) +
                                           " probes not **** detected ***"))
