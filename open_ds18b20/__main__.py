@@ -55,7 +55,7 @@ def createMail(temperatures, config, alert=False, messages=[]):
 
 def main():
     # initialize the returned instance
-    result = {"temperatures": [], "messages": []}
+    result = {"temperatures": {}, "messages": []}
     # flag for the alert
     alert = False
     # test that the moduels are present
@@ -95,11 +95,14 @@ def main():
             files.append(ProbeFile(materials.listPaths[p]))
             # test the probe
             if probes[p].is_working(files[p].readLine(1)):
+                if probes[p].has_config():
+                    probes[p].get_data()
                 # the probe is working
                 materials.numWorkingProbes += 1
                 templine = files[p].readLine(2)
                 probes[p].getTemperature(templine)
-                result["temperatures"].append(float(probes[p].temperature))
+                result["temperatures"][probes[p].get_slug()] = float(probes[
+                    p].temperature)
     # append an exception message if exception is raised
     except:
         # sys.exc_info()[:2]
@@ -114,7 +117,7 @@ def main():
     # if alert compare the max/min with real temp
     if len(result["temperatures"]) > 0:
         for p in range(materials.numWorkingProbes):
-            if probes[p].has_config() and probes[p].has_alert():
+            if probes[p].has_alert():
                 if (result["temperatures"][p] >= probes[p].get_max_alert() or
                         result["temperatures"][p] <=
                         probes[p].get_min_alert()):

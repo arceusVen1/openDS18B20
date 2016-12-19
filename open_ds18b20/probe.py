@@ -3,8 +3,8 @@ from fichier import ProbeConfigFile
 import re
 import os
 
-SETTINGS = {"idt": "", "alert": {"bool": False, "max": 0,
-                                 "min": 0}, "max": [], "min": [], "moment": []}
+SETTINGS = {"idt": "", "slug": "", "alert": {"bool": False, "max": 0,
+                                             "min": 0}, "max": [], "min": [], "moment": []}
 
 
 class Materials():
@@ -44,6 +44,7 @@ class Probe():
     def __init__(self, idt, settings=SETTINGS):
         self.idt = idt
         self.settings = settings
+        self.settings["slug"] = self.idt
         self.temperature = ""
         self.path = "/home/pi/ds18b20_conf/" + self.idt + ".json"
         self.config = ProbeConfigFile(self.path)
@@ -83,7 +84,6 @@ class Probe():
 
     def set_alert(self, alert):
         self.settings["alert"]["bool"] = True
-
 
     def get_max_alert(self):
         return self.settings["alert"]["max"]
