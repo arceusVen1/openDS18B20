@@ -58,10 +58,16 @@ class Probe():
             return False
 
     def has_config(self):
+        """test if the config file exist and has been filled
+
+        Returns:
+            bool: true if the config exists, false otherwise
+        """
         if not self.config.exists() or (hasattr(self.config, "nbline") and
                                         self.config.nbline == 0):
             return False
         else:
+            self.allow_config()
             return True
 
     def allow_config(self):
