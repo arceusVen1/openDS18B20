@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from fichier import ProbeConfigFile
+from open_ds18b20.fichier import ProbeConfigFile
 import re
 import os
 

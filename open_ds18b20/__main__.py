@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 import sys
-from fichier import File, ConfigFile, ProbeFile, ModuleFile
-from mail import Mail
-from probe import Materials, Probe
+from open_ds18b20.fichier import File, ConfigFile, ProbeFile, ModuleFile
+from open_ds18b20.mail import Mail
+from open_ds18b20.probe import Materials, Probe
 
 
 def argGestion(args):
