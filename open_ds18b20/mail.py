@@ -38,9 +38,9 @@ class Mail():
             self.msg["Subject"] = "List of Temperatures"
             self.body = "Here is the list of the mesured temperatures\n"
         if len(temperatures) > 0:
-            for i in range(len(temperatures)):
-                self.body += ("probe " + str(i + 1) +
-                              " : " + str(temperatures[i]) + "*C\n")
+            for probe, temp in temperatures.items():
+                self.body += (str(probe) +
+                              " : " + str(temp) + "*C\n")
         return self.body
 
     def messageBuilder(self, toaddr, fromaddr):
