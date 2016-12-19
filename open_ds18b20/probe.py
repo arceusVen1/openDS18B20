@@ -75,7 +75,8 @@ class Probe():
         self.config.edit()
 
     def get_data(self):
-        self.settings = self.config.readData()
+        self.config.readData()
+        self.settings = self.config.data
         return self.settings
 
     def set_data(self):
