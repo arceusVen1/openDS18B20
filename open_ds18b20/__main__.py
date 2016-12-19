@@ -116,8 +116,8 @@ def main():
     if len(result["temperatures"]) > 0:
         for p in range(materials.numWorkingProbes):
             if probes[p].has_alert():
-                if (result["temperatures"][p] >= probes[p].get_max_alert() or
-                        result["temperatures"][p] <=
+                if (result["temperatures"][probes[p].get_slug()] >= probes[p].get_max_alert() or
+                        result["temperatures"][probes[p].get_slug()] <=
                         probes[p].get_min_alert()):
                     result["messages"].append(probes[p].get_slug() +
                                               " : too high/low temperature")
