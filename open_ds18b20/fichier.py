@@ -72,6 +72,7 @@ class ConfigFile(File):
         """
         self.file.seek(0)
         self.data = json.load(self.file)
+        return self.data
 
     def getCredentials(self):
         """get the credential from the json loaded data

@@ -88,24 +88,24 @@ def main():
 # dht_h, dht_t = dht.read_retry(dht.DHT22,17)
     number = config.getProbes()
     # try to read the probes temp
-    for p in range(n):
+    try:
+        for p in range(n):
             # put the file probe in files
-        files.append(ProbeFile(materials.listPaths[p]))
+            files.append(ProbeFile(materials.listPaths[p]))
             # test the probe
-        if probes[p].is_working(files[p].readLine(1)):
-            if probes[p].has_config():
-                probes[p].get_data()
+            if probes[p].is_working(files[p].readLine(1)):
+                if probes[p].has_config():
+                    probes[p].get_data()
                 # the probe is working
-            materials.numWorkingProbes += 1
-            templine = files[p].readLine(2)
-            probes[p].getTemperature(templine)
-            result["temperatures"][probes[p].get_slug()] = float(probes[
+                materials.numWorkingProbes += 1
+                templine = files[p].readLine(2)
+                probes[p].getTemperature(templine)
+                result["temperatures"][probes[p].get_slug()] = float(probes[
                     p].temperature)
     # append an exception message if exception is raised
-    #except:    
-     #   print(sys.exc_info()[:2])
-      #  result["messages"].append("* temperatures *couldn't be read")
-       # alert = True
+    except:
+        result["messages"].append("* temperatures *couldn't be read")
+        alert = True
     # if not all of the probes attached are working
     if materials.numWorkingProbes < number:
         difference = number - materials.numWorkingProbes
