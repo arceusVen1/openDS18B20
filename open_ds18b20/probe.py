@@ -46,8 +46,8 @@ class Probe():
         self.settings = settings
         self.settings["slug"] = self.idt
         self.temperature = ""
-        self.path = "/home/pi/ds18b20_conf/" + self.idt + ".json"
-        self.config = ProbeConfigFile(self.path)
+        path = "/home/pi/ds18b20_conf/" + self.idt + ".json"
+        self.config = ProbeConfigFile(path)
         return
 
     def is_working(self, line):
@@ -76,7 +76,7 @@ class Probe():
 
     def get_data(self):
         self.config.readData()
-        self.settings = self.config.data
+        self.settings = self.config.settings
         return self.settings
 
     def set_data(self):

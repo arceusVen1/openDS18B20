@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from open_ds18b20.console import Console
+from open_ds18b20.econsole import Console
 import json
 import os
 import re
@@ -68,11 +68,11 @@ class ConfigFile(File):
         """load the data from a json file
 
         Returns:
-            none: The datas have been loaded
+            dict: the new settings
         """
         self.file.seek(0)
-        self.data = json.load(self.file)
-        return self.data
+        self.settings = json.load(self.file)
+        return self.settings
 
     def getCredentials(self):
         """get the credential from the json loaded data
@@ -80,8 +80,8 @@ class ConfigFile(File):
         Returns:
             str: email and password from the data
         """
-        email = self.data["email"]
-        password = self.data["password"]
+        email = self.settings["email"]
+        password = self.settings["password"]
         return email, password
 
     def has_alert(self):
@@ -90,13 +90,13 @@ class ConfigFile(File):
         Returns:
             bool: True if it has alert, False otherwise
         """
-        if self.data["alert"]["choice"]:
+        if self.settings["alert"]["choice"]:
             return True
         else:
             return False
 
     def getProbes(self):
-        return int(self.data["number"])
+        return int(self.settings["number"])
 
     def getMaxTempAlert(self):
         """get the max temperature allowed before alert from the json loaded data
@@ -104,7 +104,7 @@ class ConfigFile(File):
         Returns:
             float: maximum temperature allowed
         """
-        return float(self.data["alert"]["max"])
+        return float(self.settings["alert"]["max"])
 
     def getMinTempAlert(self):
         """Get the minimum temperature allowed before alert from the json loaded data
@@ -112,7 +112,7 @@ class ConfigFile(File):
         Returns:
             float: Minimum temp allowed
         """
-        return float(self.data["alert"]["min"])
+        return float(self.settings["alert"]["min"])
 
     def set_settings(self):
         self.settings = Console().promptConfig(self.settings)
