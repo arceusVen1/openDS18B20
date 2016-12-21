@@ -4,7 +4,7 @@ import re
 import os
 
 SETTINGS = {"idt": "", "slug": "", "alert": {"bool": False, "max": 0,
-                                             "min": 0}, "max": [], "min": [], "moment": []}
+                                             "min": 0}, "thermostated": {"bool": False, "temps": []}, "moment": []}
 
 
 class Materials():
@@ -111,22 +111,26 @@ class Probe():
         slug = str(slug)
         self.settings["slug"] = str(slug)
 
-    def get_max(self):
-        return self.settings["max"]
+    def get_thermostated(self):
+        return self.settings["thermostated"]["bool"]
 
-    def get_min(self):
-        return self.settings["min"]
-
-    def set_max(self, maxTemps):
-        self.settings["max"] = maxTemps
-
-    def set_min(self, minTemps):
-        self.settings["min"] = minTemps
+    def set_thermostated(self, bool_, temps=[]):
+        if not isinstance(bool_, bool):
+            raise TypeError("thermostated should be a boolean")
+        if bool_:
+            if temps == []:
+                raise ValueError("the list of temps desired is empty")
+            self.settings["thermostated"]["temps"] = temps
+        self.settings["thermostated"] = bool_
 
     def get_moment(self):
         return self.settings["moment"]
 
     def set_moment(self, moments):
+        if not isinstance(moments, list):
+            raise TypeError("the moments must be a list")
+        if len(moments) != len(self.settings["thermostated"]["temps"]):
+            raise IndexError("number of moments must equal temperatures")
         self.settings["moment"] = moments
 
     def get_creneau(self):
@@ -136,8 +140,7 @@ class Probe():
         thermorange = []
         for i in range(self.get_creneau()):
             thermorange.append([self.settings["moment"][i],
-                                self.settings["min"][i],
-                                self.settings["max"][i]])
+                                self.settings["thermostated"]["temps"][i]])
         return thermorange
 
     def getTemperature(self, line):
