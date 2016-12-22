@@ -111,7 +111,7 @@ class Probe():
         slug = str(slug)
         self.settings["slug"] = str(slug)
 
-    def get_thermostated(self):
+    def is_thermostated(self):
         return self.settings["thermostated"]["bool"]
 
     def set_thermostated(self, bool_, temps=[]):
@@ -120,6 +120,9 @@ class Probe():
         if bool_:
             if temps == []:
                 raise ValueError("the list of temps desired is empty")
+            for i in range(len(temps)):
+                if not isinstance(temps[i], float):
+                    raise TypeError("the temps must be a list of float")
             self.settings["thermostated"]["temps"] = temps
         self.settings["thermostated"] = bool_
 
@@ -137,10 +140,10 @@ class Probe():
         return len(self.settings["moment"])
 
     def link_moment_temp(self):
-        thermorange = []
+        thermorange = {}
         for i in range(self.get_creneau()):
-            thermorange.append([self.settings["moment"][i],
-                                self.settings["thermostated"]["temps"][i]])
+            thermorange[self.settings["moment"][i]] = self.settings[
+                "thermostated"]["temps"][i]
         return thermorange
 
     def getTemperature(self, line):
