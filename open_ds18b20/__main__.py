@@ -83,8 +83,8 @@ def main():
     # get all the probes attach
     probes = []
     n = len(materials.listprobes)
-    for probe in range(n):
-        probes.append(Probe(materials.listprobes[probe]))
+    for idProbe in materials.listprobes:
+        probes.append(Probe(idProbe))
 # dht_h, dht_t = dht.read_retry(dht.DHT22,17)
     number = config.getProbes()
     # try to read the probes temp
