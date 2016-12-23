@@ -1,7 +1,7 @@
 OpenDS18B20
 ==========
 
-I am working on this project to help people with the automation of the task of reading temperatures with DS18B20 probe on a Raspberry Pi 3
+I am working on this project to help people with the automation of reading temperatures from a DS18B20 probe on a Raspberry Pi 3.
 The goal of this program is to detect DS18B20 probes attached to a pi automatically, read their temperatures and send an alert by email if needed. All of this with only one command ! :)
 
 How to use OpenDS18B20 ?
@@ -9,13 +9,13 @@ How to use OpenDS18B20 ?
 This program runs under python 3.5 (there is also a branch for python 2.7 which won't be updated anymore and will remain as it is, working but with less features)
 
 
-Before anything you should create a random gmail adress used only for the purpose of this sofware where you enable the low security usage to allow python to send email from this specific adress you just created (you can easily find how to do this by googling it ;)
+Before anything you should create a random gmail adress used only for the purpose of this sofware where you enable the low security usage to allow python to send email from this specific adress (you can easily find how to do this by googling it ;) ).
 
 It is then very easy to use ! 
 Install it
 *********************************************************************
 
-	$ sudo python setup.py install 
+	$ sudo python3 setup.py install 
 
 *********************************************************************
 
@@ -37,14 +37,14 @@ This can manually modified later of course by running the program :
 
 *********************************************************************
 
-the other options currently available is :
+the other option currently available is :
 
 *********************************************************************
 
 	$ open_ds18b20 mail
 
 *********************************************************************
-this tells the software that you wan't an email no matter what for this single run
+this tells the software that you wan't an email no matter what for this single run.
 
 For now it only works with gmail adresses ! It will send the emails from the same adress where you receive them. 
 Feel free to modify the code in mail.py to configure the software for an another email adress domain (you will need to change the default smtp server or modify the __main__.py and give the smtp server you want as an argument of the sendMail() function).

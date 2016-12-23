@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from open_ds18b20.econsole import Console
+from open_ds18b20.console import Console
 import json
 import os
 import re

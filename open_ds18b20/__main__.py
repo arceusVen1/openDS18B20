@@ -55,7 +55,8 @@ def createMail(temperatures, config, alert=False, messages=[]):
 
 def main():
     # initialize the returned instance
-    result = {"temperatures": {}, "messages": []}
+    temperatures = {}
+    messages = []
     # flag for the alert
     alert = False
     # test that the moduels are present
@@ -100,40 +101,40 @@ def main():
                 materials.numWorkingProbes += 1
                 templine = files[p].readLine(2)
                 probes[p].getTemperature(templine)
-                result["temperatures"][probes[p].get_slug()] = float(probes[
+                temperatures[probes[p].get_slug()] = float(probes[
                     p].temperature)
     # append an exception message if exception is raised
     except:
-        result["messages"].append("* temperatures *couldn't be read")
-        alert = True
+        messages.append("* temperatures *couldn't be read")
     # if not all of the probes attached are working
     if materials.numWorkingProbes < number:
         difference = number - materials.numWorkingProbes
-        result["messages"].append("* " + (str(difference) +
+        messages.append("* " + (str(difference) +
                                           " probes not **** detected ***"))
-        alert = True
     # if alert compare the max/min with real temp
-    if len(result["temperatures"]) > 0:
+    if len(temperatures) > 0:
         for p in range(materials.numWorkingProbes):
             if probes[p].has_alert():
-                if (result["temperatures"][probes[p].get_slug()] >= probes[p].get_max_alert() or
-                        result["temperatures"][probes[p].get_slug()] <=
+                if (temperatures[probes[p].get_slug()] >= probes[p].get_max_alert() or
+                        temperatures[probes[p].get_slug()] <=
                         probes[p].get_min_alert()):
-                    result["messages"].append(probes[p].get_slug() +
+                    messages.append(probes[p].get_slug() +
                                               " : too high/low temperature")
-                    alert = True
+    # test if there is any alert to display
+    if len(messages) > 0:
+        alert = True
     # to force a mail message with the optionnal argument "mail"
     if mail or alert:
-        sent = createMail(result["temperatures"],
-                          config, alert, result["messages"])
+        sent = createMail(temperatures,
+                          config, alert, messages)
         if not sent:
-            result["messages"].append("mail couldn't be***** send *****")
+            messages.append("mail couldn't be***** send *****")
         # sys.exc_info()[:2]
     # close the opened file
     for i in range(len(files)):
         files[i].closeFile()
     config.closeFile()
-    return result
+    return temperatures, messages
 
 
 if __name__ == '__main__':
