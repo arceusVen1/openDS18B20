@@ -120,21 +120,18 @@ class ConfigFile(File):
 
     def register(self):
         """Registers the (new) settings in the cofnig file
-
+a
         Returns:
             none: The settings hacve been saved in the config file
         """
         element = json.dumps(self.settings, indent=4)
-        self.__save(element)
+        self._save(element)
 
-    def __save(self, element):
+    def _save(self, element):
         """Overwrite text in a file to ensure that the file have been saved
 
         Args:
             element (str): what needs to be written
-
-        Returns:
-            none: The file has been correctly overwrittent by the element
         """
         self.file = open(self.path, "w")
         self.file.write(element)
@@ -172,8 +169,8 @@ class ProbeConfigFile(ConfigFile):
     def register(self):
         super(ProbeConfigFile, self).register()
 
-    def __save(self):
-        super(ProbeConfigFile, self).__save()
+    def _save(self):
+        super(ProbeConfigFile, self)._save()
 
     def readData(self):
         super(ProbeConfigFile, self).readData()
