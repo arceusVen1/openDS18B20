@@ -170,7 +170,7 @@ class ProbeConfigFile(ConfigFile):
         super(ProbeConfigFile, self).register()
 
     def _save(self, element):
-        super(ProbeConfigFile, self)._save()
+        super(ProbeConfigFile, self)._save(element)
 
     def readData(self):
         super(ProbeConfigFile, self).readData()
