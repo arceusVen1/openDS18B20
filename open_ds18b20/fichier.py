@@ -19,7 +19,7 @@ class File(object):
         self.content = list(self.file)
         self.nbline = len(self.content)
 
-    def readLine(self, nbline):
+    def read_line(self, nbline):
         """Reads a specific line
 
         Args:
@@ -30,7 +30,7 @@ class File(object):
         """
         return self.content[nbline - 1]
 
-    def closeFile(self):
+    def close_file(self):
         """close a file
 
         Returns:
@@ -38,8 +38,8 @@ class File(object):
         """
         self.file.close()
 
-    def removeFile(self):
-        self.closeFile()
+    def remove_file(self):
+        self.close_file()
         os.remove(self.path)
 
 
@@ -64,7 +64,7 @@ class ConfigFile(File):
         self.content = list(self.file)
         self.nbline = len(self.content)
 
-    def readData(self):
+    def read_data(self):
         """load the data from a json file
 
         Returns:
@@ -74,7 +74,7 @@ class ConfigFile(File):
         self.settings = json.load(self.file)
         return self.settings
 
-    def getCredentials(self):
+    def get_credentials(self):
         """get the credential from the json loaded data
 
         Returns:
@@ -95,7 +95,7 @@ class ConfigFile(File):
         else:
             return False
 
-    def getProbes(self):
+    def get_probes(self):
         return int(self.settings["number"])
 
     def getMaxTempAlert(self):
@@ -138,8 +138,8 @@ a
         self.file.close()
         self.file = open(self.path, "r")
 
-    def closeFile(self):
-        super(ConfigFile, self).closeFile()
+    def close_file(self):
+        super(ConfigFile, self).close_file()
 
 
 class ProbeConfigFile(ConfigFile):
@@ -172,8 +172,8 @@ class ProbeConfigFile(ConfigFile):
     def _save(self, element):
         super(ProbeConfigFile, self)._save(element)
 
-    def readData(self):
-        super(ProbeConfigFile, self).readData()
+    def read_data(self):
+        super(ProbeConfigFile, self).read_data()
 
 
 class ProbeFile(File):
@@ -183,8 +183,8 @@ class ProbeFile(File):
     def __init__(self, filepath):
         super(ProbeFile, self).__init__(filepath)
 
-    def closeFile(self):
-        super(ProbeFile, self).closeFile()
+    def close_file(self):
+        super(ProbeFile, self).close_file()
 
 
 class ModuleFile(File):
@@ -194,8 +194,8 @@ class ModuleFile(File):
     def __init__(self, filepath):
         super(ModuleFile, self).__init__(filepath)
 
-    def closeFile(self):
-        super(ModuleFile, self).closeFile()
+    def close_file(self):
+        super(ModuleFile, self).close_file()
 
     def tester(self):
         """test the presence w1-therm and w1-gpio modules in the /etc/modules
@@ -205,7 +205,7 @@ class ModuleFile(File):
         """
         flag = [False, False]
         for i in range(self.nbline):
-            line = self.readLine(i + 1)
+            line = self.read_line(i + 1)
             if re.match(r"^w1-gpio", line):
                 flag[0] = True
             if re.match(r"^w1-therm", line):

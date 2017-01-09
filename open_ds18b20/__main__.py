@@ -46,7 +46,7 @@ def createMail(temperatures, config, alert=False, messages=[]):
         message += "\n"
     email.messageBody(temperatures, message, alert)
     email.credentials["email"], email.credentials[
-        "password"] = config.getCredentials()
+        "password"] = config.get_credentials()
     email.messageBuilder(email.credentials["email"],
                          email.credentials["email"])
     sent = email.sendMail()
@@ -68,7 +68,7 @@ def main():
     # if erase arg the config is reset
     if erase:
         # erase the config file to avoid conflict
-        File("/home/pi/ds18b20_conf/config.json").removeFile()
+        File("/home/pi/ds18b20_conf/config.json").remove_file()
     # create if needed and open a config file
     config = ConfigFile("/home/pi/ds18b20_conf/config.json")
     # if the config file is empty (especially if it has just been created)
@@ -76,7 +76,7 @@ def main():
         # ask for the new settings in the console
         config.set_settings()
     # read the data now that you should have some
-    config.readData()
+    config.read_data()
     # create a Probe instance
     materials = Materials()
     # detect the probes attach
@@ -87,19 +87,19 @@ def main():
     for idProbe in materials.listprobes:
         probes.append(Probe(idProbe))
 # dht_h, dht_t = dht.read_retry(dht.DHT22,17)
-    number = config.getProbes()
+    number = config.get_probes()
     # try to read the probes temp
     try:
         for p in range(n):
             # put the file probe in files
             files.append(ProbeFile(materials.listPaths[p]))
             # test the probe
-            if probes[p].is_working(files[p].readLine(1)):
+            if probes[p].is_working(files[p].read_line(1)):
                 if probes[p].has_config():
                     probes[p].get_data()
                 # the probe is working
                 materials.numWorkingProbes += 1
-                templine = files[p].readLine(2)
+                templine = files[p].read_line(2)
                 probes[p].getTemperature(templine)
                 temperatures[probes[p].get_slug()] = float(probes[
                     p].temperature)
@@ -132,8 +132,8 @@ def main():
         # sys.exc_info()[:2]
     # close the opened file
     for i in range(len(files)):
-        files[i].closeFile()
-    config.closeFile()
+        files[i].close_file()
+    config.close_file()
     return temperatures, messages
 
 

@@ -83,7 +83,7 @@ class Probe():
         Returns:
             dict: the loaded settings
         """
-        self.config.readData()
+        self.config.read_data()
         self.settings = self.config.settings
         return self.settings
 
@@ -204,7 +204,7 @@ class Probe():
         if not isinstance(bool_, bool):
             raise TypeError("thermostated should be a boolean")
         if bool_:
-            if temps == []:
+            if not temps:
                 raise ValueError("the list of temps desired is empty")
             for i in range(len(temps)):
                 if not isinstance(temps[i], float):
