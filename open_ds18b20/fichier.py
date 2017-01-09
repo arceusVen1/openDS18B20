@@ -51,9 +51,9 @@ class ConfigFile(File):
         self.path = filepath
         self.settings = SETTINGS
         console = Console()
-        osPath = os.path.abspath(self.path)
-        if not os.path.exists(osPath):
-            dirpath = os.path.dirname(osPath)
+        os_path = os.path.abspath(self.path)
+        if not os.path.exists(os_path):
+            dirpath = os.path.dirname(os_path)
             console.display("creating config.json in " + str(dirpath))
             try:
                 os.makedirs(dirpath)
@@ -97,22 +97,6 @@ class ConfigFile(File):
 
     def get_probes(self):
         return int(self.settings["number"])
-
-    def getMaxTempAlert(self):
-        """get the max temperature allowed before alert from the json loaded data
-
-        Returns:
-            float: maximum temperature allowed
-        """
-        return float(self.settings["alert"]["max"])
-
-    def getMinTempAlert(self):
-        """Get the minimum temperature allowed before alert from the json loaded data
-
-        Returns:
-            float: Minimum temp allowed
-        """
-        return float(self.settings["alert"]["min"])
 
     def set_settings(self):
         self.settings = Console().promptConfig(self.settings)
