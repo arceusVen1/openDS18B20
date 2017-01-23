@@ -3,53 +3,84 @@ import sys
 from open_ds18b20.fichier import File, ConfigFile, ProbeFile, ModuleFile
 from open_ds18b20.mail import Mail
 from open_ds18b20.probe import Materials, Probe
+from open_ds18b20.console import *
 
 
-def argGestion(args):
+def arg_gestion(args):
+    """
+    Checks the option given in the command line
+
+    :return erase: erase option
+    :rtype erase: bool
+    :return mail: mail option
+    :rtype mail: bool
+    :return new: new option
+    :rtype new: bool
+    """
     erase = False
     mail = False
+    new = False
     for i in range(len(args)):
         if args[i] == "erase":
             erase = True
         elif args[i] == "mail":
             mail = True
-    return erase, mail
-
-# def test(probe):
-   # probe.allow_config()
-   # probe.set_idt()
-   # probe.set_slug("test")
-   # probe.set_alert(True)
-   # probe.set_max_alert(25)
-   # probe.set_min_alert(24)
-   # probe.set_data()
-   # return
+        elif args[i] == "new":
+            new = True
+    return erase, mail, new
 
 
-def createMail(temperatures, config, alert=False, messages=[]):
-    """create the email to use it more easily on the __main__
-
-    Args:
-        temperatures (list): List of temperatures
-        subject (str): Subject of the message
-        config (ConfigFile): Config file
-        alert (bool, optional): if it is an alert mail
-
-    Returns:
-        bool: indicates if mail has been sent
+def erase_command():
     """
+    Erases a file if required, used with erase option
 
+    """
+    File("/home/pi/ds18b20_conf/config.json").remove_file()
+
+
+def new_command(config):
+    """
+    Asks for the new settings config, used with "new" option
+
+    :param config: the config file where the settings are to be registered
+    :type config: ConfigFile
+    """
+    settings = prompt_config()
+    config.set_credentials(settings["email"], settings["password"])
+    config.set_probes(settings["number"])
+    config.set_alert(settings["alert"])
+    config.set_data()
+
+
+def create_mail(temperatures, config, alert=False, messages=None):
+    """
+    Creates a mail and send it using the Mail class functions
+
+    :param temperatures: {"probe_slug": temp (float)}
+    :type temperatures: dict
+    :param config: The config.json file
+    :type config: ConfigFile
+    :param alert: (optional) set to False by default
+    :type alert: bool
+    :param messages: (optional) empty unless alert = True
+    :type messages: list
+
+    :return: sent to indicates if the messages is sent
+    :rtype: bool
+    """
+    if messages is None:
+        messages = []
     email = Mail()
     message = ""
     for i in range(len(messages)):
         message += str(messages[i])
         message += "\n"
-    email.messageBody(temperatures, message, alert)
+    email.message_body(temperatures, message, alert)
     email.credentials["email"], email.credentials[
         "password"] = config.get_credentials()
-    email.messageBuilder(email.credentials["email"],
-                         email.credentials["email"])
-    sent = email.sendMail()
+    email.message_builder(email.credentials["email"],
+                          email.credentials["email"])
+    sent = email.send_mail()
     return sent
 
 
@@ -62,31 +93,40 @@ def main():
     # test that the moduels are present
     tester = ModuleFile("/etc/modules").tester()
     if not tester:
+        write_dependencies()
         return
     files = []
-    erase, mail = argGestion(sys.argv)
+    # test the presences of an argument
+    erase, mail, new = arg_gestion(sys.argv)
     # if erase arg the config is reset
     if erase:
         # erase the config file to avoid conflict
-        File("/home/pi/ds18b20_conf/config.json").remove_file()
+        erase_command()
+        return
     # create if needed and open a config file
     config = ConfigFile("/home/pi/ds18b20_conf/config.json")
+    # if the "new" option is given
+    if new:
+        # ask for the new config
+        new_command(config)
+        return
     # if the config file is empty (especially if it has just been created)
     if config.nbline == 0:
         # ask for the new settings in the console
-        config.set_settings()
+        display("the config file is empty, use 'new' option")
+        return
     # read the data now that you should have some
-    config.read_data()
+    config.get_data()
     # create a Probe instance
     materials = Materials()
     # detect the probes attach
-    materials.detectProbes()
+    materials.detect_probes()
     # get all the probes attach
     probes = []
     n = len(materials.listprobes)
     for idProbe in materials.listprobes:
         probes.append(Probe(idProbe))
-# dht_h, dht_t = dht.read_retry(dht.DHT22,17)
+    # dht_h, dht_t = dht.read_retry(dht.DHT22,17)
     number = config.get_probes()
     # try to read the probes temp
     try:
@@ -100,9 +140,9 @@ def main():
                 # the probe is working
                 materials.numWorkingProbes += 1
                 templine = files[p].read_line(2)
-                probes[p].getTemperature(templine)
+                probes[p].get_temperature(templine)
                 temperatures[probes[p].get_slug()] = float(probes[
-                    p].temperature)
+                                                               p].temperature)
     # append an exception message if exception is raised
     except:
         messages.append("* temperatures *couldn't be read")
@@ -110,26 +150,26 @@ def main():
     if materials.numWorkingProbes < number:
         difference = number - materials.numWorkingProbes
         messages.append("* " + (str(difference) +
-                                          " probes not **** detected ***"))
+                                " probes not **** detected ***"))
     # if alert compare the max/min with real temp
     if len(temperatures) > 0:
         for p in range(materials.numWorkingProbes):
-            if probes[p].has_alert():
-                if (temperatures[probes[p].get_slug()] >= probes[p].get_max_alert() or
-                        temperatures[probes[p].get_slug()] <=
-                        probes[p].get_min_alert()):
-                    messages.append(probes[p].get_slug() +
-                                              " : too high/low temperature")
-    # test if there is any alert to display
+            if probes[p].has_alert() and (
+                            temperatures[probes[p].get_slug()] >= probes[p].get_max_alert() or temperatures[
+                        probes[p].get_slug()] <= probes[p].get_min_alert()):
+                # test if there is any alert to display
+                messages.append(probes[p].get_slug() +
+                                " : too high/low temperature")
+    # if messages list is not empty, there is an a least one alert
     if len(messages) > 0:
         alert = True
     # to force a mail message with the optionnal argument "mail"
     if mail or alert:
-        sent = createMail(temperatures,
-                          config, alert, messages)
+        sent = create_mail(temperatures,
+                           config, alert, messages)
         if not sent:
             messages.append("mail couldn't be***** send *****")
-        # sys.exc_info()[:2]
+            # sys.exc_info()[:2]
     # close the opened file
     for i in range(len(files)):
         files[i].close_file()
