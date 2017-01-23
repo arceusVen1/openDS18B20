@@ -166,7 +166,6 @@ class ConfigFile(File):
             raise TypeError("alert option must be a bool")
         self.settings["alert"] = alert
 
-
     def register(self):
         """
         Registers the (new) settings in the config file by overwriting the file
@@ -192,7 +191,8 @@ class ProbeConfigFile(ConfigFile):
     def __init__(self, path):
         """
         Class constructor, only turns a path string in a os path.
-        Since a probe does not necessarily have a config file yet, you don't want to create it automatically
+        Since a probe does not necessarily have a config file yet, you don't want to create it automatically.
+        That's why there is no call to super class
 
         :param path: absolute path of the config file
         :type path: str
@@ -202,7 +202,7 @@ class ProbeConfigFile(ConfigFile):
 
     def edit(self):
         """
-        If the file exist, use this function to read it
+        If the file exists, use this function to read it
         """
         self.file = open(self.path, "r")
         self.content = list(self.file)
