@@ -1,3 +1,9 @@
+"""
+TODO:
+    - check if credentials are needed in case of no alert
+    - make a function for registering a new probe
+"""
+
 import sys
 import getpass
 
@@ -18,25 +24,29 @@ class Console(object):
         sys.stdout.write(str(string) + "\n")
 
     def writeDependencies(self):
-        """indicates what to do if you don't have the modules installed
-
-
-        Returns:
-            bool: just to know that you miss the modules
+        """
+        Indicates what to do if you don't have the modules installed
         """
         sys.stdout.write("before continuing you should add "
                          "\"w1-gpio\" & \"w1-therm\" to /etc/modules files\n")
-        return False
 
-    def promptConfig(self, settings):
-        """ask for the new config settings
-
-        Args:
-            config (ConfigFile): File to write the config
-
-        Returns:
-            none: The configuration has been saved
+    def promptConfig(self):
         """
+        Asks for the new config settings
+        """
+        settings = {}
+        sys.stdout.write("What is the number of probes attached ?\n")
+        while not settings["number"]:
+            try:
+                number = int(input(PROMPT))
+                if number < 15 and number >= 0:
+                    settings["number"] = number
+            except:
+                sys.stdout.write("a number please !")
+        if str(alert) == "y":
+            settings["alert"] = True
+        else:
+            settings["alert"] = False
         sys.stdout.write(
             "adress where emails are going to be send and sent from ?\n")
         settings["email"] = input(PROMPT)
@@ -44,17 +54,11 @@ class Console(object):
                          "(WARNING the password will be clear in the config file)\n")
         # to hide the password in the console
         settings["password"] = getpass.getpass()
-        sys.stdout.write("What is the number of probes attached ?\n")
-        try:
-            settings["number"] = int(input(PROMPT))
-        except:
-            sys.stdout.write("a number please !")
+
         sys.stdout.write("woud you like to set an alert system ?(y/n)\n")
         alert = input(PROMPT)
         if str(alert) == "y":
-            settings["alert"]["choice"] = True
-            sys.stdout.write("max temp ?\n")
-            settings["alert"]["max"] = int(input(PROMPT))
-            sys.stdout.write("min temp ?\n")
-            settings["alert"]["min"] = int(input(PROMPT))
+            settings["alert"] = True
+        else:
+            settings["alert"] = False
         return settings
