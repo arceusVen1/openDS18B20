@@ -7,7 +7,7 @@ SETTINGS = {"idt": "", "slug": "", "alert": {"bool": False, "max": 0,
                                              "min": 0}, "thermostated": {"bool": False, "temps": []}, "moment": []}
 
 
-class Materials():
+class Materials:
 
     """Represents all the probes"""
 
@@ -18,11 +18,12 @@ class Materials():
         self.path = os.path.abspath("/sys/bus/w1/devices")
         return
 
-    def detectProbes(self):
-        """detects the connected DS18B20 probes whose folders always start by 28
+    def detect_probes(self):
+        """
+        Detects the connected DS18B20 probes whose folders always start by 28
 
-        Returns:
-            list: files containing a measured temperature from a probe
+        :return: list of files containing a measured temperature from a probe
+        :rtype: list
         """
         regexp = re.compile("^28")
         for directory in os.listdir(self.path):
@@ -37,7 +38,7 @@ class Materials():
                 self.path + '/' + self.listprobes[probe] + "/w1_slave")
 
 
-class Probe():
+class Probe:
 
     """Represents the DS18B20 probes"""
 
@@ -51,6 +52,16 @@ class Probe():
         return
 
     def is_working(self, line):
+        """
+        Checks if a probe is working by matchi with "YES"
+        inside the /sys/bus/w1/.../w1_slave file
+
+        :param line: number of the line
+        :type line: int
+
+        :return: the working state of a probe
+        :rtype: bool
+        """
         regexp = re.compile("YES$")
         if regexp.search(line):
             return True
@@ -58,10 +69,12 @@ class Probe():
             return False
 
     def has_config(self):
-        """test if the config file exist and has been filled
+        """
+        Tests if the config file exist and has been filled
 
-        Returns:
-            bool: true if the config exists, false otherwise
+        :return: indicates if the config file exist with attributes
+        :rtype: bool
+
         """
         if not self.config.exists() or (hasattr(self.config, "nbline") and
                                         self.config.nbline == 0):
@@ -77,21 +90,23 @@ class Probe():
         self.config.edit()
 
     def get_data(self):
-        """read the data from the config file and
+        """
+        Reads the data from the config file and
         upload it in the settings
 
-        Returns:
-            dict: the loaded settings
+        :return: the loaded settings of the probes with its config
+        :rtype: dict
+
         """
         self.config.read_data()
         self.settings = self.config.settings
         return self.settings
 
     def set_data(self):
-        """registers the new data in the config file
+        """
+        Overwrites the file with the settings
 
-        Raises:
-            ValueError: if the settings hasn't been modified
+        :raises ValueError: if the settings remained in their default definition
         """
         if self.settings == SETTINGS:
             raise ValueError("the settings needs to be modified")
@@ -104,103 +119,113 @@ class Probe():
         self.settings["idt"] = self.idt
 
     def has_alert(self):
-        """test if the config has alert settings
+        """
+        Test if the config has alert settings
 
-        Returns:
-            bool: True if alerts are set, False otherwise
+        :return: if the user wants the probe to send alert
+        :rtype: bool
         """
         return self.settings["alert"]["bool"]
 
     def set_alert(self, alert):
-        """set the alert bool
+        """
+        Set the alert bool
 
-        Args:
-            alert (bool): alert boolean
+        :param alert: True f you want to power alert system on, false otherwise
+        :type alert: bool
 
-        Raises:
-            TypeError: if alert is not a booleant
+        :raises TypeError: if alert is not a booleant
         """
         if not isinstance(alert, bool):
             raise TypeError("alert setting is either True or False")
         self.settings["alert"]["bool"] = True
 
     def get_max_alert(self):
-        """get the maximum value suported before alert
+        """
+        Get the maximum value suported before alert
 
-        Returns:
-            float: the max temperature allowed
+        :return: the max temperature allowed before alert
+        :rtype: float
         """
         return self.settings["alert"]["max"]
 
     def get_min_alert(self):
-        """get the minimum temp supported before alert
-
-        Returns:
-            float: the min temperature allowed
         """
+        Get the minimum temp supported before alert
+
+        :return: the min temperature allowed before alert
+        :rtype: float
+        """
+
         return self.settings["alert"]["min"]
 
-    def set_max_alert(self, maxAlert):
-        """set the maximum temperature before alert
-
-        Args:
-            maxAlert (float): the maximum temp
-
-        Raises:
-            TypeError: if the value given is not a float
+    def set_max_alert(self, max_alert):
         """
-        if not isinstance(maxAlert, float):
-            raise TypeError("the temperature is a number")
-        self.settings["alert"]["max"] = maxAlert
+        Set the maximum temperature before alert
 
-    def set_min_alert(self, minAlert):
-        """set the minimum temperature before alert
+        :param max_alert: the maximum temperature desired before alert
+        :type max_alert: float
 
-        Args:
-            minAlert (float): the minimum temp
-
-        Raises:
-            TypeError: if the value given is not a float
+        :raises TypeError: if the max_alert given is not a float
         """
-        if not isinstance(minAlert, float):
+        if not isinstance(max_alert, float):
             raise TypeError("the temperature is a number")
-        self.settings["alert"]["min"] = minAlert
+        self.settings["alert"]["max"] = max_alert
+
+    def set_min_alert(self, min_alert):
+        """
+        Set the minimum temperature before alert
+
+        :param min_alert: the minimum temp
+        :type min_alert: float
+
+        :raises TypeError: if the value given is not a float
+        """
+        if not isinstance(min_alert, float):
+            raise TypeError("the temperature is a number")
+        self.settings["alert"]["min"] = min_alert
 
     def get_slug(self):
-        """get the pseudo name of the probe
+        """
+        Get the pseudo name of the probe
 
-        Returns:
-            str: the speudo name of the probe
+        :return: the pseudo name of the probe
+        :rtype: str
         """
         return self.settings["slug"]
 
     def set_slug(self, slug):
-        """set the pseudo name of the probe
+        """
+        Sets the pseudo name of the probe
 
-        Args:
-            slug (str): a pseudo name for the probe
+        :param slug: a pseudo name for the probe
+        :type slug: str
         """
         self.settings["slug"] = str(slug)
 
     def is_thermostated(self):
-        """test if the probe has a thermostating option
+        """
+        Tests if the probe has a thermostating option
 
-        Returns:
-            bool: True if it is thermostated
+        :return: True if it is thermostated
+        :rtype: bool
         """
         return self.settings["thermostated"]["bool"]
 
-    def set_thermostated(self, bool_, temps=[]):
-        """set the thermostats option with the list of thermostats
-
-        Args:
-            bool_ (bool): True for thermostat option
-            temps (list, optional): the list of different temps desired if True
-
-        Raises:
-            TypeError: if bool_ is not a bool or temp not a list of float
-            ValueError: if you choose thermostat option, you need a list of temp 
+    def set_thermostated(self, bool_, temps=None):
         """
+        Sets the thermostats option with the list of thermostats
+
+        :param bool_: True for thermostat option
+        :type bool_: bool
+        :param temps: (optional) the list of different temps desired if True
+        :type temps: (optional) list
+
+        :raises TypeError: if bool_ is not a bool or temp not a list of float
+        :raises ValueError: if you choose thermostat option, you need a list of temp
+        """
+        if temps is None:
+            temps = []
         if not isinstance(bool_, bool):
             raise TypeError("thermostated should be a boolean")
         if bool_:
@@ -213,22 +238,22 @@ class Probe():
         self.settings["thermostated"] = bool_
 
     def get_moment(self):
-        """get the list of time slot for the temps
+        """
+        Gets the list of time slot for the temps
 
-        Returns:
-            list: list of the beginning of time slot
+        :return: the list of the beginning of time slot
+        :rtype: list
         """
         return self.settings["moment"]
 
     def set_moment(self, moments):
-        """set the different time slots by the beginning of each time slot
+        """
+        Sets the different time slots by the beginning of each time slot
 
-        Args:
-            moments (list): time slot with the hour written in this form "%H:%M"
+        :param moments: time slot with the hour written in this form "%H:%M"
 
-        Raises:
-            IndexError: if the number of time slots is different from the number of temps
-            TypeError: if the time slots are not a list
+        :raises TypeError: if the number of time slots is different from the number of temps
+        :raises IndexError: if the time slots are not a list
         """
         if not isinstance(moments, list):
             raise TypeError("the moments must be a list")
@@ -237,18 +262,20 @@ class Probe():
         self.settings["moment"] = moments
 
     def get_creneau(self):
-        """return the number of time slots
+        """
+        Returns the number of time slots
 
-        Returns:
-            int: number of time slot
+        :return: number of time changing fror a thermostat
+        :rtype: int
         """
         return len(self.settings["moment"])
 
     def link_moment_temp(self):
-        """associate a temp with a moment
+        """
+        Associates a temp with a moment
 
-        Returns:
-            dict: {time_slog_beginning: temperature}
+        :return: {time_slot_temp: beginning_of_time_slot}
+        :rtype: dict
         """
         thermorange = {}
         for i in range(self.get_creneau()):
@@ -257,13 +284,17 @@ class Probe():
         return thermorange
 
     def getTemperature(self, line):
-        """get the temperature
+        """
+        Gets the temperature measured by the probe
+        from the line of its system file
+        :param line: the line which contains the temperature
+        :type line: str
 
-        Args:
-            line (str): content of the files with the temperature inside
+        :return: the temperature measured
+        :rtype: float
 
-        Returns:
-            string: String of the temperatures
+        :Example:
+            the line looks like this
         """
         regexp = re.compile("\d+$")
         temp = regexp.search(line).group(0)
