@@ -283,7 +283,7 @@ class Probe:
                 "thermostated"]["temps"][i]
         return thermorange
 
-    def getTemperature(self, line):
+    def get_temperature(self, line):
         """
         Gets the temperature measured by the probe
         from the line of its system file
