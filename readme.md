@@ -47,7 +47,7 @@ the other option currently available is :
 this tells the software that you wan't an email no matter what for this single run.
 
 For now it only works with gmail adresses ! It will send the emails from the same adress where you receive them. 
-Feel free to modify the code in mail.py to configure the software for an another email adress domain (you will need to change the default smtp server or modify the __main__.py and give the smtp server you want as an argument of the sendMail() function).
+Feel free to modify the code in mail.py to configure the software for an another email adress domain (you will need to change the default smtp server or modify the __main__.py and give the smtp server you want as an argument of the send_mail() function).
 
 Before using this sofware, make sure you have properly modified the "/etc/modules" file by adding "w1-gpio" and "w1-therm" and have then rebooted your RPi (IT'S EXTREMELY IMPORTANT). The sofware will tell you anyway if you haven't.
 
