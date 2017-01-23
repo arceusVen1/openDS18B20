@@ -53,11 +53,11 @@ class Probe:
 
     def is_working(self, line):
         """
-        Checks if a probe is working by matchi with "YES"
+        Checks if a probe is working by matching with "YES"
         inside the /sys/bus/w1/.../w1_slave file
 
-        :param line: number of the line
-        :type line: int
+        :param line: the fist line of the file which contains "YES"/"NO"
+        :type line: str
 
         :return: the working state of a probe
         :rtype: bool
@@ -98,7 +98,7 @@ class Probe:
         :rtype: dict
 
         """
-        self.config.read_data()
+        self.config.get_data()
         self.settings = self.config.settings
         return self.settings
 
