@@ -14,51 +14,47 @@ PROMPT = '> '
 # ---------------------------------------------------------
 
 
-class Console(object):
-    """display all the needed info in the console"""
 
-    def __init__(self):
-        return
+def display(self, string):
+    sys.stdout.write(str(string) + "\n")
 
-    def display(self, string):
-        sys.stdout.write(str(string) + "\n")
-
-    def writeDependencies(self):
-        """
-        Indicates what to do if you don't have the modules installed
-        """
-        sys.stdout.write("before continuing you should add "
+def write_dependencies(self):
+    """
+    Indicates what to do if you don't have the modules installed
+    """
+    sys.stdout.write("before continuing you should add "
                          "\"w1-gpio\" & \"w1-therm\" to /etc/modules files\n")
 
-    def promptConfig(self):
-        """
-        Asks for the new config settings
-        """
-        settings = {}
-        sys.stdout.write("What is the number of probes attached ?\n")
-        while not settings["number"]:
-            try:
-                number = int(input(PROMPT))
-                if number < 15 and number >= 0:
-                    settings["number"] = number
-            except:
-                sys.stdout.write("a number please !")
-        if str(alert) == "y":
-            settings["alert"] = True
-        else:
-            settings["alert"] = False
-        sys.stdout.write(
-            "adress where emails are going to be send and sent from ?\n")
-        settings["email"] = input(PROMPT)
-        sys.stdout.write("password ? "
+def prompt_config(self):
+    """
+    Asks for the new config settings
+    """
+    settings = {}
+    sys.stdout.write("What is the number of probes attached ?\n")
+    while not settings["number"]:
+        try:
+            number = int(input(PROMPT))
+            if number < 15 and number >= 0:
+                settings["number"] = number
+        except:
+            sys.stdout.write("a number please !")
+    alert = input(PROMPT)
+    if str(alert) == "y":
+        settings["alert"] = True
+    else:
+        settings["alert"] = False
+    sys.stdout.write(
+        "adress where emails are going to be send and sent from ?\n")
+    settings["email"] = input(PROMPT)
+    sys.stdout.write("password ? "
                          "(WARNING the password will be clear in the config file)\n")
-        # to hide the password in the console
-        settings["password"] = getpass.getpass()
+    # to hide the password in the console
+    settings["password"] = getpass.getpass()
 
-        sys.stdout.write("woud you like to set an alert system ?(y/n)\n")
-        alert = input(PROMPT)
-        if str(alert) == "y":
-            settings["alert"] = True
-        else:
-            settings["alert"] = False
-        return settings
+    sys.stdout.write("woud you like to set an alert system ?(y/n)\n")
+    alert = input(PROMPT)
+    if str(alert) == "y":
+        settings["alert"] = True
+    else:
+        settings["alert"] = False
+    return settings
