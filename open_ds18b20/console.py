@@ -15,17 +15,19 @@ PROMPT = '> '
 
 
 
-def display(self, string):
+def display(string):
     sys.stdout.write(str(string) + "\n")
 
-def write_dependencies(self):
+
+def write_dependencies():
     """
     Indicates what to do if you don't have the modules installed
     """
     sys.stdout.write("before continuing you should add "
                          "\"w1-gpio\" & \"w1-therm\" to /etc/modules files\n")
 
-def prompt_config(self):
+
+def prompt_config():
     """
     Asks for the new config settings
     """
@@ -58,3 +60,7 @@ def prompt_config(self):
     else:
         settings["alert"] = False
     return settings
+
+
+def config_probe():
+    pass
