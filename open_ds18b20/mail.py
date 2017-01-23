@@ -6,7 +6,12 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
-class Mail():
+class Mail:
+
+    """
+    Deals with a mail creation from a gmail address.
+    A mail address must accept the "low security usage" to allow python to send a mail from it
+    """
 
     def __init__(self):
         self.credentials = {"email": "", "password": ""}
@@ -14,8 +19,17 @@ class Mail():
         self.body = ""
         return
 
-    def sendMail(self, smtp_server="smtp.gmail.com", port=587):
-        sent = False
+    def send_mail(self, smtp_server="smtp.gmail.com", port=587):
+        """
+        Sends the mail built
+
+        :param smtp_server: (optional, smtp.gmail.com by default) the smtp server to send the mail
+        :type smtp_server: str
+        :param port: (optional, 587 by default) the server ports
+        :type port: int
+        :return: if the mail has been sent
+        :rtype: bool
+        """
         try:
             self.msg.attach(MIMEText(self.body, 'plain'))
             text = self.msg.as_string()
@@ -26,11 +40,37 @@ class Mail():
             server.sendmail(self.msg["From"], self.msg["To"], text)
             server.quit()
             sent = True
-        except:
-            pass
+        except Exception as e:
+            sent = False
+            print("the message could not be sent :", e)
         return sent
 
-    def messageBody(self, temperatures, additional="", alert=False):
+    def message_body(self, temperatures, additional=None, alert=False):
+        """
+        Creates the body of the email
+
+        :param temperatures: {probe_name: temp}
+        :type temperatures: dict
+        :param additional: (optional) any additional messages to send
+        :type additional: str
+        :param alert: (optional, False by default) if the mail is defined as an alert
+        :type alert: bool
+
+        :return: the body of the mail and its subject
+        :rtype: str
+
+        :Example:
+
+            subject: List of temperatures
+            body:   Here is the list of the mesured temperatures
+                    probe_name : temp
+                    ...
+                    probe_name : temp
+                    memory usage: x%
+                    cpu usage: x%
+        """
+        if additional is None:
+            additional = ""
         if alert:
             self.msg["Subject"] = "Alert Detected"
             self.body = ("An alert has been detected, "
@@ -48,7 +88,14 @@ class Mail():
         self.body += str(psutils.cpu_percent()) + "\n"
         return self.body
 
-    def messageBuilder(self, toaddr, fromaddr):
-        self.msg["From"] = fromaddr
-        self.msg["To"] = toaddr
-        return self.msg
+    def message_builder(self, to_addr, from_addr):
+        """
+        Defines the address to send the mail from and to
+
+        :param to_addr: address to send mail to
+        :type to_addr: str
+        :param from_addr: address to send mail from (must accept "low security usage"
+        :type from_addr: str
+        """
+        self.msg["From"] = from_addr
+        self.msg["To"] = to_addr
