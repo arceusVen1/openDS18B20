@@ -6,7 +6,7 @@ import os
 import re
 
 SETTINGS = {"email": "", "password": "", "number": 0,
-            "alert": {"choice": False, "max": 0, "min": 0}}
+            "alert": False}
 
 
 class File(object):
@@ -19,35 +19,47 @@ class File(object):
         self.content = list(self.file)
         self.nbline = len(self.content)
 
-    def read_line(self, nbline):
-        """Reads a specific line
-
-        Args:
-            nbline (int): number of the line
-
-        Returns:
-            str: the content read
+    def read_line(self, nb_line):
         """
-        return self.content[nbline - 1]
+        Reads a specific line
+
+        :param nb_line: number of the line (human format, starting from line 1)
+        :type nb_line: int
+
+        :return: the content read
+        :rtype: str
+        """
+        return self.content[nb_line - 1]
 
     def close_file(self):
-        """close a file
-
-        Returns:
-            none: File has been closed
+        """
+        Closes a file
         """
         self.file.close()
 
     def remove_file(self):
+        """
+        Removes the file from the system
+        """
         self.close_file()
         os.remove(self.path)
+
+    def __str__(self):
+        return self.path
 
 
 class ConfigFile(File):
 
-    """Deal with the configuration file in /home/pi/ds18b20_conf/config.json"""
+    """Deal with the configuration file in /home/pi/ds18b20_conf/config.json, inherits from File"""
 
     def __init__(self, filepath):
+        """
+        Initiated with the file path, it will check for the existence and create it if necessary.
+        The file will then be opened and listed
+
+        :param filepath: absolute file path
+        :type filepath: str
+        """
         self.path = filepath
         self.settings = SETTINGS
         console = Console()
@@ -64,100 +76,158 @@ class ConfigFile(File):
         self.content = list(self.file)
         self.nbline = len(self.content)
 
-    def read_data(self):
-        """load the data from a json file
+    def get_data(self):
+        """
+            Loads the actual settings from the probe_config file
 
-        Returns:
-            dict: the new settings
+            :return: the new settings
+            :rtype: dict
         """
         self.file.seek(0)
         self.settings = json.load(self.file)
         return self.settings
 
-    def get_credentials(self):
-        """get the credential from the json loaded data
+    def set_data(self):
+        """
+        Overwrites the settings configuration of config.json
+        WARNING: once your settings are all set, this function must be called to save them
+        """
+        self.register()
 
-        Returns:
-            str: email and password from the data
+    def get_credentials(self):
+        """
+        Gets the credential from the json loaded data
+
+        :return: email and password from the data
+        :rtype: str
         """
         email = self.settings["email"]
         password = self.settings["password"]
         return email, password
 
-    def has_alert(self):
-        """determine if the configuration includes alert mailing
-
-        Returns:
-            bool: True if it has alert, False otherwise
+    def set_credentials(self, email, password):
         """
-        if self.settings["alert"]["choice"]:
-            return True
-        else:
-            return False
+        Registers in the settings the credentials
+
+        :param email: email adress to send to and from
+        :type email: str
+        :param password: the password of the above adress (warning ! kept clear)
+        :type password: str
+
+        :raises TypeError: if the email or password are not strings
+        """
+        if not isinstance(email, str) or not isinstance(password, str):
+            raise TypeError("email and password are strings")
+        self.settings["email"] = email
+        self.settings["password"] = password
 
     def get_probes(self):
+        """
+        Gets the number of probes that should be attached to the system
+
+        :return: the number of probes theoretically attached to the system (< 15)
+        :rtype: int
+        """
         return int(self.settings["number"])
 
-    def set_settings(self):
-        self.settings = Console().promptConfig(self.settings)
-        self.register()
+    def set_probes(self, number):
+        """
+        Registers the number of probes attached to the system (< 15)
+        :param number: the number of probes attached
+        :type number: int
+
+        :raises TypeError: if number is not a int
+        """
+        if not isinstance(number, int):
+            raise TypeError("the number of probe must be an integer")
+        self.settings["number"] = number
+
+    def has_alert(self):
+        """
+        Checks if an alert system is enabled
+
+        :return: True if alert system is enabled, false otherwise
+        :rtype: bool
+        """
+        if self.settings["alert"]:
+            return True
+        return False
+
+    def set_alert(self, alert):
+        """
+        Enables/disables the alert system
+
+        :param alert: True for enabling, False for disabling
+        :type alert: bool
+
+        :raises TypeError: if alert is not a bool
+        """
+        if not isinstance(alert, bool):
+            raise TypeError("alert option must be a bool")
+        self.settings["alert"] = alert
+
 
     def register(self):
-        """Registers the (new) settings in the cofnig file
-a
-        Returns:
-            none: The settings hacve been saved in the config file
+        """
+        Registers the (new) settings in the config file by overwriting the file
         """
         element = json.dumps(self.settings, indent=4)
         self._save(element)
 
     def _save(self, element):
-        """Overwrite text in a file to ensure that the file have been saved
-
-        Args:
-            element (str): what needs to be written
+        """
+        Overwrite text in a file to ensure that the file have been saved
+        :param element: what needs to be written
+        :type element: int, float, str, dict, list ...
         """
         self.file = open(self.path, "w")
         self.file.write(element)
         self.file.close()
         self.file = open(self.path, "r")
 
-    def close_file(self):
-        super(ConfigFile, self).close_file()
-
 
 class ProbeConfigFile(ConfigFile):
     """deals with the config file of the probes"""
 
     def __init__(self, path):
+        """
+        Class constructor, only turns a path string in a os path.
+        Since a probe does not necessarily have a config file yet, you don't want to create it automatically
+
+        :param path: absolute path of the config file
+        :type path: str
+        """
         # super(ProbeConfigFile, self).__init__()
         self.path = os.path.abspath(path)
 
     def edit(self):
+        """
+        If the file exist, use this function to read it
+        """
         self.file = open(self.path, "r")
         self.content = list(self.file)
         self.nbline = len(self.content)
 
     def exists(self):
+        """
+        Checks if the file exists at the given path
+
+        :return: True if the file exists, False otherwise
+        :rtype: bool
+        """
         if os.path.exists(self.path):
             return True
         else:
             return False
 
     def create(self):
+        """
+        Creates a file at the given path
+        """
         try:
             os.mknod(self.path)
         except OSError:
-            pass
-
-    def register(self):
-        super(ProbeConfigFile, self).register()
-
-    def _save(self, element):
-        super(ProbeConfigFile, self)._save(element)
-
-    def read_data(self):
-        super(ProbeConfigFile, self).read_data()
+            print("The file already exist, no need to create it")
 
 
 class ProbeFile(File):
@@ -167,9 +237,6 @@ class ProbeFile(File):
     def __init__(self, filepath):
         super(ProbeFile, self).__init__(filepath)
 
-    def close_file(self):
-        super(ProbeFile, self).close_file()
-
 
 class ModuleFile(File):
 
@@ -178,14 +245,12 @@ class ModuleFile(File):
     def __init__(self, filepath):
         super(ModuleFile, self).__init__(filepath)
 
-    def close_file(self):
-        super(ModuleFile, self).close_file()
-
     def tester(self):
-        """test the presence w1-therm and w1-gpio modules in the /etc/modules
+        """
+        Tests the presence w1-therm and w1-gpio modules in the /etc/modules
 
-        Returns:
-            bool: True if the modules are installed, false otherwise
+        :return: True if the modules are installed, false otherwise
+        :rtype: bool
         """
         flag = [False, False]
         for i in range(self.nbline):
@@ -195,6 +260,6 @@ class ModuleFile(File):
             if re.match(r"^w1-therm", line):
                 flag[1] = True
         if flag != [True, True]:
-            return Console.writeDependencies()
+            return False
         else:
             return True
