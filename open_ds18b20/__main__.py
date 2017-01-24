@@ -19,15 +19,18 @@ def arg_gestion(args):
     """
     erase = False
     mail = False
-    new = False
+    config = False
+    probe = False
     for i in range(len(args)):
         if args[i] == "erase":
             erase = True
         elif args[i] == "mail":
             mail = True
         elif args[i] == "new":
-            new = True
-    return erase, mail, new
+            config = True
+        elif args[i] == "probe":
+            probe = True
+    return erase, mail, config, probe
 
 
 def erase_command():
@@ -38,7 +41,7 @@ def erase_command():
     File("/home/pi/ds18b20_conf/config.json").remove_file()
 
 
-def new_command(config):
+def config_command(config):
     """
     Asks for the new settings config, used with "new" option
 
@@ -50,6 +53,14 @@ def new_command(config):
     config.set_probes(settings["number"])
     config.set_alert(settings["alert"])
     config.set_data()
+
+
+def probe_conf_command():
+    """
+    Shows every configured and unconfigured probes detected and
+    allow the user to configure and see the config of every of them
+    """
+    config_probe()
 
 
 def create_mail(temperatures, config, alert=False, messages=None):
@@ -97,24 +108,25 @@ def main():
         return
     files = []
     # test the presences of an argument
-    erase, mail, new = arg_gestion(sys.argv)
+    erase, mail, general_conf, probe_conf = arg_gestion(sys.argv)
     # if erase arg the config is reset
     if erase:
         # erase the config file to avoid conflict
         erase_command()
-        return
     # create if needed and open a config file
     config = ConfigFile("/home/pi/ds18b20_conf/config.json")
     # if the "new" option is given
-    if new:
+    if general_conf:
         # ask for the new config
-        new_command(config)
+        config_command(config)
         return
     # if the config file is empty (especially if it has just been created)
     if config.nbline == 0:
         # ask for the new settings in the console
         display("the config file is empty, use 'new' option")
         return
+    if probe_conf:
+        probe_conf_command()
     # read the data now that you should have some
     config.get_data()
     # create a Probe instance
