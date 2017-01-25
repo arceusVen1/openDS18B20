@@ -56,6 +56,13 @@ def prompt_config():
 
 
 def config_probe(listprobes):
+    """
+    Using the probe command from command line,
+    shows the config of the attached probes and can configure them
+
+    :param listprobes: list of probes from Probe class
+    :type listprobes: list
+    """
     configured = []
     unconfigured = []
     for probe in listprobes:

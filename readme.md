@@ -11,7 +11,33 @@ This program runs under python 3.5 (there is also a branch for python 2.7 which 
 
 Before anything you should create a random gmail adress used only for the purpose of this sofware where you enable the low security usage to allow python to send email from this specific adress (you can easily find how to do this by googling it ;) ).
 
-It is then very easy to use ! 
+It is then very easy to use !
+ 
+what's is new in v1.1 ?
+-----------------------
+
+#####An all new interface ! Use "probe" command to use it !
+*********************************************************************
+
+	$ open_ds18b20 probe 
+
+*********************************************************************
+
+#####The command "new" to change the general config
+*********************************************************************
+
+	$ open_ds18b20 new 
+
+*********************************************************************
+
+
+#####All DS18B20 has its own config file to adjust your needs with each individual probes
+Each probes has its own alert limits, its pseudo (each pseudo must be unique !!), a thermostat option to use with open_thermostat
+
+#####An all new documentation using ReStructuredText format
+
+#####Full compatibility with open_thermostat and open_dothat
+
 Install it
 *********************************************************************
 
@@ -27,7 +53,7 @@ you just need to use the following command to start it from the console
 
 *********************************************************************
 
-The first start of the software will create a config.json file in /home/pi (feel free to ajust this folder) and ask for an adress email as well as a password for it. 
+The first start of the software will create a config.json file in /home/pi (feel free to ajust this folder) and ask for an address email as well as a password for it. 
 
 This can manually modified later of course by running the program :
 
@@ -46,12 +72,12 @@ the other option currently available is :
 *********************************************************************
 this tells the software that you wan't an email no matter what for this single run.
 
-For now it only works with gmail adresses ! It will send the emails from the same adress where you receive them. 
-Feel free to modify the code in mail.py to configure the software for an another email adress domain (you will need to change the default smtp server or modify the __main__.py and give the smtp server you want as an argument of the send_mail() function).
+For now it only works with gmail addresses ! It will send the emails from the same adress where you receive them. 
+Feel free to modify the code in mail.py to configure the software for an another email address domain (you will need to change the default smtp server or modify the __main__.py and give the smtp server you want as an argument of the send_mail() function).
 
-Before using this sofware, make sure you have properly modified the "/etc/modules" file by adding "w1-gpio" and "w1-therm" and have then rebooted your RPi (IT'S EXTREMELY IMPORTANT). The sofware will tell you anyway if you haven't.
+Before using this software, make sure you have properly modified the "/etc/modules" file by adding "w1-gpio" and "w1-therm" and have then rebooted your RPi (IT'S EXTREMELY IMPORTANT). The software will tell you anyway if you haven't.
 
-I am still working on this project, there is alot to do to improve it (installer, documentation, code concatenation...) I am only a student so I am still improving, any help or advice will be glady acceted as well as feedback :)
+I am still working on this project, there is alot to do to improve it (installer, documentation, code concatenation...) I am only a student so I am still improving, any help or advice will be gladly accepted as well as feedback :)
 
 Feel free to use this program wherever and whenever you desire and modify it as much as you like :D
 

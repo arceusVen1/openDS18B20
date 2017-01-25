@@ -59,6 +59,9 @@ def probe_conf_command(probes):
     """
     Shows every configured and unconfigured probes detected and
     allow the user to configure and see the config of every of them
+
+    :param probes: list of probes from Probe class
+    :type probes: list
     """
     config_probe(probes)
 
@@ -138,6 +141,7 @@ def main():
     n = len(materials.listprobes)
     for idProbe in materials.listprobes:
         probes.append(Probe(idProbe))
+    # if the probe command is used
     if probe_conf:
         probe_conf_command(probes)
     # dht_h, dht_t = dht.read_retry(dht.DHT22,17)
