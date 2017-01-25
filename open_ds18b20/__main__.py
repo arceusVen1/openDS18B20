@@ -55,12 +55,12 @@ def config_command(config):
     config.set_data()
 
 
-def probe_conf_command():
+def probe_conf_command(probes):
     """
     Shows every configured and unconfigured probes detected and
     allow the user to configure and see the config of every of them
     """
-    config_probe()
+    config_probe(probes)
 
 
 def create_mail(temperatures, config, alert=False, messages=None):
