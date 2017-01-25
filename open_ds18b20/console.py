@@ -3,7 +3,6 @@ TODO:
     - check if credentials are needed in case of no alert
     - make a function for registering a new probe
 """
-from open_ds18b20.probe import Probe
 import sys
 import getpass
 
