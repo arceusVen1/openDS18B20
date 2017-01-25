@@ -39,6 +39,7 @@ def prompt_config():
                 settings["number"] = number
         except:
             sys.stdout.write("a number please !")
+    sys.stdout.write("woud you like to set an alert system ?(y/n)\n")
     alert = input(PROMPT)
     if str(alert) == "y":
         settings["alert"] = True
@@ -51,13 +52,6 @@ def prompt_config():
                      "(WARNING the password will be clear in the config file)\n")
     # to hide the password in the console
     settings["password"] = getpass.getpass()
-
-    sys.stdout.write("woud you like to set an alert system ?(y/n)\n")
-    alert = input(PROMPT)
-    if str(alert) == "y":
-        settings["alert"] = True
-    else:
-        settings["alert"] = False
     return settings
 
 
@@ -117,6 +111,7 @@ def config_probe(listprobes):
         moments = []
         for i in temps:
             moments.append(input(PROMPT))
+            print(moments)
         probe.set_moment(moments)
     probe.set_data()
     for probe in configured:

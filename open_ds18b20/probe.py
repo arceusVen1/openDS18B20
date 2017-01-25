@@ -235,7 +235,7 @@ class Probe:
                 if not isinstance(temps[i], float):
                     raise TypeError("the temps must be a list of float")
             self.settings["thermostated"]["temps"] = temps
-        self.settings["thermostated"] = bool_
+        self.settings["thermostated"]["bool"] = bool_
 
     def get_moment(self):
         """
