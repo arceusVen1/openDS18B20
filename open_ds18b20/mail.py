@@ -83,7 +83,7 @@ class Mail:
                 self.body += (str(probe) +
                               " : " + str(temp) + "*C\n")
         self.body += "\nmemory usage: "
-        self.body += str((round(psutil.virtual_memory().available/psutil.virtual_memory().total)))*100 + "%"
+        self.body += str(round(psutil.virtual_memory().available/psutil.virtual_memory().total, 3)*100) + "%"
         self.body += "\ncpu usage: "
         self.body += str(psutil.cpu_percent()) + "%" + "\n"
         return self.body
