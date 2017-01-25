@@ -30,7 +30,7 @@ def prompt_config():
     """
     Asks for the new config settings
     """
-    settings = {}
+    settings = {"email": "", "password": "", "number": False, "alert": False}
     sys.stdout.write("What is the number of probes attached ?\n")
     while not settings["number"]:
         try:
@@ -99,18 +99,19 @@ def config_probe(listprobes):
         probe.set_max_alert(float(input(PROMPT)))
         display("min ?")
         probe.set_min_alert(float(input(PROMPT)))
-    display("thermostat ?")
+    display("thermostat ? (y/n)")
     thermostat = input(PROMPT)
     if thermostat == "y":
         temps = []
         esc = None
         while esc is None:
-            display("add a temp")
+            display("add a temp (0 to esc)")
             temp = float(input(PROMPT))
             if temp == 0 and temps != []:
                 esc = 0
             else:
                 temps.append(temp)
+                print(temps)
         probe.set_thermostated(True, temps)
         display("Please give the start of each time lapse in order (HH:MM)")
         moments = []
