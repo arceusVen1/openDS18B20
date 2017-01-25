@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from open_ds18b20.fichier import ProbeConfigFile
+import open_ds18b20.fichier as f
 import re
 import os
 
@@ -48,7 +48,7 @@ class Probe:
         self.settings["slug"] = self.idt
         self.temperature = ""
         path = "/home/pi/ds18b20_conf/" + self.idt + ".json"
-        self.config = ProbeConfigFile(path)
+        self.config = f.ProbeConfigFile(path)
         return
 
     def is_working(self, line):
