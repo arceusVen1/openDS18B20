@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from open_ds18b20.console import Console
+from open_ds18b20.console import display
 import json
 import os
 import re
@@ -9,7 +9,7 @@ SETTINGS = {"email": "", "password": "", "number": 0,
             "alert": False}
 
 
-class File(object):
+class File:
 
     """abstract class of file"""
 
@@ -62,15 +62,14 @@ class ConfigFile(File):
         """
         self.path = filepath
         self.settings = SETTINGS
-        console = Console()
         os_path = os.path.abspath(self.path)
         if not os.path.exists(os_path):
             dirpath = os.path.dirname(os_path)
-            console.display("creating config.json in " + str(dirpath))
+            display("creating config.json in " + str(dirpath))
             try:
                 os.makedirs(dirpath)
             except OSError:
-                console.display("already existing folder")
+                display("already existing folder")
                 os.mknod(self.path)
         self.file = open(self.path, 'r')
         self.content = list(self.file)

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import sys
-from open_ds18b20.fichier import File, ConfigFile, ProbeFile, ModuleFile
+import open_ds18b20.fichier as f
 from open_ds18b20.mail import Mail
 from open_ds18b20.probe import Materials, Probe
 from open_ds18b20.console import *
@@ -38,7 +38,7 @@ def erase_command():
     Erases a file if required, used with erase option
 
     """
-    File("/home/pi/ds18b20_conf/config.json").remove_file()
+    f.File("/home/pi/ds18b20_conf/config.json").remove_file()
 
 
 def config_command(config):
@@ -102,7 +102,7 @@ def main():
     # flag for the alert
     alert = False
     # test that the moduels are present
-    tester = ModuleFile("/etc/modules").tester()
+    tester = f.ModuleFile("/etc/modules").tester()
     if not tester:
         write_dependencies()
         return
@@ -114,7 +114,7 @@ def main():
         # erase the config file to avoid conflict
         erase_command()
     # create if needed and open a config file
-    config = ConfigFile("/home/pi/ds18b20_conf/config.json")
+    config = f.ConfigFile("/home/pi/ds18b20_conf/config.json")
     # if the "new" option is given
     if general_conf:
         # ask for the new config
@@ -144,7 +144,7 @@ def main():
     try:
         for p in range(n):
             # put the file probe in files
-            files.append(ProbeFile(materials.listPaths[p]))
+            files.append(f.ProbeFile(materials.listPaths[p]))
             # test the probe
             if probes[p].is_working(files[p].read_line(1)):
                 if probes[p].has_config():

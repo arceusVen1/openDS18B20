@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import smtplib
-import psutils
+import psutil
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -83,9 +83,9 @@ class Mail:
                 self.body += (str(probe) +
                               " : " + str(temp) + "*C\n")
         self.body += "\nmemory usage: "
-        self.body += str((psutils.virtual_memory().available/psutils.virtual_memory().total))*100
+        self.body += str((round(psutil.virtual_memory().available/psutil.virtual_memory().total)))*100 + "%"
         self.body += "\ncpu usage: "
-        self.body += str(psutils.cpu_percent()) + "\n"
+        self.body += str(psutil.cpu_percent()) + "%" + "\n"
         return self.body
 
     def message_builder(self, to_addr, from_addr):
