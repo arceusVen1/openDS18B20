@@ -110,7 +110,7 @@ def config_probe(listprobes):
             if temp == 0 and temps != []:
                 esc = 0
             else:
-                temps.append(temps)
+                temps.append(temp)
         probe.set_thermostated(True, temps)
         display("Please give the start of each time lapse in order (HH:MM)")
         moments = []
