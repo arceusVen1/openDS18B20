@@ -16,14 +16,14 @@ It is then very easy to use !
 what's is new in v1.1 ?
 -----------------------
 
-#####An all new interface ! Use "probe" command to use it !
+* #####An all new interface ! Use "probe" command to use it !
 *********************************************************************
 
 	$ open_ds18b20 probe 
 
 *********************************************************************
 
-#####The command "new" to change the general config
+* #####The command "new" to change the general config
 *********************************************************************
 
 	$ open_ds18b20 new 
@@ -31,12 +31,12 @@ what's is new in v1.1 ?
 *********************************************************************
 
 
-#####All DS18B20 has its own config file to adjust your needs with each individual probes
+* #####All DS18B20 has its own config file to adjust your needs with each individual probes
 Each probes has its own alert limits, its pseudo (each pseudo must be unique !!), a thermostat option to use with open_thermostat
 
-#####An all new documentation using ReStructuredText format
+* #####An all new documentation using ReStructuredText format
 
-#####Full compatibility with open_thermostat and open_dothat
+* #####Full compatibility with open_thermostat and open_dothat
 
 Install it
 *********************************************************************
