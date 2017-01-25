@@ -125,19 +125,21 @@ def main():
         # ask for the new settings in the console
         display("the config file is empty, use 'new' option")
         return
-    if probe_conf:
-        probe_conf_command()
+
     # read the data now that you should have some
     config.get_data()
     # create a Probe instance
     materials = Materials()
     # detect the probes attach
     materials.detect_probes()
+
     # get all the probes attach
     probes = []
     n = len(materials.listprobes)
     for idProbe in materials.listprobes:
         probes.append(Probe(idProbe))
+    if probe_conf:
+        probe_conf_command(probes)
     # dht_h, dht_t = dht.read_retry(dht.DHT22,17)
     number = config.get_probes()
     # try to read the probes temp

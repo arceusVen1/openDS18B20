@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from open_ds18b20.console import display
 import json
 import os
 import re
@@ -65,11 +64,11 @@ class ConfigFile(File):
         os_path = os.path.abspath(self.path)
         if not os.path.exists(os_path):
             dirpath = os.path.dirname(os_path)
-            display("creating config.json in " + str(dirpath))
+            print("creating config.json in " + str(dirpath))
             try:
                 os.makedirs(dirpath)
             except OSError:
-                display("already existing folder")
+                print("already existing folder")
                 os.mknod(self.path)
         self.file = open(self.path, 'r')
         self.content = list(self.file)

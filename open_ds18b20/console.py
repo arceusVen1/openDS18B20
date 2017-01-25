@@ -3,10 +3,9 @@ TODO:
     - check if credentials are needed in case of no alert
     - make a function for registering a new probe
 """
-
+from open_ds18b20.probe import Probe
 import sys
 import getpass
-from open_ds18b20.probe import Materials, Probe
 
 # GLOBAL--------------------------------------------------
 
@@ -63,15 +62,10 @@ def prompt_config():
     return settings
 
 
-def config_probe():
-    materials = Materials()
+def config_probe(listprobes):
     configured = []
     unconfigured = []
-    probes = []
-    materials.detect_probes()
-    for material in materials.listprobes:
-        probe = Probe(material)
-        probes.append(probe)
+    for probe in listprobes:
         if probe.has_config():
             probe.get_data()
             configured.append(probe)
