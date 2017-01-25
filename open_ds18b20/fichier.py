@@ -43,6 +43,17 @@ class File:
         self.close_file()
         os.remove(self.path)
 
+    def _save(self, element):
+        """
+        Overwrite text in a file to ensure that the file have been saved
+        :param element: what needs to be written
+        :type element: int, float, str, dict, list ...
+        """
+        self.file = open(self.path, "w")
+        self.file.write(element)
+        self.file.close()
+        self.file = open(self.path, "r")
+
     def __str__(self):
         return self.path
 
@@ -171,16 +182,6 @@ class ConfigFile(File):
         element = json.dumps(self.settings, indent=4)
         self._save(element)
 
-    def _save(self, element):
-        """
-        Overwrite text in a file to ensure that the file have been saved
-        :param element: what needs to be written
-        :type element: int, float, str, dict, list ...
-        """
-        self.file = open(self.path, "w")
-        self.file.write(element)
-        self.file.close()
-        self.file = open(self.path, "r")
 
 
 class ProbeConfigFile(ConfigFile):
@@ -206,26 +207,7 @@ class ProbeConfigFile(ConfigFile):
         self.content = list(self.file)
         self.nbline = len(self.content)
 
-    def exists(self):
-        """
-        Checks if the file exists at the given path
 
-        :return: True if the file exists, False otherwise
-        :rtype: bool
-        """
-        if os.path.exists(self.path):
-            return True
-        else:
-            return False
-
-    def create(self):
-        """
-        Creates a file at the given path
-        """
-        try:
-            os.mknod(self.path)
-        except OSError:
-            print("The file already exist, no need to create it")
 
 
 class ProbeFile(File):
