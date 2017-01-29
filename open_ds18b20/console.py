@@ -138,7 +138,7 @@ def config_probe(listprobes):
                 flag = True
             except Exception as e:
                 display(str(e))
-        flag = True
+        flag = False
         while not flag:
             display("Please give the start of each time lapse in order (HH:MM)")
             moments = []
