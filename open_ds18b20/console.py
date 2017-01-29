@@ -147,6 +147,7 @@ def config_probe(listprobes):
                     moments.append(input(PROMPT))
                     print(moments)
                 probe.set_moment(moments)
+                flag = True
             except Exception as e:
                 display(str(e))
     probe.set_data()
