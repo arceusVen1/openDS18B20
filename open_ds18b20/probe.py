@@ -261,14 +261,14 @@ class Probe:
             raise TypeError("the moments must be a list")
         if len(moments) != len(self.settings["thermostated"]["temps"]):
             raise IndexError("number of moments must equal temperatures")
-        regex = re.compile("^\d\d:\d\d$")
+        regex = re.compile("^(\d\d):(\d\d)$")
         for moment in moments:
             result = regex.match(moment)
             if not result:
                 raise ValueError("the format is uncorrect, use HH:MM")
             hour = int(result.groups()[0])
             minute = int(result.groups()[1])
-            if hour > 23 or hour > 0 or minute < 0 or minute > 59:
+            if hour > 23 or hour < 0 or minute < 0 or minute > 59:
                 raise ValueError("A correct time must be given")
         self.settings["moment"] = moments
 
