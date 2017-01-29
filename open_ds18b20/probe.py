@@ -251,7 +251,7 @@ class Probe:
         Sets the different time slots by the beginning of each time slot
 
         :param moments: time slot with the hour written in this form "%H:%M"
-        :type list:
+        :type moments: list
 
         :raises TypeError: if the number of time slots is different from the number of temperatures
         :raises IndexError: if the time slots are not a list

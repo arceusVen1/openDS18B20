@@ -90,12 +90,12 @@ def config_probe(listprobes):
         if probe.is_thermostated():
             display(probe.get_moment())
             display(probe.link_moment_temp())
-    flag =  False
+    flag = False
     while not flag:
         display("pseudo ?")
         try:
             probe.set_slug(input(PROMPT))
-            flag= True
+            flag = True
         except Exception as e:
             display(str(e))
     flag = False
