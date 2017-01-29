@@ -54,6 +54,26 @@ class File:
         self.file.close()
         self.file = open(self.path, "r")
 
+    def exists(self):
+        """
+        Checks if the file exists at the given path
+
+        :return: True if the file exists, False otherwise
+        :rtype: bool
+        """
+        if os.path.exists(self.path):
+            return True
+        return False
+
+    def create(self):
+        """
+        Creates a file at the given path
+        """
+        try:
+            os.mknod(self.path)
+        except OSError:
+            print("The file already exist, no need to create it")
+
     def __str__(self):
         return self.path
 
@@ -183,7 +203,6 @@ class ConfigFile(File):
         self._save(element)
 
 
-
 class ProbeConfigFile(ConfigFile):
     """deals with the config file of the probes"""
 
@@ -206,8 +225,6 @@ class ProbeConfigFile(ConfigFile):
         self.file = open(self.path, "r")
         self.content = list(self.file)
         self.nbline = len(self.content)
-
-
 
 
 class ProbeFile(File):
