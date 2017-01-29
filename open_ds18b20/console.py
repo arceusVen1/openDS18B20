@@ -90,36 +90,65 @@ def config_probe(listprobes):
         if probe.is_thermostated():
             display(probe.get_moment())
             display(probe.link_moment_temp())
-    display("pseudo ?")
-    probe.set_slug(input(PROMPT))
+    flag =  False
+    while not flag:
+        display("pseudo ?")
+        try:
+            probe.set_slug(input(PROMPT))
+            flag= True
+        except Exception as e:
+            display(str(e))
+    flag = False
     display("Alert ? (y/n)")
     alert = input(PROMPT)
     if alert == "y":
         probe.set_alert(True)
-        display("max ?")
-        probe.set_max_alert(float(input(PROMPT)))
-        display("min ?")
-        probe.set_min_alert(float(input(PROMPT)))
+        while not flag:
+            display("max ?")
+            try:
+                probe.set_max_alert(float(input(PROMPT)))
+                flag = True
+            except Exception as e:
+                display(str(e))
+        flag = False
+        while not flag:
+            display("min ?")
+            try:
+                probe.set_min_alert(float(input(PROMPT)))
+                flag = True
+            except Exception as e:
+                display(str(e))
+    flag = False
     display("thermostat ? (y/n)")
     thermostat = input(PROMPT)
     if thermostat == "y":
-        temps = []
-        esc = None
-        while esc is None:
-            display("add a temp (0 to esc)")
-            temp = float(input(PROMPT))
-            if temp == 0 and temps != []:
-                esc = 0
-            else:
-                temps.append(temp)
-                print(temps)
-        probe.set_thermostated(True, temps)
-        display("Please give the start of each time lapse in order (HH:MM)")
-        moments = []
-        for i in temps:
-            moments.append(input(PROMPT))
-            print(moments)
-        probe.set_moment(moments)
+        while not flag:
+            try:
+                temps = []
+                esc = None
+                while esc is None:
+                    display("add a temp (0 to esc)")
+                    temp = float(input(PROMPT))
+                    if temp == 0 and temps != []:
+                        esc = 0
+                    else:
+                        temps.append(temp)
+                        print(temps)
+                probe.set_thermostated(True, temps)
+                flag = True
+            except Exception as e:
+                display(str(e))
+        flag = True
+        while not flag:
+            display("Please give the start of each time lapse in order (HH:MM)")
+            moments = []
+            try:
+                for i in temps:
+                    moments.append(input(PROMPT))
+                    print(moments)
+                probe.set_moment(moments)
+            except Exception as e:
+                display(str(e))
     probe.set_data()
     for probe in configured:
         probe.config.close_file()
