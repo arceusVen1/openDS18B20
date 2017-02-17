@@ -8,6 +8,7 @@ TODO:   - {ds18b20: [{}], dht22:[{idt, slug, alert {bool max, min}, hygrostated 
 import open_ds18b20.fichier as f
 import re
 import os
+import Adafruit_DHT
 
 PATH = "/home/pi/ds18b20_conf/probes/config.json"
 SETTINGS = {"idt": "", "slug": "", "alert": {"bool": False, "max": 0,
@@ -407,7 +408,20 @@ class Ds18b20(Probe):
 
 
 class Dht22(Probe):
-
-    def __init__(self, idt=0, settings=SETTINGS):
+    """
+    Represents the DHT22 probes. The id of a dht22 correspond to its pin making it easily replaceable
+    """
+    def __init__(self, idt='21', settings=SETTINGS):
         super().__init__(idt, settings)
+        self.sensor = Adafruit_DHT.DHT22
+
+    def get_value(self):
+        self.temperature, self.humidity = Adafruit_DHT.read_retry(self.sensor, self.get_id(), retries=2)
+
+    def get_temperature(self, line=None):
+        return self.temperature
+
+    def get_humidity(self):
+        return self.humidity
+
 
