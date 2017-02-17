@@ -1,10 +1,13 @@
 #!/usr/bin/python3
+"""
+TODO: {ds18b20: [{}], dht22:[{idt, slug, alert {bool max, min}, hygrostated {bool hygro moment]
+"""
 import open_ds18b20.fichier as f
 import re
 import os
 
 SETTINGS = {"idt": "", "slug": "", "alert": {"bool": False, "max": 0,
-                                             "min": 0}, "thermostated": {"bool": False, "temps": []}, "moment": []}
+                                             "min": 0}, "thermostated": {"bool": False, "temps": [], "moment": []}}
 
 
 class Materials:
@@ -244,7 +247,7 @@ class Probe:
         :return: the list of the beginning of time slot
         :rtype: list
         """
-        return self.settings["moment"]
+        return self.settings["thermostated"]["moment"]
 
     def set_moment(self, moments):
         """
@@ -270,7 +273,7 @@ class Probe:
             minute = int(result.groups()[1])
             if hour > 23 or hour < 0 or minute < 0 or minute > 59:
                 raise ValueError("A correct time must be given")
-        self.settings["moment"] = moments
+        self.settings["thermostated"]["moment"] = moments
 
     def get_creneau(self):
         """
@@ -279,7 +282,7 @@ class Probe:
         :return: number of time changing fror a thermostat
         :rtype: int
         """
-        return len(self.settings["moment"])
+        return len(self.settings["thermostated"]["moment"])
 
     def link_moment_temp(self):
         """
@@ -290,7 +293,7 @@ class Probe:
         """
         thermorange = {}
         for i in range(self.get_creneau()):
-            thermorange[self.settings["moment"][i]] = self.settings[
+            thermorange[self.settings["thermostated"]["moment"][i]] = self.settings[
                 "thermostated"]["temps"][i]
         return thermorange
 
