@@ -13,7 +13,7 @@ setup(
     description='DS18B20 auto-detector,reader and mailer for RPi',
     author='jeremy venin',
     author_email='jeremy.venin@telecom-sudparis.eu',
-    url='https://github.com/lecreateurfrench/openDS18B20.git',
+    url='https://github.com/arceusVen1/openDS18B20.git',
     # license="",
     long_description=read('readme.md'),
     packages=['open_ds18b20'],
