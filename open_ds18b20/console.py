@@ -55,7 +55,7 @@ def prompt_config():
     return settings
 
 
-def config_probe(listprobes):
+def config_probe(listprobes, materials):
     """
     Using the probe command from command line,
     shows the config of the attached probes and can configure them
@@ -67,7 +67,6 @@ def config_probe(listprobes):
     unconfigured = []
     for probe in listprobes:
         if probe.has_config():
-            probe.get_data()
             configured.append(probe)
         else:
             unconfigured.append(probe)
@@ -150,6 +149,6 @@ def config_probe(listprobes):
                 flag = True
             except Exception as e:
                 display(str(e))
-    probe.set_data()
+    materials.add_probe(probe)
     for probe in configured:
         probe.config.close_file()

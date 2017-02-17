@@ -100,7 +100,7 @@ class ConfigFile(File):
                 os.makedirs(dirpath)
             except OSError:
                 print("already existing folder")
-                os.mknod(self.path)
+                self.create()
         self.file = open(self.path, 'r')
         self.content = list(self.file)
         self.nbline = len(self.content)

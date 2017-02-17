@@ -2,7 +2,7 @@
 import sys
 import open_ds18b20.fichier as f
 from open_ds18b20.mail import Mail
-from open_ds18b20.probe import Materials, Probe
+from open_ds18b20.probe import Materials, Probe, Ds18b20, Dht22
 from open_ds18b20.console import *
 
 
@@ -12,8 +12,10 @@ def arg_gestion(args):
 
     :return erase: erase option
     :rtype erase: bool
+
     :return mail: mail option
     :rtype mail: bool
+
     :return new: new option
     :rtype new: bool
     """
@@ -55,15 +57,17 @@ def config_command(config):
     config.set_data()
 
 
-def probe_conf_command(probes):
+def probe_conf_command(probes, materials):
     """
     Shows every configured and unconfigured probes detected and
     allow the user to configure and see the config of every of them
 
+    :param materials: configuration of all the probes
+    :type materials: Materials
     :param probes: list of probes from Probe class
     :type probes: list
     """
-    config_probe(probes)
+    config_probe(probes, materials)
 
 
 def create_mail(temperatures, config, alert=False, messages=None):
@@ -133,17 +137,23 @@ def main():
     config.get_data()
     # create a Probe instance
     materials = Materials()
+    # get the data from materials
+    materials.allow_config()
+    materials.get_data()
     # detect the probes attach
-    materials.detect_probes()
-
+    materials.detect_attached_probes()
     # get all the probes attach
     probes = []
     n = len(materials.listprobes)
     for idProbe in materials.listprobes:
-        probes.append(Probe(idProbe))
+        # test the presence of the probe
+        fprobe = materials.get_probe_by_id(idProbe)
+        if fprobe:
+            probes.append(Ds18b20(idProbe, fprobe[0]))
+        probes.append(Ds18b20(idProbe))
     # if the probe command is used
     if probe_conf:
-        probe_conf_command(probes)
+        probe_conf_command(probes, materials)
     # dht_h, dht_t = dht.read_retry(dht.DHT22,17)
     number = config.get_probes()
     # try to read the probes temp
@@ -153,8 +163,6 @@ def main():
             files.append(f.ProbeFile(materials.listPaths[p]))
             # test the probe
             if probes[p].is_working(files[p].read_line(1)):
-                if probes[p].has_config():
-                    probes[p].get_data()
                 # the probe is working
                 materials.numWorkingProbes += 1
                 templine = files[p].read_line(2)
