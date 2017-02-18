@@ -87,7 +87,7 @@ def config_probe(listprobes, materials):
             display("max :" + str(probe.get_max_alert()))
             display("min :" + str(probe.get_min_alert()))
         if probe.is_thermostated():
-            display(probe.get_moment())
+            display(probe.get_interval())
             display(probe.link_moment_temp())
     flag = False
     while not flag:
@@ -145,7 +145,7 @@ def config_probe(listprobes, materials):
                 for i in temps:
                     moments.append(input(PROMPT))
                     print(moments)
-                probe.set_moment(moments)
+                probe.set_interval(moments)
                 flag = True
             except Exception as e:
                 display(str(e))
