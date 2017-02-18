@@ -30,13 +30,21 @@ def prompt_config():
     """
     Asks for the new config settings
     """
-    settings = {"email": "", "password": "", "number": False, "alert": False}
-    sys.stdout.write("What is the number of probes attached ?\n")
-    while not settings["number"]:
+    settings = {"email": "", "password": "", "DS18B20": 0, "DHT22": 0,"alert": False}
+    sys.stdout.write("What is the number of DS18B20 probes attached ?\n")
+    while not settings["DS18B20"]:
         try:
             number = int(input(PROMPT))
             if 15 > number >= 0:
-                settings["number"] = number
+                settings["DS18B20"] = number
+        except:
+            sys.stdout.write("a number please !")
+    sys.stdout.write("What is the number of DHT22 probes attached ?\n")
+    while not settings["DHT22"]:
+        try:
+            number = int(input(PROMPT))
+            if 2 > number >= 0:
+                settings["DHT22"] = number
         except:
             sys.stdout.write("a number please !")
     sys.stdout.write("woud you like to set an alert system ?(y/n)\n")

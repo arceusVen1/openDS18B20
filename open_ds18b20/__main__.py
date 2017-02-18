@@ -52,7 +52,8 @@ def config_command(config):
     """
     settings = prompt_config()
     config.set_credentials(settings["email"], settings["password"])
-    config.set_probes(settings["number"])
+    config.set_ds18b20(settings["DS18B20"])
+    config.set_dht22(settings["DHT22"])
     config.set_alert(settings["alert"])
     config.set_data()
 
@@ -155,8 +156,8 @@ def main():
     # if the probe command is used
     if probe_conf:
         probe_conf_command(probes, materials)
-    # number of probes attached
-    number = config.get_probes()
+    # number of DS18B20 probes attached
+    number = config.get_ds18b20() + config.get_dht22()
     # try to read the probes temp
     try:
         for p in range(n):
@@ -173,23 +174,27 @@ def main():
     # append an exception message if exception is raised
     except:
         messages.append("* temperatures *couldn't be read")
+    # DHT22 reading
+    for dht22 in materials.get_dht22():
+        dht22 = Dht22(dht22["idt"])
+        try:
+            dht22.get_value()
+            temperatures[dht22.get_slug()] = dht22.get_temperature()
+            humidity[dht22.get_slug()] = dht22.get_humidity()
+            # include the dht22 probes for alert reading
+            probes.append(dht22)
+            materials.num_working_probes += 1
+        except EnvironmentError:
+            messages.append("*one DHT22 not *****detected****")
     # if not all of the probes attached are working
     if materials.num_working_probes < number:
         difference = number - materials.num_working_probes
         messages.append("* " + (str(difference) +
                                 " probes not **** detected ***"))
-    #DHT22 reading
-    for dht22 in materials.get_dht22():
-        try:
-            dht22.get_value()
-            temperatures[dht22.get_slug()] = dht22.get_temperature()
-            humidity[dht22.get_slug()] = dht22.get_humidity()
-            probes.append(dht22)
-        except EnvironmentError:
-            messages.append("*one DHT22 not *****detected****")
+
     # if alert compare the max/min with real temp
     if len(temperatures) > 0:
-        for p in range(materials.num_working_probes): # issue for including dht22
+        for p in range(materials.num_working_probes):
             if probes[p].has_alert() and (
                             temperatures[probes[p].get_slug()] >= probes[p].get_max_alert() or temperatures[
                         probes[p].get_slug()] <= probes[p].get_min_alert()):

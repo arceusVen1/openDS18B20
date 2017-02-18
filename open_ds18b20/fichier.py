@@ -4,8 +4,7 @@ import json
 import os
 import re
 
-SETTINGS = {"email": "", "password": "", "number": 0,
-            "alert": False}
+SETTINGS = {"email": "", "password": "", "DS18B20": 0, "DHT22": 0, "alert": False}
 
 
 class File:
@@ -150,26 +149,49 @@ class ConfigFile(File):
         self.settings["email"] = email
         self.settings["password"] = password
 
-    def get_probes(self):
+    def get_ds18b20(self):
         """
-        Gets the number of probes that should be attached to the system
+        Gets the number of DS18B20 probes that should be attached to the system
 
-        :return: the number of probes theoretically attached to the system (< 15)
+        :return: the number of DS18B20 probes theoretically attached to the system (< 15)
         :rtype: int
         """
-        return int(self.settings["number"])
+        return int(self.settings["DS18B20"])
 
-    def set_probes(self, number):
+    def get_dht22(self):
         """
-        Registers the number of probes attached to the system (< 15)
-        :param number: the number of probes attached
+        Gets the number of DHT22 probes that should be attached to the system
+
+        :return: the number of DHT22 probes theoretically attached to the system (< 15)
+        :rtype: int
+        """
+        return int(self.settings["DHT22"])
+
+    def set_ds18b20(self, number):
+        """
+        Registers the number of DS18B20 probes attached to the system (< 15)
+
+        :param number: the number of DS18B20 probes attached
         :type number: int
 
         :raises TypeError: if number is not a int
         """
         if not isinstance(number, int):
             raise TypeError("the number of probe must be an integer")
-        self.settings["number"] = number
+        self.settings["DS18B20"] = number
+
+    def set_dht22(self, number):
+        """
+        Registers the number of DHT22 probes attached to the system (< 15)
+
+        :param number: the number of DHT22 probes attached
+        :type number: int
+
+        :raises TypeError: if number is not a int
+        """
+        if not isinstance(number, int):
+            raise TypeError("the number of probe must be an integer")
+        self.settings["DHT22"] = number
 
     def has_alert(self):
         """
