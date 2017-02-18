@@ -22,7 +22,7 @@ class Materials:
     def __init__(self):
         self.listprobes = []
         self.listPaths = []
-        self.numWorkingProbes = 0
+        self.num_working_probes = 0
         self.path = os.path.abspath("/sys/bus/w1/devices")
         self.config = f.ProbeConfigFile(PATH)
         self.settings = {"ds18b20": [], "dht22": []}
@@ -297,7 +297,7 @@ class Probe:
             self.settings["thermostated"]["values"] = values
         self.settings["thermostated"]["bool"] = bool_
 
-    def get_moment(self):
+    def get_interval(self):
         """
         Gets the list of time slot for the temps
 
@@ -306,23 +306,23 @@ class Probe:
         """
         return self.settings["stated"]["moment"]
 
-    def set_moment(self, moments):
+    def set_interval(self, intervals):
         """
         Sets the different time slots by the beginning of each time slot
 
-        :param moments: time slot with the hour written in this form "%H:%M"
-        :type moments: list
+        :param intervals: start of the time slot with the hour written in this form "%H:%M"
+        :type intervals: list
 
         :raises TypeError: if the number of time slots is different from the number of temperatures
         :raises IndexError: if the time slots are not a list
         :raises ValueError: if the time format is uncorrect
         """
-        if not isinstance(moments, list):
-            raise TypeError("the moments must be a list")
-        if len(moments) != len(self.settings["stated"]["values"]):
-            raise IndexError("number of moments must equal number of values")
+        if not isinstance(intervals, list):
+            raise TypeError("the intervals must be a list")
+        if len(intervals) != len(self.settings["stated"]["values"]):
+            raise IndexError("number of intervals must equal number of values")
         regex = re.compile("^(\d\d):(\d\d)$")
-        for moment in moments:
+        for moment in intervals:
             result = regex.match(moment)
             if not result:
                 raise ValueError("the format is uncorrect, use HH:MM")
@@ -330,7 +330,7 @@ class Probe:
             minute = int(result.groups()[1])
             if hour > 23 or hour < 0 or minute < 0 or minute > 59:
                 raise ValueError("A correct time must be given")
-        self.settings["stated"]["moment"] = moments
+        self.settings["stated"]["moment"] = intervals
 
     def get_creneau(self):
         """
@@ -355,6 +355,15 @@ class Probe:
         return thermorange
 
     def get_temperature(self, line=None):
+        """
+        Abstract method for getting temperature. Line is used only in trhe case of a DS18B20
+
+        :param line: (optionnal) line of the file which contains the temp
+        :type line: str
+
+        :return: the read temperature
+        :rtype: float
+        """
         return self.temperature
 
 
@@ -416,7 +425,12 @@ class Dht22(Probe):
         self.sensor = Adafruit_DHT.DHT22
 
     def get_value(self):
+        """
+        Gets the read values of a DHT22 probe using the Adafruit API
+        """
         self.temperature, self.humidity = Adafruit_DHT.read_retry(self.sensor, self.get_id(), retries=2)
+        if self.temperature is None or self.humidity is None:
+            raise EnvironmentError("The DHT22 probe is not functionnal")
 
     def get_temperature(self, line=None):
         return self.temperature
