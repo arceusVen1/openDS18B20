@@ -105,6 +105,7 @@ def create_mail(temperatures, config, alert=False, messages=None):
 def main():
     # initialize the returned instance
     temperatures = {}
+    humidity = {}
     messages = []
     # flag for the alert
     alert = False
@@ -154,7 +155,7 @@ def main():
     # if the probe command is used
     if probe_conf:
         probe_conf_command(probes, materials)
-    # dht_h, dht_t = dht.read_retry(dht.DHT22,17)
+    # number of probes attached
     number = config.get_probes()
     # try to read the probes temp
     try:
@@ -164,7 +165,7 @@ def main():
             # test the probe
             if probes[p].is_working(files[p].read_line(1)):
                 # the probe is working
-                materials.numWorkingProbes += 1
+                materials.num_working_probes += 1
                 templine = files[p].read_line(2)
                 probes[p].get_temperature(templine)
                 temperatures[probes[p].get_slug()] = float(probes[
@@ -173,13 +174,22 @@ def main():
     except:
         messages.append("* temperatures *couldn't be read")
     # if not all of the probes attached are working
-    if materials.numWorkingProbes < number:
-        difference = number - materials.numWorkingProbes
+    if materials.num_working_probes < number:
+        difference = number - materials.num_working_probes
         messages.append("* " + (str(difference) +
                                 " probes not **** detected ***"))
+    #DHT22 reading
+    for dht22 in materials.get_dht22():
+        try:
+            dht22.get_value()
+            temperatures[dht22.get_slug()] = dht22.get_temperature()
+            humidity[dht22.get_slug()] = dht22.get_humidity()
+            probes.append(dht22)
+        except EnvironmentError:
+            messages.append("*one DHT22 not *****detected****")
     # if alert compare the max/min with real temp
     if len(temperatures) > 0:
-        for p in range(materials.numWorkingProbes):
+        for p in range(materials.num_working_probes): # issue for including dht22
             if probes[p].has_alert() and (
                             temperatures[probes[p].get_slug()] >= probes[p].get_max_alert() or temperatures[
                         probes[p].get_slug()] <= probes[p].get_min_alert()):
@@ -200,7 +210,7 @@ def main():
     for i in range(len(files)):
         files[i].close_file()
     config.close_file()
-    return temperatures, messages
+    return temperatures, humidity, messages
 
 
 if __name__ == '__main__':
