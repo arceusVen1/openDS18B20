@@ -79,21 +79,23 @@ def config_probe(listprobes, materials):
             configured.append(probe)
         else:
             unconfigured.append(probe)
+    nc = len(configured)
+    nu = len(unconfigured)
     display("Already configured probes :")
-    for i in range(len(configured)):
+    for i in range(nc):
         display(str(i) + " - " + configured[i].get_slug())
     display("Unconfigured probes")
-    for j in range(len(unconfigured)):
-        display(str(i + j) + " - " + unconfigured[j].get_slug())
+    for j in range(nu):
+        display(str(nc + j) + " - " + unconfigured[j].get_slug())
     # create a new instance of Dht22
-    display(str(i + j + 1) + " - new DHT22")
+    display(str(nc + nu) + " - new DHT22")
     unconfigured.append(open_ds18b20.probe.Dht22())
     display("Please type in a number for the probes to configure :")
     number = int(input(PROMPT))
-    if number > i:
-        probe = unconfigured[number - i]
+    if number >= nc:
+        probe = unconfigured[number - nc]
     else:
-        probe = configured[i]
+        probe = configured[number]
         display(probe.get_slug())
         if probe.has_alert():
             display("max :" + str(probe.get_max_alert()))
