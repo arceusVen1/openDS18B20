@@ -294,8 +294,8 @@ class Probe:
             for i in range(len(values)):
                 if not isinstance(values[i], float):
                     raise TypeError("the values must be a list of float")
-            self.settings["thermostated"]["values"] = values
-        self.settings["thermostated"]["bool"] = bool_
+            self.settings["stated"]["values"] = values
+        self.settings["stated"]["bool"] = bool_
 
     def get_interval(self):
         """
@@ -341,7 +341,7 @@ class Probe:
         """
         return len(self.settings["stated"]["moment"])
 
-    def link_moment_temp(self):
+    def link_moment_value(self):
         """
         Associates a temp with a moment
 
@@ -351,14 +351,14 @@ class Probe:
         thermorange = {}
         for i in range(self.get_creneau()):
             thermorange[self.settings["stated"]["moment"][i]] = self.settings[
-                "stated"]["temps"][i]
+                "stated"]["values"][i]
         return thermorange
 
     def get_temperature(self, line=None):
         """
         Abstract method for getting temperature. Line is used only in trhe case of a DS18B20
 
-        :param line: (optionnal) line of the file which contains the temp
+        :param line: (optional) line of the file which contains the temp
         :type line: str
 
         :return: the read temperature
@@ -420,8 +420,10 @@ class Dht22(Probe):
     """
     Represents the DHT22 probes. The id of a dht22 correspond to its pin making it easily replaceable
     """
+    DHTSET = SETTINGS
     def __init__(self, idt='21', settings=SETTINGS):
         super().__init__(idt, settings)
+
         self.sensor = Adafruit_DHT.DHT22
 
     def get_value(self):
@@ -430,7 +432,7 @@ class Dht22(Probe):
         """
         self.temperature, self.humidity = Adafruit_DHT.read_retry(self.sensor, self.get_id(), retries=2)
         if self.temperature is None or self.humidity is None:
-            raise EnvironmentError("The DHT22 probe is not functionnal")
+            raise EnvironmentError("The DHT22 probe is not functional")
 
     def get_temperature(self, line=None):
         return self.temperature
@@ -438,4 +440,9 @@ class Dht22(Probe):
     def get_humidity(self):
         return self.humidity
 
+    def is_hygrostated(self):
+        return super().is_stated()
+
+    def set_hygrostated(self, bool_, values=None):
+        return super().set_stated(bool_, values)
 
