@@ -162,5 +162,6 @@ def config_probe(listprobes, materials):
             except Exception as e:
                 display(str(e))
     materials.add_probe(probe)
+    materials.set_data()
     for probe in configured:
         probe.config.close_file()

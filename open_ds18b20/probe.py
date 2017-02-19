@@ -107,6 +107,13 @@ class Materials:
                 return probes[i], i
         return None
 
+    def get_probe_by_slug(self, slug):
+        probes = self.get_ds18b20() + self.get_dht22()
+        for i in len(range(probes)):
+            if probes[i]["slug"] == slug:
+                return probes[i], i
+        return None
+
     def get_dht22(self):
         """
         Gets the configured dht22 probes
@@ -142,9 +149,10 @@ class Probe:
     """Abstracts class which represents the DS18B20 and DHT22 probes"""
 
     def __init__(self, idt, settings):
-        self.set_id(str(idt))
         self.settings = settings
-        if self.get_slug() == "":
+        if not self.get_id():
+            self.set_id(str(idt))
+        if not self.get_slug():
             self.set_slug(str(idt))
         self.temperature = ""
         return
@@ -369,7 +377,7 @@ class Probe:
 
 class Ds18b20(Probe):
 
-    def __init__(self, idt, settings=SETTINGS):
+    def __init__(self, idt=None, settings=SETTINGS):
         super().__init__(idt, settings)
 
     def is_thermostated(self):
