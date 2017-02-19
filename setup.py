@@ -9,7 +9,7 @@ def read(fname):
 
 setup(
     name='OpenDS18B20',
-    version='1.1',
+    version='1.2',
     description='DS18B20 auto-detector,reader and mailer for RPi',
     author='jeremy venin',
     author_email='jeremy.venin@telecom-sudparis.eu',
