@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """
 TODO:   - {ds18b20: [{}], dht22:[{idt, slug, alert {bool max, min}, hygrostated {bool hygro moment]
-        - the id of a dht22 needs to be properly defined
-
+        - the id of a dht22 needs to be properly defined (pin)
+        - main -> check if len(temperature) may be useless -> test it
 
 """
 import open_ds18b20.fichier as f
