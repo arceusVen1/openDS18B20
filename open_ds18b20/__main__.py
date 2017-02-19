@@ -2,7 +2,7 @@
 import sys
 import open_ds18b20.fichier as f
 from open_ds18b20.mail import Mail
-from open_ds18b20.probe import Materials, Probe, Ds18b20, Dht22
+from open_ds18b20.probe import Materials, Ds18b20, Dht22
 from open_ds18b20.console import *
 
 
@@ -193,18 +193,23 @@ def main():
                                 " probes not **** detected ***"))
 
     # if alert compare the max/min with real temp
-    if len(temperatures) > 0:
+    if len(temperatures) > 0 or len(humidity) > 0:
         for p in range(materials.num_working_probes):
-            if probes[p].has_alert() and (
-                            temperatures[probes[p].get_slug()] >= probes[p].get_max_alert() or temperatures[
-                        probes[p].get_slug()] <= probes[p].get_min_alert()):
-                # test if there is any alert to display
-                messages.append(probes[p].get_slug() +
-                                " : too high/low temperature")
+            if probes[p].has_alert():
+                # test if alert for temperature
+                if isinstance(probes[p], Ds18b20) and (
+                                temperatures[probes[p].get_slug()] >= probes[p].get_max_alert() or temperatures[
+                                    probes[p].get_slug()] <= probes[p].get_min_alert()):
+                    messages.append(probes[p].get_slug() + " : too high/low temperature")
+                # test if alert for humidity
+                elif isinstance(probes[p], Dht22) and (
+                                humidity[probes[p].get_slug()] >= probes[p].get_max_alert() or humidity[
+                                    probes[p].get_slug()] <= probes[p].get_min_alert()):
+                    messages.append(probes[p].get_slug() + " : too high/low humidity")
     # if messages list is not empty, there is an a least one alert
     if len(messages) > 0:
         alert = True
-    # to force a mail message with the optionnal argument "mail"
+    # to force a mail message with the optional argument "mail"
     if mail or alert:
         sent = create_mail(temperatures,
                            config, alert, messages)
