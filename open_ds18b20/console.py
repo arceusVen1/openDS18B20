@@ -5,6 +5,7 @@ TODO:
 """
 import sys
 import getpass
+import open_ds18b20.probe
 
 # GLOBAL--------------------------------------------------
 
@@ -84,6 +85,9 @@ def config_probe(listprobes, materials):
     display("Unconfigured probes")
     for j in range(len(unconfigured)):
         display(str(i + j) + " - " + unconfigured[j].get_slug())
+    # create a new instance of Dht22
+    display(str(i + j +1) + " - new DHT22")
+    unconfigured.append(open_ds18b20.probe.Dht22())
     display("Please type in a number for the probes to configure :")
     number = int(input(PROMPT))
     if number > i:
@@ -126,22 +130,22 @@ def config_probe(listprobes, materials):
             except Exception as e:
                 display(str(e))
     flag = False
-    display("thermostat ? (y/n)")
-    thermostat = input(PROMPT)
-    if thermostat == "y":
+    display("thermostat (DS18B20) /hygrostat (DHT22) ? (y/n)")
+    stat = input(PROMPT)
+    if stat == "y":
         while not flag:
             try:
-                temps = []
+                values = []
                 esc = None
                 while esc is None:
-                    display("add a temp (0 to esc)")
-                    temp = float(input(PROMPT))
-                    if temp == 0 and temps != []:
+                    display("add a temperature (DS18B20)/humidity (DHT22) (0 to esc)")
+                    value = float(input(PROMPT))
+                    if value == 0 and values != []:
                         esc = 0
                     else:
-                        temps.append(temp)
-                        print(temps)
-                probe.set_thermostated(True, temps)
+                        values.append(value)
+                        print(values)
+                probe.set_stated(True, values)
                 flag = True
             except Exception as e:
                 display(str(e))
@@ -150,7 +154,7 @@ def config_probe(listprobes, materials):
             display("Please give the start of each time lapse in order (HH:MM)")
             moments = []
             try:
-                for i in temps:
+                for i in values:
                     moments.append(input(PROMPT))
                     print(moments)
                 probe.set_interval(moments)
