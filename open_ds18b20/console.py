@@ -75,7 +75,7 @@ def config_probe(listprobes, materials):
     configured = []
     unconfigured = []
     for dht22 in materials.get_dht22():
-        configured.append(Dht22(settings=dht22))
+        configured.append(open_ds18b20.probe.Dht22(settings=dht22))
     for probe in listprobes:
         if probe.has_config(materials):
             configured.append(probe)
