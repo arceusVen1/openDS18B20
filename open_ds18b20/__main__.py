@@ -176,7 +176,7 @@ def main():
         messages.append("* temperatures *couldn't be read")
     # DHT22 reading
     for dht22 in materials.get_dht22():
-        dht22 = Dht22(dht22["idt"])
+        dht22 = Dht22(settings=dht22)
         try:
             dht22.get_value()
             temperatures[dht22.get_slug()] = dht22.get_temperature()
