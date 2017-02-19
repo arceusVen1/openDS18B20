@@ -31,7 +31,7 @@ def prompt_config():
     """
     Asks for the new config settings
     """
-    settings = {"email": "", "password": "", "DS18B20": 0, "DHT22": 0,"alert": False}
+    settings = {"email": "", "password": "", "DS18B20": 0, "DHT22": 0, "alert": False}
     sys.stdout.write("What is the number of DS18B20 probes attached ?\n")
     while not settings["DS18B20"]:
         try:
@@ -86,7 +86,7 @@ def config_probe(listprobes, materials):
     for j in range(len(unconfigured)):
         display(str(i + j) + " - " + unconfigured[j].get_slug())
     # create a new instance of Dht22
-    display(str(i + j +1) + " - new DHT22")
+    display(str(i + j + 1) + " - new DHT22")
     unconfigured.append(open_ds18b20.probe.Dht22())
     display("Please type in a number for the probes to configure :")
     number = int(input(PROMPT))
@@ -98,9 +98,9 @@ def config_probe(listprobes, materials):
         if probe.has_alert():
             display("max :" + str(probe.get_max_alert()))
             display("min :" + str(probe.get_min_alert()))
-        if probe.is_thermostated():
+        if probe.is_stated():
             display(probe.get_interval())
-            display(probe.link_moment_temp())
+            display(probe.link_moment_value())
     flag = False
     while not flag:
         display("pseudo ?")
