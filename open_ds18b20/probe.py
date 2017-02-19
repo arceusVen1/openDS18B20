@@ -105,14 +105,14 @@ class Materials:
         for i in range(len(probes)):
             if probes[i]["idt"] == idt:
                 return probes[i], i
-        return None
+        return None, None
 
     def get_probe_by_slug(self, slug):
         probes = self.get_ds18b20() + self.get_dht22()
         for i in range(len(probes)):
             if probes[i]["slug"] == slug:
                 return probes[i], i
-        return None
+        return None, None
 
     def get_dht22(self):
         """
