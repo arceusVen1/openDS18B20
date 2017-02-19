@@ -100,19 +100,37 @@ class Materials:
         """
         return self.settings["ds18b20"]
 
-    def get_probe_by_id(self, idt):
-        probes = self.get_ds18b20() + self.get_dht22()
+    def get_probe_by_id(self, idt, probes=None):
+        if not list:
+            probes = self.get_ds18b20() + self.get_dht22()
         for i in range(len(probes)):
             if probes[i]["idt"] == idt:
                 return probes[i], i
         return None, None
 
-    def get_probe_by_slug(self, slug):
-        probes = self.get_ds18b20() + self.get_dht22()
+    def get_probe_by_slug(self, slug, probes=None):
+        if not probes:
+            probes = self.get_ds18b20() + self.get_dht22()
         for i in range(len(probes)):
             if probes[i]["slug"] == slug:
                 return probes[i], i
         return None, None
+
+    def get_ds18b20_by_id(self, idt):
+        probes = self.get_ds18b20()
+        self.get_probe_by_id(idt, probes)
+
+    def get_ds18b20_by_slug(self, slug):
+        probes = self.get_ds18b20()
+        self.get_probe_by_slug(slug, probes)
+
+    def get_dht22_by_id(self, idt):
+        probes = self.get_dht22()
+        self.get_probe_by_id(idt, probes)
+
+    def get_dht22_by_slug(self, slug):
+        probes = self.get_dht22()
+        self.get_probe_by_id(slug, probes)
 
     def get_dht22(self):
         """
