@@ -461,10 +461,10 @@ class Dht22(Probe):
             raise EnvironmentError("The DHT22 probe is not functional")
 
     def get_temperature(self, line=None):
-        return self.temperature
+        return round(self.temperature, 1)
 
     def get_humidity(self):
-        return self.humidity
+        return round(self.humidity, 1)
 
     def is_hygrostated(self):
         return super().is_stated()
