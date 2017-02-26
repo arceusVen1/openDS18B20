@@ -167,4 +167,4 @@ def config_probe(listprobes, materials):
                 display(str(e))
     materials.add_probe(probe)
     materials.set_data()
-    materials.config.close()
+    materials.config.close_file()
