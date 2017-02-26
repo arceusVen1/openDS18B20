@@ -151,7 +151,7 @@ def main():
         # test the presence of the probe
         fprobe = materials.get_ds18b20_by_id(idProbe)
         if fprobe:
-            probes.append(Ds18b20(settings=fprobe[0]))
+            probes.append(Ds18b20(idt=idProbe, settings=fprobe[0]))
         probes.append(Ds18b20(idt=idProbe))
     # if the probe command is used
     if probe_conf:
