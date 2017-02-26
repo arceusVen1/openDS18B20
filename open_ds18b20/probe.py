@@ -87,9 +87,9 @@ class Materials:
                 self.settings["dht22"].append(probe.settings)
         else:
             if isinstance(probe, Ds18b20):
-                self.get_ds18b20()[i] = probe
+                self.get_ds18b20()[i] = probe.settings
             elif isinstance(probe, Dht22):
-                self.get_dht22()[i - len(self.get_ds18b20())] = probe
+                self.get_dht22()[i - len(self.get_ds18b20())] = probe.settings
 
     def get_ds18b20(self):
         """
