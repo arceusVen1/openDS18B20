@@ -100,6 +100,7 @@ class Materials:
         """
         return self.settings["ds18b20"]
 
+    # working
     def get_probe_by_id(self, idt, probes=None):
         if not probes:
             probes = self.get_ds18b20() + self.get_dht22()
@@ -116,6 +117,7 @@ class Materials:
                 return probes[i], i
         return None, None
 
+    #not working
     def get_ds18b20_by_id(self, idt):
         probes = self.get_ds18b20()
         self.get_probe_by_id(idt, probes)
