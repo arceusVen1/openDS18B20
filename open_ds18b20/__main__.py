@@ -152,7 +152,8 @@ def main():
         fprobe = materials.get_probe_by_id(idProbe)
         if fprobe:
             probes.append(Ds18b20(idt=idProbe, settings=fprobe[0]))
-        probes.append(Ds18b20(idt=idProbe))
+        else:
+            probes.append(Ds18b20(idt=idProbe))
     # if the probe command is used
     if probe_conf:
         probe_conf_command(probes, materials)
