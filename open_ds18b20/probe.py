@@ -101,7 +101,7 @@ class Materials:
         return self.settings["ds18b20"]
 
     def get_probe_by_id(self, idt, probes=None):
-        if not list:
+        if not probes:
             probes = self.get_ds18b20() + self.get_dht22()
         for i in range(len(probes)):
             if probes[i]["idt"] == idt:
