@@ -166,7 +166,6 @@ def main():
             files.append(f.ProbeFile(materials.listPaths[p]))
             # test the probe
             if probes[p].is_working(files[p].read_line(1)):
-                print(files[p].readline(1))
                 # the probe is working
                 materials.num_working_probes += 1
                 templine = files[p].read_line(2)
@@ -175,7 +174,8 @@ def main():
                 temperatures[probes[p].get_slug()] = float(probes[
                                                                p].temperature)
     # append an exception message if exception is raised
-    except:
+    except Exception as e:
+        print(e)
         messages.append("* temperatures *couldn't be read")
     # DHT22 reading
     for dht22 in materials.get_dht22():
