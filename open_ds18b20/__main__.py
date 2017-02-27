@@ -169,7 +169,6 @@ def main():
                 # the probe is working
                 materials.num_working_probes += 1
                 templine = files[p].read_line(2)
-                print(templine)
                 probes[p].get_temperature(templine)
                 temperatures[probes[p].get_slug()] = float(probes[
                                                                p].temperature)
