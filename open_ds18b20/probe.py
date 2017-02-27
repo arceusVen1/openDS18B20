@@ -444,6 +444,8 @@ class Ds18b20(Probe):
         regexp = re.compile("\d+$")
         temp = regexp.search(line).group(0)
         temp = list(temp)
+        if temp == []:
+            raise EnvironmentError("The probe is detected but not working")
         self.temperature = temp[0] + temp[1] + "." + temp[2]
         return self.temperature
 

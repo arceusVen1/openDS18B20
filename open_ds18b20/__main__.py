@@ -167,6 +167,7 @@ def main():
             files.append(f.ProbeFile(materials.listPaths[p]))
             # test the probe
             if probes[p].is_working(files[p].read_line(1)):
+                print(files[p].readline(1))
                 # the probe is working
                 materials.num_working_probes += 1
                 templine = files[p].read_line(2)
