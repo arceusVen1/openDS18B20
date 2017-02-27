@@ -181,6 +181,9 @@ class Probe:
         self.temperature = ""
         return
 
+    def __str__(self):
+        return self.settings
+
     def has_config(self, materials):
         """
         Tests if the config file exist and has been filled
