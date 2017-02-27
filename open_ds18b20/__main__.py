@@ -154,6 +154,7 @@ def main():
             probes.append(Ds18b20(idt=idProbe, settings=fprobe[0]))
         else:
             probes.append(Ds18b20(idt=idProbe))
+    print(probes)
     # if the probe command is used
     if probe_conf:
         probe_conf_command(probes, materials)
@@ -175,6 +176,7 @@ def main():
     # append an exception message if exception is raised
     except:
         messages.append("* temperatures *couldn't be read")
+    print(probes)
     # DHT22 reading
     for dht22 in materials.get_dht22():
         dht22 = Dht22(settings=dht22)
@@ -192,7 +194,7 @@ def main():
         difference = number - materials.num_working_probes
         messages.append("* " + (str(difference) +
                                 " probes not **** detected ***"))
-
+    print(probes)
     # if alert compare the max/min with real temp
     if len(temperatures) > 0 or len(humidity) > 0:
         for p in range(materials.num_working_probes):
