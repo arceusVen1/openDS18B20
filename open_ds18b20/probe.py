@@ -458,7 +458,7 @@ class Dht22(Probe):
         """
         Gets the read values of a DHT22 probe using the Adafruit API
         """
-        self.temperature, self.humidity = Adafruit_DHT.read_retry(self.sensor, self.get_id(), retries=2)
+        self.humidity, self.temperature = Adafruit_DHT.read_retry(self.sensor, self.get_id(), retries=2)
         if self.temperature is None or self.humidity is None:
             raise EnvironmentError("The DHT22 probe is not functional")
 
