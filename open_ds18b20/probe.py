@@ -120,19 +120,23 @@ class Materials:
     #not working
     def get_ds18b20_by_id(self, idt):
         probes = self.get_ds18b20()
-        self.get_probe_by_id(idt, probes)
+        fprobe = self.get_probe_by_id(idt, probes)
+        return fprobe
 
     def get_ds18b20_by_slug(self, slug):
         probes = self.get_ds18b20()
-        self.get_probe_by_slug(slug, probes)
+        fprobe = self.get_probe_by_slug(slug, probes)
+        return fprobe
 
     def get_dht22_by_id(self, idt):
         probes = self.get_dht22()
-        self.get_probe_by_id(idt, probes)
+        fprobe = self.get_probe_by_id(idt, probes)
+        return fprobe
 
     def get_dht22_by_slug(self, slug):
         probes = self.get_dht22()
-        self.get_probe_by_id(slug, probes)
+        fprobe = self.get_probe_by_id(slug, probes)
+        return fprobe
 
     def get_dht22(self):
         """
