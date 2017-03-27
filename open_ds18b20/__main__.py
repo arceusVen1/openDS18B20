@@ -155,10 +155,12 @@ def main():
         print(idProbe)
         print(fprobe)
         if fprobe[0]:
-            probes.append(Ds18b20(idt=idProbe, settings=fprobe[0]))
+            p = Ds18b20(idt=idProbe, settings=fprobe[0])
+            probes.append(p)
         else:
-            print("hello")
-            probes.append(Ds18b20(idt=idProbe))
+            p = Ds18b20(idt=idProbe)
+            print(p)
+            probes.append(p)
     print(str(probes[0]), str(probes[1]))
     # if the probe command is used
     if probe_conf:
