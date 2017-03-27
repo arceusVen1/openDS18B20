@@ -172,6 +172,12 @@ class Probe:
     """Abstracts class which represents the DS18B20 and DHT22 probes"""
 
     def __init__(self, idt, settings):
+        idt = idt
+        settings = list(settings)
+        self.set_settings(settings)
+        self.set_id(idt)
+        if not self.get_slug():
+            self.set_slug(idt)
         self.temperature = ""
 
     def __str__(self):
@@ -404,11 +410,9 @@ class Ds18b20(Probe):
     def __init__(self, idt, settings=None):
         if settings is None:
             global SETTINGS
-            settings = SETTINGS
-        self.set_settings(settings)
-        self.set_id(idt)
-        if not self.get_slug():
-            self.set_slug(idt)
+            settings = list(SETTINGS)
+        sets = settings
+        super().__init__(idt, sets)
 
     def is_thermostated(self):
         return super().is_stated()
