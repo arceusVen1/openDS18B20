@@ -408,7 +408,7 @@ class Ds18b20(Probe):
     def __init__(self, idt, settings=None):
         if settings is None:
             global SETTINGS
-            settings = SETTINGS
+            sets = SETTINGS
         sets = settings
         super().__init__(idt, sets)
 
