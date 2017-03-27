@@ -153,7 +153,6 @@ def main():
         fprobe = materials.get_ds18b20_by_id(idProbe)
         p = Ds18b20(idProbe, fprobe[0])
         probes.append(p)
-    print(probes[0], probes[1])
     # if the probe command is used
     if probe_conf:
         probe_conf_command(probes, materials)
@@ -164,13 +163,11 @@ def main():
         for probe in probes:
             # put the file probe in files
             fichier = f.ProbeFile(materials.listPaths[probe.get_id()])
-            print(fichier)
             files.append(fichier)
             # test the probe
             if probe.is_working(fichier.read_line(1)):
                 # the probe is working
                 materials.num_working_probes += 1
-                print(probe.get_slug())
                 templine = fichier.read_line(2)
                 probe.get_temperature(templine)
                 temperatures[probe.get_slug()] = float(probe.temperature)
