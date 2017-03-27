@@ -148,7 +148,6 @@ def main():
     probes = []
     print(materials.listprobes)
     print(materials.listPaths)
-    n = len(materials.listprobes)
     for idProbe in materials.listprobes:
         # test the presence of the probe
         fprobe = materials.get_ds18b20_by_id(idProbe)
@@ -161,7 +160,7 @@ def main():
             p = Ds18b20(idt=idProbe)
             print(p)
             probes.append(p)
-        del p
+    print(locals())
     print(str(probes[0]), str(probes[1]))
     # if the probe command is used
     if probe_conf:
