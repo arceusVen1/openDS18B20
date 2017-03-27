@@ -406,7 +406,8 @@ class Ds18b20(Probe):
     def __init__(self, idt, settings=None):
         if settings is None:
             global SETTINGS
-            sets = SETTINGS
+            settings = SETTINGS
+        sets = settings
         super().__init__(idt, sets)
 
     def is_thermostated(self):
