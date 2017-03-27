@@ -173,7 +173,7 @@ class Probe:
 
     def __init__(self, idt, settings):
         idt = idt
-        settings = list(settings)
+        settings = dict(settings)
         self.set_settings(settings)
         self.set_id(idt)
         if not self.get_slug():
@@ -410,7 +410,7 @@ class Ds18b20(Probe):
     def __init__(self, idt, settings=None):
         if settings is None:
             global SETTINGS
-            settings = list(SETTINGS)
+            settings = dict(SETTINGS)
         sets = settings
         super().__init__(idt, sets)
 
