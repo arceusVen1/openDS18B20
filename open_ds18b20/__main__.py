@@ -159,7 +159,7 @@ def main():
         else:
             print("hello")
             probes.append(Ds18b20(idt=idProbe))
-    print(probes)
+    print(str(probes[0]), str(probes[1]))
     # if the probe command is used
     if probe_conf:
         probe_conf_command(probes, materials)
