@@ -181,7 +181,7 @@ class Probe:
         return
 
     def __str__(self):
-        return self.settings
+        return self.get_id()
 
     def has_config(self, materials):
         """

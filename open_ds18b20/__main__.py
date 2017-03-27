@@ -160,7 +160,6 @@ def main():
             p = Ds18b20(idProbe)
             print(p)
             probes.append(p)
-            del p
     print(locals())
     print(str(probes[0]), str(probes[1]))
     # if the probe command is used
