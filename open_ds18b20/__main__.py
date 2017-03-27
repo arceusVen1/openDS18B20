@@ -161,6 +161,7 @@ def main():
             p = Ds18b20(idt=idProbe)
             print(p)
             probes.append(p)
+        del p
     print(str(probes[0]), str(probes[1]))
     # if the probe command is used
     if probe_conf:
