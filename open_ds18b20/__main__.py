@@ -151,12 +151,9 @@ def main():
     for idProbe in materials.listprobes:
         # test the presence of the probe
         fprobe = materials.get_ds18b20_by_id(idProbe)
-        print(idProbe)
-        print(fprobe)
         p = Ds18b20(idProbe, settings=fprobe[0])
         probes.append(p)
-        print(p)
-    print(str(probes[0]), str(probes[1]))
+    print(str(probes))
     # if the probe command is used
     if probe_conf:
         probe_conf_command(probes, materials)
