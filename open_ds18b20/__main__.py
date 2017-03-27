@@ -154,7 +154,7 @@ def main():
         print(idProbe)
         print(fprobe)
         if fprobe[0]:
-            p = Ds18b20(idt=idProbe, settings=fprobe[0])
+            p = Ds18b20(idProbe, settings=fprobe[0])
             probes.append(p)
         else:
             p = Ds18b20(idProbe)

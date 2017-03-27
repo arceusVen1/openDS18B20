@@ -400,13 +400,11 @@ class Probe:
         """
         return self.temperature
 
-    def __str__(self):
-        return self.get_id()
 
 
 class Ds18b20(Probe):
 
-    def __init__(self, idt=None, settings=SETTINGS):
+    def __init__(self, idt, settings=SETTINGS):
         super().__init__(idt, settings)
 
     def is_thermostated(self):
