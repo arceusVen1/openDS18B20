@@ -400,6 +400,9 @@ class Probe:
         """
         return self.temperature
 
+    def __str__(self):
+        return self.get_id()
+
 
 class Ds18b20(Probe):
 
