@@ -21,7 +21,7 @@ class Materials:
 
     def __init__(self):
         self.listprobes = []
-        self.listPaths = []
+        self.listPaths = {}
         self.num_working_probes = 0
         self.path = os.path.abspath("/sys/bus/w1/devices")
         self.config = f.ProbeConfigFile(PATH)
@@ -164,7 +164,7 @@ class Materials:
 
     def __path_listing(self):
         for probe in range(len(self.listprobes)):
-            self.listPaths.append(
+            self.listPaths.[self.listprobes[probe](
                 self.path + '/' + self.listprobes[probe] + "/w1_slave")
 
 

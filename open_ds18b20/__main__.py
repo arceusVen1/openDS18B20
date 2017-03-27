@@ -166,7 +166,7 @@ def main():
     try:
         for p in range(n):
             # put the file probe in files
-            fichier = f.ProbeFile(materials.listPaths[p])
+            fichier = f.ProbeFile(materials.listPaths[probes[p].get_id()])
             print(fichier)
             files.append(fichier)
             # test the probe
