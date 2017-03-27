@@ -404,6 +404,9 @@ class Probe:
 
 class Ds18b20(Probe):
 
+    SETTINGS = {"idt": "", "slug": "", "alert": {"bool": False, "max": 0,
+                                                 "min": 0}, "stated": {"bool": False, "values": [], "moment": []}}
+
     def __init__(self, idt, settings=None):
         if settings is None:
             global SETTINGS
