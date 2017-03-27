@@ -146,10 +146,13 @@ def main():
     materials.detect_attached_probes()
     # get all the probes attach
     probes = []
+    print(materials.listprobes)
+    print(materials.listPaths)
     n = len(materials.listprobes)
     for idProbe in materials.listprobes:
         # test the presence of the probe
         fprobe = materials.get_ds18b20_by_id(idProbe)
+        print(fprobe)
         if fprobe[0]:
             probes.append(Ds18b20(idt=idProbe, settings=fprobe[0]))
         else:
@@ -163,12 +166,15 @@ def main():
     try:
         for p in range(n):
             # put the file probe in files
-            files.append(f.ProbeFile(materials.listPaths[p]))
+            fichier = f.ProbeFile(materials.listPaths[p])
+	    print(fichier)
+	    files.append(fichier)
             # test the probe
-            if probes[p].is_working(files[p].read_line(1)):
+            if probes[p].is_working(fichier.read_line(1)):
                 # the probe is working
                 materials.num_working_probes += 1
-                templine = files[p].read_line(2)
+                print(probes[p].get_slug())
+                templine = fichier.read_line(2)
                 probes[p].get_temperature(templine)
                 temperatures[probes[p].get_slug()] = float(probes[
                                                                p].temperature)
