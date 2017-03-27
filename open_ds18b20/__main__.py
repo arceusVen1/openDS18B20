@@ -167,20 +167,19 @@ def main():
     number = config.get_ds18b20() + config.get_dht22()
     # try to read the probes temp
     try:
-        for p in range(n):
+        for probe in probes:
             # put the file probe in files
-            fichier = f.ProbeFile(materials.listPaths[probes[p].get_id()])
+            fichier = f.ProbeFile(materials.listPaths[probe.get_id()])
             print(fichier)
             files.append(fichier)
             # test the probe
-            if probes[p].is_working(fichier.read_line(1)):
+            if probe.is_working(fichier.read_line(1)):
                 # the probe is working
                 materials.num_working_probes += 1
-                print(probes[p].get_slug())
+                print(probe.get_slug())
                 templine = fichier.read_line(2)
                 probes[p].get_temperature(templine)
-                temperatures[probes[p].get_slug()] = float(probes[
-                                                               p].temperature)
+                temperatures[probes.get_slug()] = float(probe.temperature)
     # append an exception message if exception is raised
     except Exception as e:
         print(e)
