@@ -157,7 +157,7 @@ def main():
             p = Ds18b20(idt=idProbe, settings=fprobe[0])
             probes.append(p)
         else:
-            p = Ds18b20(idt=idProbe)
+            p = Ds18b20(idProbe)
             print(p)
             probes.append(p)
     print(locals())
