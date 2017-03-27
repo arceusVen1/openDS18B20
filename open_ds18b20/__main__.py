@@ -146,8 +146,6 @@ def main():
     materials.detect_attached_probes()
     # get all the probes attach
     probes = []
-    print(materials.listprobes)
-    print(materials.listPaths)
     for idProbe in materials.listprobes:
         # test the presence of the probe
         fprobe = materials.get_ds18b20_by_id(idProbe)
