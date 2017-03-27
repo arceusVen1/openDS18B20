@@ -172,7 +172,7 @@ class Probe:
     """Abstracts class which represents the DS18B20 and DHT22 probes"""
 
     def __init__(self, idt, settings):
-        self.settings = settings
+        self.set_settings(settings)
         self.set_id(idt)
         if not self.get_slug():
             self.set_slug(idt)
@@ -181,6 +181,9 @@ class Probe:
 
     def __str__(self):
         return self.get_id()
+
+    def set_settings(self, settings):
+        self.settings = settings
 
     def has_config(self, materials):
         """
