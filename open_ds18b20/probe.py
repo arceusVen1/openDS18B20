@@ -173,8 +173,7 @@ class Probe:
 
     def __init__(self, idt, settings):
         self.settings = settings
-        if not self.get_id():
-            self.set_id(str(idt))
+        self.set_id(idt)
         if not self.get_slug():
             self.set_slug(str(idt))
         self.temperature = ""
