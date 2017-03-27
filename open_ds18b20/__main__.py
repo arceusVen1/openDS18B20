@@ -178,7 +178,7 @@ def main():
                 materials.num_working_probes += 1
                 print(probe.get_slug())
                 templine = fichier.read_line(2)
-                probes[p].get_temperature(templine)
+                probe.get_temperature(templine)
                 temperatures[probes.get_slug()] = float(probe.temperature)
     # append an exception message if exception is raised
     except Exception as e:
