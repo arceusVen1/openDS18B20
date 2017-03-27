@@ -179,7 +179,7 @@ def main():
                 print(probe.get_slug())
                 templine = fichier.read_line(2)
                 probe.get_temperature(templine)
-                temperatures[probes.get_slug()] = float(probe.temperature)
+                temperatures[probe.get_slug()] = float(probe.temperature)
     # append an exception message if exception is raised
     except Exception as e:
         print(e)
