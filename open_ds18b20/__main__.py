@@ -167,8 +167,8 @@ def main():
         for p in range(n):
             # put the file probe in files
             fichier = f.ProbeFile(materials.listPaths[p])
-	    print(fichier)
-	    files.append(fichier)
+            print(fichier)
+            files.append(fichier)
             # test the probe
             if probes[p].is_working(fichier.read_line(1)):
                 # the probe is working
@@ -206,12 +206,12 @@ def main():
                 # test if alert for temperature
                 if isinstance(probes[p], Ds18b20) and (
                                 temperatures[probes[p].get_slug()] >= probes[p].get_max_alert() or temperatures[
-                                    probes[p].get_slug()] <= probes[p].get_min_alert()):
+                            probes[p].get_slug()] <= probes[p].get_min_alert()):
                     messages.append(probes[p].get_slug() + " : too high/low temperature")
                 # test if alert for humidity
                 elif isinstance(probes[p], Dht22) and (
                                 humidity[probes[p].get_slug()] >= probes[p].get_max_alert() or humidity[
-                                    probes[p].get_slug()] <= probes[p].get_min_alert()):
+                            probes[p].get_slug()] <= probes[p].get_min_alert()):
                     messages.append(probes[p].get_slug() + " : too high/low humidity")
     # if messages list is not empty, there is an a least one alert
     if len(messages) > 0:
