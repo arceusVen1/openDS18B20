@@ -177,7 +177,6 @@ class Probe:
         if not self.get_slug():
             self.set_slug(idt)
         self.temperature = ""
-        return
 
     def __str__(self):
         return self.get_id()
