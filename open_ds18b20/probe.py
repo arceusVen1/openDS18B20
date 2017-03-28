@@ -197,7 +197,7 @@ class Probe:
         :rtype: bool
 
         """
-        if materials.get_ds18b20_by_id(self.get_id()) is not (None, None) or materials.get_dht22_by_id(self.get_id()):
+        if materials.get_probe_by_id(self.get_id()):
             return True
         return False
 
