@@ -172,7 +172,7 @@ def main():
     # append an exception message if exception is raised
     except Exception as e:
         print(e)
-        messages.append("DES TEMPERATURES N'ONT PAS PU ETRE LUES")
+        messages.append("Des températures n'ont pas pu être lues")
     # DHT22 reading
     for dht22 in materials.get_dht22():
         dht22 = Dht22(settings=dht22)
@@ -184,11 +184,11 @@ def main():
             probes.append(dht22)
             materials.num_working_probes += 1
         except EnvironmentError:
-            messages.append("UNE DHT22 N'A PAS PU ETRE LUE")
+            messages.append("Une DHT22 n'a pas pu être detectée")
     # if not all of the probes attached are working
     if materials.num_working_probes < number:
         difference = number - materials.num_working_probes
-        messages.append((str(difference) + " SONDES NON DETECTEES"))
+        messages.append((str(difference) + " sondes non detetées"))
     # if alert compare the max/min with real temp
     if len(temperatures) > 0 or len(humidity) > 0:
         for p in range(materials.num_working_probes):
@@ -197,12 +197,12 @@ def main():
                 if isinstance(probes[p], Ds18b20) and (
                                 temperatures[probes[p].get_slug()] >= probes[p].get_max_alert() or temperatures[
                             probes[p].get_slug()] <= probes[p].get_min_alert()):
-                    messages.append(probes[p].get_slug() + " : TROP FORTE/BASSE TEMPERATURE")
+                    messages.append(probes[p].get_slug() + " : trop forte/basse température")
                 # test if alert for humidity
                 elif isinstance(probes[p], Dht22) and (
                                 humidity[probes[p].get_slug()] >= probes[p].get_max_alert() or humidity[
                             probes[p].get_slug()] <= probes[p].get_min_alert()):
-                    messages.append(probes[p].get_slug() + " : TOP FORTE/FAIBLE HUMIDITE ")
+                    messages.append(probes[p].get_slug() + " : trop forte/basse humidité")
     # if messages list is not empty, there is an a least one alert
     if len(messages) > 0:
         alert = True
@@ -211,7 +211,7 @@ def main():
         sent = create_mail(temperatures,
                            config, alert, messages)
         if not sent:
-            messages.append("UN MAIL N'A PAS PU ETRE ENVOYE")
+            messages.append("Un mail n'a pas pu être envoyé")
             # sys.exc_info()[:2]
     # close the opened file
     for i in range(len(files)):

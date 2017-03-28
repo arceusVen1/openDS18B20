@@ -77,8 +77,7 @@ def config_probe(listprobes, materials):
     for dht22 in materials.get_dht22():
         configured.append(open_ds18b20.probe.Dht22(settings=dht22))
     for probe in listprobes:
-        print(materials.get_probe_by_id(probe.get_id()))
-        if probe.has_config(materials):
+        if materials.get_probe_by_id(probe.get_id()) is not (None, None):
             configured.append(probe)
         else:
             unconfigured.append(probe)
