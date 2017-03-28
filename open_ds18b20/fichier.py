@@ -71,7 +71,9 @@ class File:
         try:
             os.mknod(self.path)
         except OSError:
-            print("The file already exist, no need to create it")
+            pass
+        finally:
+            print("autre problème")
 
     def __str__(self):
         return self.path

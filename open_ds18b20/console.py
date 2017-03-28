@@ -92,7 +92,7 @@ def config_probe(listprobes, materials):
     # create a new instance of Dht22
     display(str(nc + nu) + " - nouvelle DHT22")
     unconfigured.append(open_ds18b20.probe.Dht22())
-    display("Veuillez entrée un numéro afin d'effectuer une action (ctrl C pour sortir) :")
+    display("Veuillez entrer un numéro afin d'effectuer une action (ctrl-C pour sortir) :")
     number = int(input(PROMPT))
     if number >= nc:
         probe = unconfigured[number - nc]
