@@ -72,8 +72,6 @@ class File:
             os.mknod(self.path)
         except OSError:
             pass
-        finally:
-            print("autre problème")
 
     def __str__(self):
         return self.path

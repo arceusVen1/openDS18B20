@@ -188,7 +188,7 @@ def main():
     # if not all of the probes attached are working
     if materials.num_working_probes < number:
         difference = number - materials.num_working_probes
-        messages.append((str(difference) + " sondes non detetées"))
+        messages.append((str(difference) + " sonde(s) non detectées"))
     # if alert compare the max/min with real temp
     if len(temperatures) > 0 or len(humidity) > 0:
         for p in range(materials.num_working_probes):
