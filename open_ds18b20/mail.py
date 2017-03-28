@@ -72,19 +72,19 @@ class Mail:
         if additional is None:
             additional = ""
         if alert:
-            self.msg["Subject"] = "Alert Detected"
-            self.body = ("An alert has been detected, "
-                         "you should check your temperatures\n" + additional)
+            self.msg["Subject"] = "Alerte detectée"
+            self.body = ("Une alerte a été detectée, "
+                         "vous devriez vérifier vos conditions\n" + additional)
         else:
-            self.msg["Subject"] = "List of Temperatures"
-            self.body = "Here is the list of the mesured temperatures\n"
+            self.msg["Subject"] = "Résumé des conditions"
+            self.body = "Voici l'état de vos terrariums\n"
         if len(temperatures) > 0:
             for probe, temp in temperatures.items():
                 self.body += (str(probe) +
                               " : " + str(temp) + "*C\n")
-        self.body += "\nmemory usage: "
+        self.body += "\nutilisation de la mémoire: "
         self.body += str(round(psutil.virtual_memory().available/psutil.virtual_memory().total, 3)*100) + "%"
-        self.body += "\ncpu usage: "
+        self.body += "\nusage du CPU: "
         self.body += str(psutil.cpu_percent()) + "%" + "\n"
         return self.body
 

@@ -83,16 +83,16 @@ def config_probe(listprobes, materials):
             unconfigured.append(probe)
     nc = len(configured)
     nu = len(unconfigured)
-    display("Already configured probes :")
+    display("Sondes déjà configurées :")
     for i in range(nc):
         display(str(i) + " - " + configured[i].get_slug())
-    display("Unconfigured probes")
+    display("Sondes non-configurées attachées")
     for j in range(nu):
         display(str(nc + j) + " - " + unconfigured[j].get_slug())
     # create a new instance of Dht22
-    display(str(nc + nu) + " - new DHT22")
+    display(str(nc + nu) + " - nouvelle DHT22")
     unconfigured.append(open_ds18b20.probe.Dht22())
-    display("Please type in a number for the probes to configure :")
+    display("Veuillez entrée un numéro afin d'effectuer une action (ctrl C pour sortir) :")
     number = int(input(PROMPT))
     if number >= nc:
         probe = unconfigured[number - nc]
@@ -114,9 +114,9 @@ def config_probe(listprobes, materials):
         except Exception as e:
             display(str(e))
     flag = False
-    display("Alert ? (y/n)")
+    display("Alerte ? (o/)")
     alert = input(PROMPT)
-    if alert == "y":
+    if alert == "o":
         probe.set_alert(True)
         while not flag:
             display("max ?")
@@ -134,15 +134,15 @@ def config_probe(listprobes, materials):
             except Exception as e:
                 display(str(e))
     flag = False
-    display("thermostat (DS18B20) /hygrostat (DHT22) ? (y/n)")
+    display("thermostat (DS18B20) /hygrostat (DHT22) ? (o/n)")
     stat = input(PROMPT)
-    if stat == "y":
+    if stat == "o":
         while not flag:
             try:
                 values = []
                 esc = None
                 while esc is None:
-                    display("add a temperature (DS18B20)/humidity (DHT22) (0 to esc)")
+                    display("Ajouter une température (DS18B20)/seuil d'humidité (DHT22) (0 = esc)")
                     value = float(input(PROMPT))
                     if value == 0 and values != []:
                         esc = 0
@@ -155,7 +155,7 @@ def config_probe(listprobes, materials):
                 display(str(e))
         flag = False
         while not flag:
-            display("Please give the start of each time lapse in order (HH:MM)")
+            display("Veuillez entrer le départ de chaque créneau horaire (HH:MM)")
             moments = []
             try:
                 for i in values:
