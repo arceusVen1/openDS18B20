@@ -175,7 +175,8 @@ class Probe:
         idt = idt
         settings = dict(settings)
         self.set_settings(settings)
-        self.set_id(idt)
+        if idt is not None:
+            self.set_id(idt)
         if not self.get_slug():
             self.set_slug(idt)
         self.temperature = ""
@@ -407,7 +408,7 @@ class Probe:
 
 class Ds18b20(Probe):
 
-    def __init__(self, idt, settings=None):
+    def __init__(self, idt=None, settings=None):
         if settings is None:
             global SETTINGS
             settings = dict(SETTINGS)
